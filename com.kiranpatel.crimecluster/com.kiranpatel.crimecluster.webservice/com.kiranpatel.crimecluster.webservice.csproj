@@ -82,6 +82,15 @@
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj">
+      <Project>{83C41F6D-4D1D-458A-9B12-EDB646B87267}</Project>
+      <Name>com.kiranpatel.crimecluster.framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="log4net.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>

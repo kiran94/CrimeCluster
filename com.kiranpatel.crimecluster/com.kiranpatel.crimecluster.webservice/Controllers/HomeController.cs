@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
+using com.kiranpatel.crimecluster.framework;
 
 namespace com.kiranpatel.crimecluster.webservice.Controllers
 {
@@ -11,6 +12,10 @@ namespace com.kiranpatel.crimecluster.webservice.Controllers
 	{
 		public ActionResult Index()
 		{
+			ILogger logger = LoggerService.GetInstance();
+
+			logger.debug("test"); 
+
 			var mvcName = typeof(Controller).Assembly.GetName();
 			var isMono = Type.GetType("Mono.Runtime") != null;
 
