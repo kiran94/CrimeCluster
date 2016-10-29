@@ -69,7 +69,6 @@
 			lat2 = toRadians(lat2);
 
 			var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) + Math.Sin(dLon / 2) * Math.Sin(dLon / 2) * Math.Cos(lat1) * Math.Cos(lat2);
-			var c = 2 * Math.Asin(Math.Sqrt(a));
 			return R * 2 * Math.Asin(Math.Sqrt(a));
 		}
 
