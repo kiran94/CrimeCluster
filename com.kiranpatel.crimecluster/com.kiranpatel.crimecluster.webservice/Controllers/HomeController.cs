@@ -13,8 +13,10 @@ namespace com.kiranpatel.crimecluster.webservice.Controllers
 		public ActionResult Index()
 		{
 			ILogger logger = LoggerService.GetInstance();
+			IConfigurationService configService = new ConfigurationService();
+			String configResult = configService.Get(ConfigurationKey.test, "fault");
+			logger.debug(configResult); 
 
-			logger.debug("test"); 
 
 			var mvcName = typeof(Controller).Assembly.GetName();
 			var isMono = Type.GetType("Mono.Runtime") != null;

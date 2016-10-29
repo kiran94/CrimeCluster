@@ -32,12 +32,16 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="contracts\ILogger.cs" />
     <Compile Include="services\LoggerService.cs" />
     <Compile Include="Progam.cs" />
+    <Compile Include="contracts\IConfigurationService.cs" />
+    <Compile Include="enums\ConfigurationKey.cs" />
+    <Compile Include="services\ConfigurationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
