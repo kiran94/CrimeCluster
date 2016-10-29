@@ -45,6 +45,8 @@
     <Compile Include="mappings\LocationMapping.cs" />
     <Compile Include="mappings\OfficerMapping.cs" />
     <Compile Include="mappings\IncidentGradingMapping.cs" />
+    <Compile Include="mappings\IncidentMapping.cs" />
+    <Compile Include="mappings\IncidentOutcomeMapping.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

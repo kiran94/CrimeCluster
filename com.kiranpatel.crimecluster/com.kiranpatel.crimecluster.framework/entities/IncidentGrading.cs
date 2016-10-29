@@ -11,12 +11,12 @@
 		/// Gets or sets the grade value.
 		/// </summary>
 		/// <value>The grade value.</value>
-		public int GradeValue { get; set;}
+		public virtual int GradeValue { get; set;}
 
 		/// <summary>
 		/// Gets or sets the description.
 		/// </summary>
 		/// <value>The description.</value>
-		public String Description { get; set; }
+		public virtual String Description { get; set; }
 	}
 }
