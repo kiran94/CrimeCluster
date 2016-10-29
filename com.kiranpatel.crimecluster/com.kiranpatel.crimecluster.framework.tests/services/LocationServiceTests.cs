@@ -15,12 +15,12 @@
 		/// <summary>
 		/// Mock of the repository.
 		/// </summary>
-		Mock<IRepository> repository;
+		private Mock<IRepository> repository;
 
 		/// <summary>
 		/// Mock of the logger.
 		/// </summary>
-		Mock<ILogger> logger;
+		private Mock<ILogger> logger;
 
 		/// <summary>
 		/// Sets up.

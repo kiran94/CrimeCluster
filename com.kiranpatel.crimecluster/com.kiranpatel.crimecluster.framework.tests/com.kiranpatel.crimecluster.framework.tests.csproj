@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="services\LocationServiceTests.cs" />
     <Compile Include="services\EntityServiceTests.cs" />
+    <Compile Include="services\OfficerServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj">

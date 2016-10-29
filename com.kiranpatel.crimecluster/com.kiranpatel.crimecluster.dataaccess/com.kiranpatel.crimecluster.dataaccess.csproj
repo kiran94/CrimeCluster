@@ -43,6 +43,7 @@
     <Compile Include="Repository.cs" />
     <Compile Include="MySQLConnection.cs" />
     <Compile Include="mappings\LocationMapping.cs" />
+    <Compile Include="mappings\OfficerMapping.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

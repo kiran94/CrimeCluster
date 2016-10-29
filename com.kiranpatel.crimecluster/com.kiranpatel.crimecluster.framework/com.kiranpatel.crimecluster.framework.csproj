@@ -49,6 +49,11 @@
     <Compile Include="contracts\IEntityService.cs" />
     <Compile Include="services\LocationService.cs" />
     <Compile Include="services\EntityService.cs" />
+    <Compile Include="enums\StatusType.cs" />
+    <Compile Include="entities\Person.cs" />
+    <Compile Include="entities\Officer.cs" />
+    <Compile Include="services\OfficerService.cs" />
+    <Compile Include="contracts\IOfficerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
