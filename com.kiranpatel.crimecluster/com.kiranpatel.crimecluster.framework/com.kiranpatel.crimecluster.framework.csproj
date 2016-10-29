@@ -44,6 +44,11 @@
     <Compile Include="services\ConfigurationService.cs" />
     <Compile Include="contracts\IRepository.cs" />
     <Compile Include="entities\EntityBase.cs" />
+    <Compile Include="entities\Location.cs" />
+    <Compile Include="contracts\ILocationService.cs" />
+    <Compile Include="contracts\IEntityService.cs" />
+    <Compile Include="services\LocationService.cs" />
+    <Compile Include="services\EntityService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
