@@ -13,5 +13,11 @@
 		{
 			return ConfigurationManager.AppSettings[key.ToString()];
 		}
+
+		// <inheritdoc>
+		public String GetConnectionString(String name)
+		{
+			return ConfigurationManager.ConnectionStrings[name].ConnectionString; 
+		}
 	}
 }

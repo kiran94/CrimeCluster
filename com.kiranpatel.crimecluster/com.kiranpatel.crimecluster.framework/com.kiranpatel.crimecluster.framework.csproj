@@ -42,6 +42,8 @@
     <Compile Include="contracts\IConfigurationService.cs" />
     <Compile Include="enums\ConfigurationKey.cs" />
     <Compile Include="services\ConfigurationService.cs" />
+    <Compile Include="contracts\IRepository.cs" />
+    <Compile Include="entities\EntityBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
