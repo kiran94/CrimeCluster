@@ -5,6 +5,7 @@
 	/// <summary>
 	/// Service for basic CRUD functionality on all Entities 
 	/// </summary>
+	/// <typeparam name="T">Entity type to do operations on.</typeparam>
 	public class EntityService<T> : IEntityService<T> where T : EntityBase
 	{
 		/// <summary>
@@ -43,11 +44,6 @@
 		// <inheritdoc>
 		public T Get(Guid ID)
 		{
-			if (ID == null)
-			{
-				return null;
-			}
-
 			this.logger.debug(String.Format("Getting {0}: {1}", typeof(T).ToString(), ID.ToString()));
 			return this.repository.Get<T>(ID); 
 		}
