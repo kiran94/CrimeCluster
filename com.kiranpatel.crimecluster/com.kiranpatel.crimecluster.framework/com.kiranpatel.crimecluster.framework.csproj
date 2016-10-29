@@ -54,6 +54,7 @@
     <Compile Include="entities\Officer.cs" />
     <Compile Include="services\OfficerService.cs" />
     <Compile Include="contracts\IOfficerService.cs" />
+    <Compile Include="entities\IncidentGrading.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
