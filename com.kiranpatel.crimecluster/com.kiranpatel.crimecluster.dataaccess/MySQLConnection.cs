@@ -43,7 +43,7 @@
 		/// Gets a ISession from the factory
 		/// </summary>
 		/// <returns>The session.</returns>
-		private ISession getSession()
+		public ISession getSession()
 		{
 			return this.getFactory().OpenSession(); 
 		}
@@ -73,7 +73,7 @@
 				this.config = new Configuration();
 				this.config.DataBaseIntegration((db) =>
 				{
-					db.Dialect<MySQLDialect>();
+					db.Dialect<MySQL55Dialect>();
 					db.Driver<MySqlDataDriver>();
 					db.ConnectionString = this.configService.GetConnectionString("db"); 
 				});
