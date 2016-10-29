@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.kiranpatel.crimecluster
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.kiranpatel.crimecluster.framework", "com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj", "{83C41F6D-4D1D-458A-9B12-EDB646B87267}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.kiranpatel.crimecluster.framework.tests", "com.kiranpatel.crimecluster.framework.tests\com.kiranpatel.crimecluster.framework.tests.csproj", "{C65DCD83-AD4A-47B0-81D0-9B8E40D67816}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,5 +27,9 @@ Global
 		{83C41F6D-4D1D-458A-9B12-EDB646B87267}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83C41F6D-4D1D-458A-9B12-EDB646B87267}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83C41F6D-4D1D-458A-9B12-EDB646B87267}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C65DCD83-AD4A-47B0-81D0-9B8E40D67816}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C65DCD83-AD4A-47B0-81D0-9B8E40D67816}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C65DCD83-AD4A-47B0-81D0-9B8E40D67816}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C65DCD83-AD4A-47B0-81D0-9B8E40D67816}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
