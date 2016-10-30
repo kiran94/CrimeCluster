@@ -38,7 +38,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="contracts\ILogger.cs" />
     <Compile Include="services\LoggerService.cs" />
-    <Compile Include="Progam.cs" />
     <Compile Include="contracts\IConfigurationService.cs" />
     <Compile Include="enums\ConfigurationKey.cs" />
     <Compile Include="services\ConfigurationService.cs" />
@@ -63,8 +62,9 @@
     <Compile Include="contracts\IIncidentBacklogService.cs" />
     <Compile Include="contracts\IIncidentService.cs" />
     <Compile Include="services\IncidentBacklogService.cs" />
-    <Compile Include="entities\ProrityQueue.cs" />
-    <Compile Include="contracts\IProrityQueue.cs" />
+    <Compile Include="structures\Heap.cs" />
+    <Compile Include="comparers\IncidentComparer.cs" />
+    <Compile Include="contracts\IHeap.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
@@ -73,6 +73,9 @@
     <Folder Include="extensions\" />
     <Folder Include="enums\" />
     <Folder Include="resources\" />
+    <Folder Include="enums\New Folder\" />
+    <Folder Include="structures\" />
+    <Folder Include="comparers\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
