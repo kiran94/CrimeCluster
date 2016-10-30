@@ -73,7 +73,6 @@
     <Folder Include="extensions\" />
     <Folder Include="enums\" />
     <Folder Include="resources\" />
-    <Folder Include="enums\New Folder\" />
     <Folder Include="structures\" />
     <Folder Include="comparers\" />
   </ItemGroup>
