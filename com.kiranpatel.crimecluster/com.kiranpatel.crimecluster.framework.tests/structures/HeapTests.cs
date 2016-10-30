@@ -91,6 +91,30 @@
 		}
 
 		/// <summary>
+		/// Ensures when the no items are added, zero is returned on the get size call
+		/// </summary>
+		[Test]
+		public void getSize_NoItemsAdded_Zero()
+		{
+			int size = this.GetInstance().getSize();
+			Assert.AreEqual(0, size); 
+		}
+
+		/// <summary>
+		/// Ensures when items are added, it is reflected in the size call
+		/// </summary>
+		[Test]
+		public void getSize_TwoItemsAdded_Two()
+		{
+			var service = this.GetInstance();
+			service.add(new Incident() { Grading = new IncidentGrading() { GradeValue = 1 } });
+			service.add(new Incident() { Grading = new IncidentGrading() { GradeValue = 1 } });
+			int size = service.getSize();
+
+			Assert.AreEqual(2, size);
+		}
+
+		/// <summary>
 		/// Gets the instance.
 		/// </summary>
 		/// <returns>The instance.</returns>

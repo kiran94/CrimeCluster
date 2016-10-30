@@ -22,5 +22,10 @@
 		/// </summary>
 		/// <returns>The minimum.</returns>
 		T getRoot();
+
+		/// <summary>
+		/// Gets the number of nodes in the heap
+		/// </summary>
+		int getSize(); 
 	}
 }

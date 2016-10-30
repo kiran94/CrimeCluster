@@ -77,6 +77,12 @@
 			return root; 
 		}
 
+		// <inheritdoc>
+		public int getSize()
+		{
+			return this.heap.Count; 
+		}
+
 		/// <summary>
 		/// Starting the StartingIndex, if the left or right child is less than the startingIndex,
 		/// then swap and perform the same operation on the next sub tree
