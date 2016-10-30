@@ -41,11 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="services\" />
+    <Folder Include="entities\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="services\LocationServiceTests.cs" />
     <Compile Include="services\EntityServiceTests.cs" />
     <Compile Include="services\OfficerServiceTests.cs" />
+    <Compile Include="services\IncidentServiceTests.cs" />
+    <Compile Include="services\IncidentBacklogServiceTests.cs" />
+    <Compile Include="entities\ProrityQueueTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj">

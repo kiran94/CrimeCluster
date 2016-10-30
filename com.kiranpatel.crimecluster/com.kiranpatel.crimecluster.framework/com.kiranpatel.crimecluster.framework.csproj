@@ -55,6 +55,16 @@
     <Compile Include="services\OfficerService.cs" />
     <Compile Include="contracts\IOfficerService.cs" />
     <Compile Include="entities\IncidentGrading.cs" />
+    <Compile Include="entities\Incident.cs" />
+    <Compile Include="entities\IncidentOutcome.cs" />
+    <Compile Include="services\IncidentService.cs" />
+    <Compile Include="contracts\IIncidentOutcomeService.cs" />
+    <Compile Include="services\IncidentOutcomeService.cs" />
+    <Compile Include="contracts\IIncidentBacklogService.cs" />
+    <Compile Include="contracts\IIncidentService.cs" />
+    <Compile Include="services\IncidentBacklogService.cs" />
+    <Compile Include="entities\ProrityQueue.cs" />
+    <Compile Include="contracts\IProrityQueue.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
