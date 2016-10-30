@@ -4,7 +4,7 @@ namespace com.kiranpatel.crimecluster.framework
 	/// <summary>
 	/// CRUD functionality for all Entities
 	/// </summary>
-	public interface IEntityService<T> where T : EntityBase
+	public interface IEntityService<T> : IDisposable where T : EntityBase
 	{
 		/// <summary>
 		/// Save the specified toSave.

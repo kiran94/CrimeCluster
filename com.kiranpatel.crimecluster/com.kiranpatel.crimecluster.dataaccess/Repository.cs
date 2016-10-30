@@ -58,5 +58,35 @@
 		{
 			return this.session.Query<T>(); 
 		}
+
+		/// <summary>
+		/// Releases all resource used by the <see cref="T:com.kiranpatel.crimecluster.dataaccess.Repository"/> object.
+		/// </summary>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the
+		/// <see cref="T:com.kiranpatel.crimecluster.dataaccess.Repository"/>. The <see cref="Dispose"/> method leaves the
+		/// <see cref="T:com.kiranpatel.crimecluster.dataaccess.Repository"/> in an unusable state. After calling
+		/// <see cref="Dispose"/>, you must release all references to the
+		/// <see cref="T:com.kiranpatel.crimecluster.dataaccess.Repository"/> so the garbage collector can reclaim the memory
+		/// that the <see cref="T:com.kiranpatel.crimecluster.dataaccess.Repository"/> was occupying.</remarks>
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		/// Dispose the specified disposing.
+		/// </summary>
+		/// <param name="disposing">If set to <c>true</c> disposing.</param>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				if (this.session != null)
+				{
+					this.session.Flush(); 
+				}
+			}
+		}
 	}
 }

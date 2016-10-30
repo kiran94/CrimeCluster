@@ -6,7 +6,7 @@ namespace com.kiranpatel.crimecluster.framework
 	/// <summary>
 	/// Repository Pattern for accessing data store
 	/// </summary>
-	public interface IRepository
+	public interface IRepository : IDisposable
 	{
 		/// <summary>
 		/// Saves the Object to the data store

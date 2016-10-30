@@ -12,7 +12,7 @@
 		/// <summary>
 		/// Heap data structure (Prority Queue) 
 		/// </summary>
-		private IHeap<Incident> heap; 
+		private static IHeap<Incident> heap;
 
 		/// <summary>
 		/// The logger instances
@@ -23,10 +23,11 @@
 		/// Initializes a new instance of the
 		/// <see cref="T:com.kiranpatel.crimecluster.framework.IncidentBacklogService"/> class.
 		/// </summary>
+		/// <param name="passedHeap">passed Heap</param>
 		/// <param name="logger">Logger.</param>
-		public IncidentBacklogService(IHeap<Incident> heap, ILogger logger)
+		public IncidentBacklogService(IHeap<Incident> passedHeap, ILogger logger)
 		{
-			this.heap = heap; 
+			heap = passedHeap;
 			this.logger = logger;
 		}
 
@@ -35,18 +36,18 @@
 		{
 			if (incident == null)
 			{
-				return; 
+				return;
 			}
 
-			this.logger.info(String.Format("Adding Incident {0} to the backlog", incident.ID.ToString())); 
-			this.heap.add(incident); 
+			this.logger.info(String.Format("Adding Incident {0} to the backlog", incident.ID.ToString()));
+			heap.add(incident);
 		}
 
 		// <inheritdoc>
 		public Incident next()
 		{
 			this.logger.info("Getting next incident from the backlog");
-			return this.heap.getRoot(); 
+			return heap.getRoot();
 		}
 
 		// <inheritdoc>
@@ -58,7 +59,7 @@
 		// <inheritdoc>
 		public int backlogSize()
 		{
-			return this.heap.getSize(); 
+			return heap.getSize();
 		}
 	}
 }

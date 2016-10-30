@@ -4,7 +4,7 @@ namespace com.kiranpatel.crimecluster.framework
 	/// <summary>
 	/// Contract for Configuration service.
 	/// </summary>
-	public interface IConfigurationService
+	public interface IConfigurationService : IDisposable
 	{
 		/// <summary>
 		/// Get the specified config value for the given key or the default value
