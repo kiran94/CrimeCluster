@@ -23,7 +23,14 @@
 		[Test]
 		public void add_NoItemsYet_AddedAsRoot()
 		{
-			throw new NotImplementedException();
+			Incident incident = new Incident();
+
+			var heap = this.GetInstance();
+			heap.add(incident);
+
+			var root = heap.getRoot();
+
+			Assert.AreSame(incident, root); 
 		}
 
 		/// <summary>
@@ -33,7 +40,21 @@
 		[Test]
 		public void add_ItemsAlreadyAdded_ItemAddedInCorrectPlace()
 		{
-			throw new NotImplementedException(); 
+			var incidents = new List<Incident>();
+			incidents.Add(new Incident() { Grading = new IncidentGrading() { GradeValue = 4 } });
+			incidents.Add(new Incident() { Grading = new IncidentGrading() { GradeValue = 4 } });
+			incidents.Add(new Incident() { Grading = new IncidentGrading() { GradeValue = 6 } });
+			incidents.Add(new Incident() { Grading = new IncidentGrading() { GradeValue = 2 } });
+			incidents.Add(new Incident() { Grading = new IncidentGrading() { GradeValue = 3 } });
+			incidents.Add(new Incident() { Grading = new IncidentGrading() { GradeValue = 7 } });
+			incidents.Add(new Incident() { Grading = new IncidentGrading() { GradeValue = 3 } });
+
+			var heap = this.GetInstance();
+			incidents.ToList().ForEach(o => heap.add(o));
+
+			var result = heap.getRoot();
+
+			Assert.AreEqual(2, result.Grading.GradeValue); 
 		}
 
 		/// <summary>
@@ -42,7 +63,7 @@
 		[Test]
 		public void getRoot_NoItems_Null()
 		{
-			throw new NotImplementedException();
+			Assert.IsNull(this.GetInstance().getRoot()); 
 		}
 
 		/// <summary>
@@ -68,8 +89,6 @@
 				Assert.AreEqual(i, result.Grading.GradeValue);
 			}
 		}
-
-		//public void getRoot_Get
 
 		/// <summary>
 		/// Gets the instance.

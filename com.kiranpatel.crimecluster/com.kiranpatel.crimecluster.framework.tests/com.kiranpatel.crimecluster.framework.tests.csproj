@@ -43,6 +43,7 @@
     <Folder Include="services\" />
     <Folder Include="entities\" />
     <Folder Include="comparers\" />
+    <Folder Include="structures\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="services\LocationServiceTests.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="services\IncidentServiceTests.cs" />
     <Compile Include="services\IncidentBacklogServiceTests.cs" />
     <Compile Include="comparers\IncidentComparerTests.cs" />
+    <Compile Include="structures\HeapTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj">
