@@ -68,6 +68,8 @@
     <Compile Include="structures\Heap.cs" />
     <Compile Include="comparers\IncidentComparer.cs" />
     <Compile Include="contracts\IHeap.cs" />
+    <Compile Include="contracts\ISerialisationService.cs" />
+    <Compile Include="services\SerialisationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
