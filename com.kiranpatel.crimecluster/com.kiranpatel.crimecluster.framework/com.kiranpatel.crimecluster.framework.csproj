@@ -70,6 +70,7 @@
     <Compile Include="contracts\IHeap.cs" />
     <Compile Include="contracts\ISerialisationService.cs" />
     <Compile Include="services\SerialisationService.cs" />
+    <Compile Include="enums\ResponseResultType.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />

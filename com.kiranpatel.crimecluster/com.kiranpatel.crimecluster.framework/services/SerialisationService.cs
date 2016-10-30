@@ -23,16 +23,16 @@
 		}
 
 		// <inheritdoc>
-		public string serialise<T>(T toSerialise) where T : EntityBase
+		public string serialise<T>(T toSerialise)
 		{
-			this.logger.info(String.Format("Serialising Object {0} of Type {1}", toSerialise.ID.ToString(), typeof(T).ToString())); 
+			this.logger.info("Serialising Object"); 
 			return JsonConvert.SerializeObject(toSerialise); 
 		}
 
 		// <inheritdoc>
-		public T deserialise<T>(string toDeserialise) where T : EntityBase
+		public T deserialise<T>(string toDeserialise)
 		{
-			this.logger.info(String.Format("Deserialising Object to type {0}", typeof(T).ToString()));
+			this.logger.info("Deserialising Object");
 			return JsonConvert.DeserializeObject<T>(toDeserialise); 
 		}
 	}

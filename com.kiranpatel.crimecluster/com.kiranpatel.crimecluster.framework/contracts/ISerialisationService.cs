@@ -13,13 +13,13 @@
 		/// </summary>
 		/// <param name="toSerialise">To serialise.</param>
 		/// <typeparam name="T">The type of object to serialise</typeparam>
-		String serialise<T>(T toSerialise) where T : EntityBase;
+		String serialise<T>(T toSerialise);
 
 		/// <summary>
 		/// Deserialise the specified toDeserialise.
 		/// </summary>
 		/// <param name="toDeserialise">To deserialise.</param>
 		/// <typeparam name="T">The type of object to deserialise</typeparam>
-		T deserialise<T>(String toDeserialise) where T : EntityBase;
+		T deserialise<T>(String toDeserialise);
 	}
 }
