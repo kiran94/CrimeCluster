@@ -40,66 +40,81 @@
 
 		///// <summary>
 		///// Gets data for officer with the identifier
+		///// GET: /Get
 		///// </summary>
 		///// <param name="ID">Identifier.</param>
-		//public String Get(String ID)
-		//{
-		//	ResponseResultModel response = new ResponseResultModel();
-		//	Guid officerID; 
+		public String Get(String ID)
+		{
+			Guid officerID; 
 
-		//	if (ID == null || ID.Equals(String.Empty))
-		//	{
-		//		var model = this.logError("Officer: ID was null or Empty");
-		//		return this.serialisationService.serialise(model); 
-		//	}
+			if (String.IsNullOrEmpty(ID))
+			{
+				var model = this.logError("Officer: ID was null or Empty");
+				return this.serialisationService.serialise(model); 
+			}
 
-		//	if (Guid.TryParse(ID, out officerID))
-		//	{
-		//		var model = this.logError("Officer: Failed to parse Guid");
-		//		return this.serialisationService.serialise(model);
-		//	}
+			if (!Guid.TryParse(ID, out officerID))
+			{
+				var model = this.logError("Officer: Failed to parse Guid");
+				return this.serialisationService.serialise(model);
+			}
 
-		//	Officer officer = this.officerService.Get(officerID);
+			Officer officer = this.officerService.Get(officerID);
 
-		//	if (officer == null)
-		//	{
-		//		var model = this.logError("Officer: Officer not found");
-		//		return this.serialisationService.serialise(model);
-		//	}
+			if (officer == null)
+			{
+				var model = this.logError("Officer: Officer not found");
+				return this.serialisationService.serialise(model);
+			}
 
-		//	var model = new ResponseResultModel() 
-		//	{ 
-		//		Status = ResponseResultType.OK, 
-		//		Message = "Officer Retrieved", 
-		//		Response = this.serialisationService.serialise(officer)
-		//	};
+			var responseResultModel = new ResponseResultModel() 
+			{ 
+				Status = ResponseResultType.OK, 
+				Message = "Officer Retrieved", 
+				Response = this.serialisationService.serialise(officer)
+			};
 
-		//	return this.serialisationService.serialise(model); 
-		//}
+			return this.serialisationService.serialise(responseResultModel); 
+		}
 
-		///// <summary>
-		///// Saves a new Officer 
-		///// </summary>
-		///// <param name="serialisedOfficer">Serialised officer object to save</param>
-		//public String Save(String serialisedOfficer)
-		//{
-		//	if (serialisedOfficer == null || serialisedOfficer.Equals(string.Empty))
-		//	{
-		//		var model = this.logError("Officer: Officer was null or empty");
-		//		return this.serialisationService.serialise(model);
-		//	}
+		/// <summary>
+		/// Recieves a serialised officer from a client and passes to the service layer
+		/// POST: /Save
+		/// </summary>
+		[HttpPost]
+		public String Save(String serialisedOfficer)
+		{
+			if (String.IsNullOrEmpty(serialisedOfficer))
+			{
+				var model = this.logError("Officer: Officer null or empty");
+				return this.serialisationService.serialise(model); 
+			}
 
-		//	Officer officer = this.serialisationService.deserialise<Officer>(serialisedOfficer);
-		//	if (officer == null)
-		//	{
-		//		var model = this.logError("Officer: Officer could not be deserialised");
-		//		return this.serialisationService.serialise(model);
-		//	}
+			var officer = this.serialisationService.deserialise<Officer>(serialisedOfficer);
 
+			if (officer == null)
+			{
+				var model = this.logError("Officer: Officer is wrong format");
+				return this.serialisationService.serialise(model);
+			}
 
+			if (!this.officerService.Validate(officer))
+			{
+				var model = this.logError("Officer: Validation Failed");
+				return this.serialisationService.serialise(model);
+			}
 
+			this.logger.debug("Officer: Saved"); 
+			this.officerService.Save(officer);
 
-		//}
+			var responseModel = new ResponseResultModel()
+			{
+				Status = ResponseResultType.OK,
+				Message = "Officer: Saved"
+			};
+
+			return this.serialisationService.serialise(responseModel); 
+		}
 
 		/// <summary>
 		/// Releases all resource used by the

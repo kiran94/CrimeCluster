@@ -53,17 +53,22 @@
 			this.serialisationService = serialisationService; 
 		}
 
+		/// <summary>
+		/// Logs the error and builds a response result model
+		/// </summary>
+		/// <returns>The response result model</returns>
+		/// <param name="message">Message.</param>
 		protected ResponseResultModel logError(String message)
 		{
 			this.logger.warn(message);
 
-			ResponseResultModel model = new ResponseResultModel()
+			var responseResultModel = new ResponseResultModel()
 			{
 				Status = ResponseResultType.ERROR,
 				Message = message
 			};
 
-			return model;
+			return responseResultModel;
 		}
 
 		/// <summary>
