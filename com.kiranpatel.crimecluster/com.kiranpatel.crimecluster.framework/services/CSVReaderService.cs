@@ -131,8 +131,17 @@
 				{
 					this.reader.Dispose(); 
 				}
+
+				if (this.configService != null)
+				{
+					this.configService.Dispose(); 
+				}
+
+				if (this.fileIOService != null)
+				{
+					this.fileIOService.Dispose(); 
+				}
 			}
 		}
-
 	}
 }

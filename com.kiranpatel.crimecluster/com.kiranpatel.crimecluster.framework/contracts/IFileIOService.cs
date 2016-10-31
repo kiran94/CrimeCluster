@@ -6,7 +6,7 @@
 	/// <summary>
 	/// Contract for the File IO Service
 	/// </summary>
-	public interface IFileIOService
+	public interface IFileIOService : IDisposable
 	{
 		/// <summary>
 		/// Flag indicating if the file exists on the file system

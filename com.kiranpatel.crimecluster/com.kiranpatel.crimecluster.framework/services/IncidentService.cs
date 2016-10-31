@@ -97,5 +97,49 @@
 		{
 			return this.repository.Query<Incident>().ToList(); 
 		}
+
+		/// <summary>
+		/// Releases all resource used by the <see cref="T:com.kiranpatel.crimecluster.framework.IncidentService"/> object.
+		/// </summary>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the
+		/// <see cref="T:com.kiranpatel.crimecluster.framework.IncidentService"/>. The <see cref="Dispose"/> method leaves the
+		/// <see cref="T:com.kiranpatel.crimecluster.framework.IncidentService"/> in an unusable state. After calling
+		/// <see cref="Dispose"/>, you must release all references to the
+		/// <see cref="T:com.kiranpatel.crimecluster.framework.IncidentService"/> so the garbage collector can reclaim the
+		/// memory that the <see cref="T:com.kiranpatel.crimecluster.framework.IncidentService"/> was occupying.</remarks>
+		public new void Dispose()
+		{
+			base.Dispose(); 
+
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		/// Dispose the specified disposing.
+		/// </summary>
+		/// <param name="disposing">If set to <c>true</c> disposing.</param>
+		protected virtual new void Dispose(bool disposing)
+		{
+			base.Dispose(); 
+
+			if (disposing)
+			{
+				if (this.officerService != null)
+				{
+					this.officerService.Dispose(); 
+				}
+
+				if (this.outcomeService != null)
+				{
+					this.outcomeService.Dispose(); 
+				}
+
+				if (this.locationService != null)
+				{
+					this.locationService.Dispose(); 
+				}
+			}
+		}
 	}
 }

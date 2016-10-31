@@ -26,7 +26,7 @@
 		private LoggerService()
 		{
 			log = LogManager.GetLogger(typeof(LoggerService));
-			XmlConfigurator.Configure(new FileInfo("log4net.xml")); 
+			XmlConfigurator.Configure(new FileInfo("log4net.xml"));
 		}
 
 		// <inheritdoc>
