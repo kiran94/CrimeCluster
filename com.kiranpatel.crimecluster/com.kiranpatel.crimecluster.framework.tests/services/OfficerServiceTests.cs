@@ -161,6 +161,48 @@
 		}
 
 		/// <summary>
+		/// Ensures when one of the required attributes are null, false is returned
+		/// </summary>
+		[Test]
+		public void Validate_InvalidOfficer_False()
+		{
+			Officer officer = new Officer()
+			{
+				Title = "title",
+				FirstName = "firstName",
+				LastName = "lastName",
+				BadgeNumber = null,
+				DOB = DateTime.Now,
+				DateRegistered = DateTime.Now,
+				Status = StatusType.Busy
+			};
+
+			var result = this.GetInstance().Validate(officer);
+			Assert.False(result); 
+		}
+
+		/// <summary>
+		/// Ensures when all required attributes are not null, true is required 
+		/// </summary>
+		[Test]
+		public void Validate_ValidOfficer_True()
+		{
+			Officer officer = new Officer()
+			{
+				Title = "title",
+				FirstName = "firstName",
+				LastName = "lastName",
+				BadgeNumber = "001",
+				DOB = DateTime.Now,
+				DateRegistered = DateTime.Now,
+				Status = StatusType.Busy
+			};
+
+			var result = this.GetInstance().Validate(officer);
+			Assert.True(result);
+		}
+
+		/// <summary>
 		/// Gets the instance.
 		/// </summary>
 		/// <returns>The instance.</returns>

@@ -31,5 +31,11 @@
 		/// </summary>
 		/// <param name="officer">Officer.</param>
 		void SetOfficerBusy(Officer officer);
+
+		/// <summary>
+		/// Validates that passed officer obeys the rules of the application
+		/// </summary>
+		/// <param name="officer">Officer.</param>
+		bool Validate(Officer officer); 
 	}
 }

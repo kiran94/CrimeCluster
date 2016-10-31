@@ -64,5 +64,18 @@
 			officer.Status = StatusType.Busy;
 			this.repository.Update(officer);
 		}
+
+		// <inheritdoc>
+		public bool Validate(Officer officer)
+		{
+			return !(officer.ID == null
+				|| officer.BadgeNumber == null
+				|| officer.Title == null
+				|| officer.FirstName == null
+				|| officer.LastName == null
+				|| officer.DOB == null
+					 || officer.DateRegistered == null);
+			
+		}
 	}
 }
