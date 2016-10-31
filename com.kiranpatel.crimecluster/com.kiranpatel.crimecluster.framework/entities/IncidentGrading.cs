@@ -11,7 +11,7 @@
 		/// Gets or sets the grade value.
 		/// </summary>
 		/// <value>The grade value.</value>
-		public virtual int GradeValue { get; set;}
+		public virtual int? GradeValue { get; set;}
 
 		/// <summary>
 		/// Gets or sets the description.
