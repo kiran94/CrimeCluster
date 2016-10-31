@@ -3,6 +3,9 @@ namespace com.kiranpatel.crimecluster.framework
 {
 	public enum ConfigurationKey
 	{
-		test = 0
+		Default,
+		CultureInfo,
+		CSVIncidentDateFormatRegex,
+		CSVIncidentColumnNumber
 	}
 }
