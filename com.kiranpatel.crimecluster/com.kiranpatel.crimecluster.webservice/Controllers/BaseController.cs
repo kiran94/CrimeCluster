@@ -11,7 +11,7 @@
 	/// <summary>
 	/// Base controller for all other controllers
 	/// </summary>
-    public class BaseController : Controller
+	public class BaseController : Controller, IDisposable 
     {
 		/// <summary>
 		/// The repository instance
@@ -64,6 +64,48 @@
 			};
 
 			return model;
+		}
+
+		/// <summary>
+		/// Releases all resource used by the
+		/// <see cref="T:com.kiranpatel.crimecluster.webservice.Controllers.BaseController"/> object.
+		/// </summary>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the
+		/// <see cref="T:com.kiranpatel.crimecluster.webservice.Controllers.BaseController"/>. The <see cref="Dispose"/>
+		/// method leaves the <see cref="T:com.kiranpatel.crimecluster.webservice.Controllers.BaseController"/> in an unusable
+		/// state. After calling <see cref="Dispose"/>, you must release all references to the
+		/// <see cref="T:com.kiranpatel.crimecluster.webservice.Controllers.BaseController"/> so the garbage collector can
+		/// reclaim the memory that the <see cref="T:com.kiranpatel.crimecluster.webservice.Controllers.BaseController"/> was occupying.</remarks>
+		public new void Dispose()
+		{
+			base.Dispose(); 
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		/// Dispose the specified disposing.
+		/// </summary>
+		/// <param name="disposing">If set to <c>true</c> disposing.</param>
+		protected virtual new void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				if (this.repository != null)
+				{
+					this.repository.Dispose(); 
+				}
+
+				if (this.configService != null)
+				{
+					this.configService.Dispose(); 
+				}
+
+				if (this.serialisationService != null)
+				{
+					this.serialisationService.Dispose(); 
+				}
+			}
 		}
     }
 }

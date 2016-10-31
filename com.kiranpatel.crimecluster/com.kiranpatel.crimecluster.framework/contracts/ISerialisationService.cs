@@ -6,7 +6,7 @@
 	/// <summary>
 	/// Contract for the Serialisation Service 
 	/// </summary>
-	public interface ISerialisationService
+	public interface ISerialisationService : IDisposable
 	{
 		/// <summary>
 		/// Serialise the specified toSerialise.

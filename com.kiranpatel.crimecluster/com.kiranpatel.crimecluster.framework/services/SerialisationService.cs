@@ -6,7 +6,7 @@
 	/// <summary>
 	/// Service for Serialisating and Deserialising Objects
 	/// </summary>
-	public class SerialisationService : ISerialisationService, IDisposable
+	public class SerialisationService : ISerialisationService
 	{
 		/// <summary>
 		/// The logger instance

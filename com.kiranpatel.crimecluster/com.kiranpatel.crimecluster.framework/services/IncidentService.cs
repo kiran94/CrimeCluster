@@ -121,8 +121,6 @@
 		/// <param name="disposing">If set to <c>true</c> disposing.</param>
 		protected virtual new void Dispose(bool disposing)
 		{
-			base.Dispose(); 
-
 			if (disposing)
 			{
 				if (this.officerService != null)

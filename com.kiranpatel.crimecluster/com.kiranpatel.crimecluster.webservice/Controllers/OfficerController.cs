@@ -100,5 +100,34 @@
 
 
 		//}
+
+		/// <summary>
+		/// Releases all resource used by the
+		/// <see cref="T:com.kiranpatel.crimecluster.webservice.Controllers.OfficerController"/> object.
+		/// </summary>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the
+		/// <see cref="T:com.kiranpatel.crimecluster.webservice.Controllers.OfficerController"/>. The <see cref="Dispose"/>
+		/// method leaves the <see cref="T:com.kiranpatel.crimecluster.webservice.Controllers.OfficerController"/> in an
+		/// unusable state. After calling <see cref="Dispose"/>, you must release all references to the
+		/// <see cref="T:com.kiranpatel.crimecluster.webservice.Controllers.OfficerController"/> so the garbage collector can
+		/// reclaim the memory that the <see cref="T:com.kiranpatel.crimecluster.webservice.Controllers.OfficerController"/>
+		/// was occupying.</remarks>
+		public new void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		/// <summary>
+		/// Dispose the specified disposing.
+		/// </summary>
+		/// <param name="disposing">If set to <c>true</c> disposing.</param>
+		protected virtual new void Dispose(bool disposing)
+		{
+			if (this.officerService != null)
+			{
+				this.officerService.Dispose(); 
+			}
+		}
     }
 }
