@@ -54,12 +54,18 @@
 
 			ICSVParseStrategy parseStrategy = getStrategy(parseType);
 			ICollection<T> returnSet = new HashSet<T>();
+			int numberOfHeadersExpected = Int32.Parse(this.configService.Get(ConfigurationKey.CSVIncidentColumnNumber, "12")); 
 
 			using (Stream underlyingStream = this.fileIOService.openStream(fileLocation, FileMode.Open, FileAccess.Read, FileShare.Read))
 			using (TextReader reader = new StreamReader(underlyingStream))
 			using (this.reader = new CsvReader(reader, true))
 			{
 				var headers = this.reader.GetFieldHeaders();
+				if (numberOfHeadersExpected != headers.Length)
+				{
+					this.logger.warn(String.Format("Expected {0} headers but was: {1}", numberOfHeadersExpected, headers.Length)); 
+					return new HashSet<T>(); 
+				}
 
 				while (this.reader.ReadNextRecord())
 				{
@@ -70,7 +76,11 @@
 						row[i] = this.reader[i]; 
 					}
 
-					returnSet.Add((T) parseStrategy.parse(row)); 
+					var result = (T)parseStrategy.parse(row);
+					if (result != null)
+					{
+						returnSet.Add(result);
+					}
 				}
 			}
 

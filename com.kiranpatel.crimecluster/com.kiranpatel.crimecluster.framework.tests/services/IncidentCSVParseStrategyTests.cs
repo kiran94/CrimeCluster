@@ -117,6 +117,10 @@
 			Assert.NotNull(result.Outcome.FirstOrDefault());
 			Assert.AreEqual(new DateTime(2009, 01, 01), result.Outcome.FirstOrDefault().DateCreated); 
 			Assert.AreEqual("Outcome", result.Outcome.FirstOrDefault().Outcome);
+
+			Assert.NotNull(result.Grading);
+			StringAssert.AreEqualIgnoringCase("Imported", result.Grading.Description);
+			Assert.IsNull(result.Grading.GradeValue); 
 		}
 
 		/*

@@ -76,9 +76,11 @@
 				var incident = new Incident() { DateCreated = extractedDate, Summary = extractedCrimeType };
 				var location = new Location() { DateLogged = extractedDate, Latitude = extractedLatitude, Longitude = extractedLongitude };
 				var outcome = new IncidentOutcome() { DateCreated = extractedDate, Outcome = extractedOutcome, Incident = incident };
+				var grading = new IncidentGrading() { GradeValue = null, Description = "Imported" };
 
 				incident.Location = location;
 				incident.Outcome = new List<IncidentOutcome>() { outcome };
+				incident.Grading = grading; 
 
 				return incident;
 			}
