@@ -16,7 +16,12 @@
 		/// <summary>
 		/// The officer service.
 		/// </summary>
-		private readonly IOfficerService officerService; 
+		private readonly IOfficerService officerService;
+
+		/// <summary>
+		/// The location service.
+		/// </summary>
+		private readonly ILocationService locationService; 
 
 		/// <summary>
 		/// Initializes a new instance of the
@@ -27,15 +32,18 @@
 		/// <param name="logger">Logger.</param>
 		/// <param name="serialisationService">Serialisation service.</param>
 		/// <param name="officerService">Officer service.</param>
+		/// <param name="locationService">Location service.</param>
 		public OfficerController(
 			IRepository repository,
 			IConfigurationService configService,
 			ILogger logger,
 			ISerialisationService serialisationService,
-			IOfficerService officerService) 
+			IOfficerService officerService,
+			ILocationService locationService)
 			: base(repository, configService, logger, serialisationService)
 		{
-			this.officerService = officerService; 
+			this.officerService = officerService;
+			this.locationService = locationService;
 		}
 
 		///// <summary>
@@ -98,7 +106,7 @@
 				return this.serialisationService.serialise(model);
 			}
 
-			if (!this.officerService.Validate(officer))
+			if (!this.officerService.validate(officer))
 			{
 				var model = this.logError("Officer: Validation Failed");
 				return this.serialisationService.serialise(model);
@@ -114,6 +122,61 @@
 			};
 
 			return this.serialisationService.serialise(responseModel); 
+		}
+
+		/// <summary>
+		/// Updates the location of an officer
+		/// </summary>
+		/// <returns>The location.</returns>
+		/// <param name="ID">Identifier.</param>
+		/// <param name="serialisedLocation">Serialised location.</param>
+		[HttpPost]
+		public String updateLocation(String ID, String serialisedLocation)
+		{
+			if (String.IsNullOrEmpty(ID))
+			{
+				var model = this.logError("Officer: null or empty ID");
+				return this.serialisationService.serialise(model);
+			}
+
+			if (String.IsNullOrEmpty(serialisedLocation))
+			{
+				var model = this.logError("Officer: null or empty serialise location");
+				return this.serialisationService.serialise(model);
+			}
+
+			Guid officerID;
+			if (!Guid.TryParse(ID, out officerID))
+			{
+				var model = this.logError("Officer: invalid officer id");
+				return this.serialisationService.serialise(model);
+			}
+
+			Location location = this.serialisationService.deserialise<Location>(serialisedLocation);
+			if (location == null || !this.locationService.validate(location))
+			{
+				var model = this.logError("Officer: location failed to serialise or did not validate");
+				return this.serialisationService.serialise(model);
+			}
+
+			Officer officer = this.officerService.Get(officerID);
+			if (officer == null)
+			{
+				var model = this.logError("Officer: officer could not be found");
+				return this.serialisationService.serialise(model);
+			}
+
+			this.logger.debug(String.Format("Updating Officer {0} location", officer.ID.ToString())); 
+			officer.Location = location;
+			this.officerService.Update(officer);
+
+			var resultReturnModel = new ResponseResultModel()
+			{
+				Status = ResponseResultType.OK,
+				Message = "Officer: Location Updated"
+			};
+
+			return this.serialisationService.serialise(resultReturnModel); 
 		}
 
 		/// <summary>
