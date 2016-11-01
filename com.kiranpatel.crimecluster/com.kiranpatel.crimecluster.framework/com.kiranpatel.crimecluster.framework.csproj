@@ -82,6 +82,7 @@
     <Compile Include="services\CSVReaderService.cs" />
     <Compile Include="contracts\IFileIOService.cs" />
     <Compile Include="services\FIleIOService.cs" />
+    <Compile Include="contracts\IValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />

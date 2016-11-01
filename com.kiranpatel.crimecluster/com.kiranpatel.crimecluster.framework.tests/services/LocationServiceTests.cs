@@ -130,7 +130,60 @@
 			var result = this.GetInstance().findClosest(target, locations);
 
 			Assert.AreEqual(locations.First().ID.ToString(), result.ID.ToString());  
+		}
 
+		/// <summary>
+		/// Ensures when the latitude is null, false is returned
+		/// </summary>
+		[Test]
+		public void validate_NullLatitude_False()
+		{
+			Location location = new Location()
+			{
+				Latitude = null,
+				Longitude = 1D,
+				DateLogged = DateTime.Now
+			};
+
+			var result = this.GetInstance().validate(location);
+
+			Assert.IsFalse(result); 
+		}
+
+		/// <summary>
+		/// ENsures when the longitude is null, false is returned
+		/// </summary>
+		[Test]
+		public void validate_NullLongitude_False()
+		{
+			Location location = new Location()
+			{
+				Latitude = 1D,
+				Longitude = null,
+				DateLogged = DateTime.Now
+			};
+
+			var result = this.GetInstance().validate(location);
+
+			Assert.IsFalse(result);
+		}
+
+		/// <summary>
+		/// Ensures when the date logged is null, false is returned
+		/// </summary>
+		[Test]
+		public void validate_NullDateLogged_False()
+		{
+			Location location = new Location()
+			{
+				Latitude = 2D,
+				Longitude = 1D,
+				DateLogged = null
+			};
+
+			var result = this.GetInstance().validate(location);
+
+			Assert.IsFalse(result);
 		}
 
 		/// <summary>

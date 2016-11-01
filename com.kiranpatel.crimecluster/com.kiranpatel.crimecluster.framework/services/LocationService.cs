@@ -29,7 +29,7 @@
 				return null;
 			}
 
-			return calculate(location1.Latitude, location1.Longitude, location2.Latitude, location2.Longitude); 
+			return calculate(location1.Latitude.Value, location1.Longitude.Value, location2.Latitude.Value, location2.Longitude.Value); 
 		}
 
 		// <inheritdoc>
@@ -51,6 +51,12 @@
 				.First();
 
 			return locationsToDifferences.Key;
+		}
+
+		// <inheritdoc>
+		public bool validate(Location location)
+		{
+			return !(!location.Latitude.HasValue || !location.Longitude.HasValue || location.DateLogged == null);
 		}
 
 		/// <summary>

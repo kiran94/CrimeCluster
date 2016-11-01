@@ -66,7 +66,7 @@
 		}
 
 		// <inheritdoc>
-		public bool Validate(Officer officer)
+		public bool validate(Officer officer)
 		{
 			return !(officer.ID == null
 				|| officer.BadgeNumber == null

@@ -7,7 +7,7 @@ namespace com.kiranpatel.crimecluster.framework
 	/// <summary>
 	/// Contract for operations on the Location Service
 	/// </summary>
-	public interface ILocationService : IEntityService<Location>
+	public interface ILocationService : IEntityService<Location>, IValidator<Location>
 	{
 		/// <summary>
 		/// Calculate the difference between location 1 and location 2 

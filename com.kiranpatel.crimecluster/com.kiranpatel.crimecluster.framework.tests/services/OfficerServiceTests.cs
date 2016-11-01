@@ -177,7 +177,7 @@
 				Status = StatusType.Busy
 			};
 
-			var result = this.GetInstance().Validate(officer);
+			var result = this.GetInstance().validate(officer);
 			Assert.False(result); 
 		}
 
@@ -198,7 +198,7 @@
 				Status = StatusType.Busy
 			};
 
-			var result = this.GetInstance().Validate(officer);
+			var result = this.GetInstance().validate(officer);
 			Assert.True(result);
 		}
 

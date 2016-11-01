@@ -6,7 +6,7 @@
 	/// <summary>
 	/// Contract for the Officer Service
 	/// </summary>
-	public interface IOfficerService : IEntityService<Officer>
+	public interface IOfficerService : IEntityService<Officer>, IValidator<Officer>
 	{
 		/// <summary>
 		/// Gets all Online officers populated into a dictionary relating ID to Locations
@@ -31,11 +31,5 @@
 		/// </summary>
 		/// <param name="officer">Officer.</param>
 		void SetOfficerBusy(Officer officer);
-
-		/// <summary>
-		/// Validates that passed officer obeys the rules of the application
-		/// </summary>
-		/// <param name="officer">Officer.</param>
-		bool Validate(Officer officer); 
 	}
 }
