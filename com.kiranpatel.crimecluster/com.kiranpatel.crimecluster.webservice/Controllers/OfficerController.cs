@@ -89,6 +89,8 @@
 		/// Recieves a serialised officer from a client and passes to the service layer
 		/// POST: /Save
 		/// </summary>
+		/// <returns>Result of the save operation</returns>
+		/// <param name="serialisedOfficer">serialised officer object</param>
 		[HttpPost]
 		public String Save(String serialisedOfficer)
 		{
@@ -127,9 +129,9 @@
 		/// <summary>
 		/// Updates the location of an officer
 		/// </summary>
-		/// <returns>The location.</returns>
-		/// <param name="ID">Identifier.</param>
-		/// <param name="serialisedLocation">Serialised location.</param>
+		/// <returns>The result of the update location operation</returns>
+		/// <param name="ID">The ID of the Officer</param>
+		/// <param name="serialisedLocation">Serialised location object</param>
 		[HttpPost]
 		public String updateLocation(String ID, String serialisedLocation)
 		{
@@ -180,6 +182,19 @@
 		}
 
 		/// <summary>
+		/// Saves an IncidentOutcome to an Incident
+		/// POST: /SaveOutcome
+		/// </summary>
+		/// <returns>result of the outcome save operation</returns>
+		/// <param name="ID">ID of the Incident</param>
+		/// <param name="serialisedOutcome">Serialised incident outcome.</param>
+		[HttpPost]
+		public String SaveOutcome(String ID, String serialisedOutcome)
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
 		/// Releases all resource used by the
 		/// <see cref="T:com.kiranpatel.crimecluster.webservice.Controllers.OfficerController"/> object.
 		/// </summary>
@@ -205,6 +220,11 @@
 			if (this.officerService != null)
 			{
 				this.officerService.Dispose(); 
+			}
+
+			if (this.locationService != null)
+			{
+				this.locationService.Dispose(); 
 			}
 		}
     }
