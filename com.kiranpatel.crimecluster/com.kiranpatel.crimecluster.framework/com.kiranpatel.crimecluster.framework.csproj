@@ -83,6 +83,7 @@
     <Compile Include="contracts\IFileIOService.cs" />
     <Compile Include="services\FIleIOService.cs" />
     <Compile Include="contracts\IValidator.cs" />
+    <Compile Include="structures\IncidentHeap.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />

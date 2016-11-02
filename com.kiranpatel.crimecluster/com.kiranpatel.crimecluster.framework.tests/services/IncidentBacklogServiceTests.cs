@@ -12,11 +12,6 @@
 	public class IncidentBacklogServiceTests
 	{
 		/// <summary>
-		/// The heap mock
-		/// </summary>
-		private Mock<IHeap<Incident>> heap; 
-
-		/// <summary>
 		/// The logger mock
 		/// </summary>
 		private Mock<ILogger> logger; 
@@ -27,22 +22,7 @@
 		[SetUp]
 		public void SetUp()
 		{
-			this.heap = new Mock<IHeap<Incident>>(); 
 			this.logger = new Mock<ILogger>(); 
-		}
-
-		/// <summary>
-		/// Ensures when an null incident is passed, nothing is added
-		/// </summary>
-		[Test]
-		public void add_NullIncident_NothingAdded()
-		{
-			Incident incident = null;
-			this.heap.Setup(x => x.add(incident)).Verifiable();
-
-			this.GetInstance().add(incident);
-
-			this.heap.Verify(x => x.add(incident), Times.Never); 
 		}
 
 		/// <summary>
@@ -52,33 +32,13 @@
 		public void add_Incident_Added()
 		{
 			Incident incident = new Incident();
-			this.heap.Setup(x => x.add(incident)).Verifiable();
 
-			this.GetInstance().add(incident);
+			var service = this.GetInstance();
+			service.add(incident);
 
-			this.heap.Verify(x => x.add(incident), Times.Once);
-		}
+			var result = service.next();
 
-		/// <summary>
-		/// Ensures when the backlog is populated, a non zero value is returned
-		/// </summary>
-		[Test]
-		public void backlogSize_BacklogSizeCalled()
-		{
-			this.heap.Setup(x => x.getSize()).Verifiable(); 
-			this.GetInstance().backlogSize();
-			this.heap.Verify(x => x.getSize(), Times.Once); 
-		}
-
-		/// <summary>
-		/// Ensures when the backlog is empty, null is returned
-		/// </summary>
-		[Test]
-		public void next_BacklogNextCalled()
-		{
-			this.heap.Setup(x => x.getRoot()).Verifiable();
-			this.GetInstance().next();
-			this.heap.Verify(x => x.getRoot(), Times.Once);
+			Assert.AreSame(incident, result); 
 		}
 
 		/// <summary>
@@ -87,7 +47,7 @@
 		/// <returns>The instance.</returns>
 		private IIncidentBacklogService GetInstance()
 		{
-			return new IncidentBacklogService(this.heap.Object, this.logger.Object); 
+			return new IncidentBacklogService(this.logger.Object); 
 		}
 	}
 }
