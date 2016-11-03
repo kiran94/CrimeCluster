@@ -1,10 +1,17 @@
-﻿using System.Web.Mvc;
-using System.Web.Routing;
-
-namespace com.kiranpatel.crimecluster.webservice
+﻿namespace com.kiranpatel.crimecluster.webservice
 {
+	using System.Web.Mvc;
+	using System.Web.Routing;
+
+	/// <summary>
+	/// Configuration for MVC Routes
+	/// </summary>
 	public class RouteConfig
 	{
+		/// <summary>
+		/// Registers the routes.
+		/// </summary>
+		/// <param name="routes">Routes Collection.</param>
 		public static void RegisterRoutes(RouteCollection routes)
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");

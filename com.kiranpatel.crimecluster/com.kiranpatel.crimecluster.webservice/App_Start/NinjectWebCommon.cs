@@ -86,8 +86,6 @@ namespace com.kiranpatel.crimecluster.webservice.App_Start
 			kernel.Bind<IIncidentOutcomeService>().To<IncidentOutcomeService>();
 			kernel.Bind<IIncidentService>().To<IncidentService>();
 			kernel.Bind<IIncidentBacklogService>().To<IncidentBacklogService>();
-
-
         }        
     }
 }
