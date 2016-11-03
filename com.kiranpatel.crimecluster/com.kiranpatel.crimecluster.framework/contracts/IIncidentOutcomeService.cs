@@ -5,7 +5,7 @@
 	/// <summary>
 	/// Contract for the IncidentOutcomeService
 	/// </summary>
-	public interface IIncidentOutcomeService : IEntityService<IncidentOutcome>
+	public interface IIncidentOutcomeService : IEntityService<IncidentOutcome>, IValidator<IncidentOutcome>
 	{
 	}
 }

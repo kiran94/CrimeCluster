@@ -55,6 +55,7 @@
     <Compile Include="structures\HeapTests.cs" />
     <Compile Include="services\CSVReaderServiceTests.cs" />
     <Compile Include="services\IncidentCSVParseStrategyTests.cs" />
+    <Compile Include="services\IncidentOutcomeServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj">

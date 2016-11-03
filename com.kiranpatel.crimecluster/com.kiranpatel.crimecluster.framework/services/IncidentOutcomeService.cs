@@ -17,5 +17,18 @@
 		{
 			
 		}
+
+		// <inheritdoc>
+		public bool validate(IncidentOutcome toValidate)
+		{
+			if (toValidate == null)
+			{
+				return false; 
+			}
+
+			return !(String.IsNullOrEmpty(toValidate.Outcome)
+				|| toValidate.Incident == null
+				|| toValidate.Officer == null);
+		}
 	}
 }
