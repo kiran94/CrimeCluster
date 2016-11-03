@@ -68,13 +68,10 @@
 		// <inheritdoc>
 		public bool validate(Officer officer)
 		{
-			return !(officer.ID == null
-				|| officer.BadgeNumber == null
+			return !(officer.BadgeNumber == null
 				|| officer.Title == null
 				|| officer.FirstName == null
-				|| officer.LastName == null
-				|| officer.DOB == null
-					 || officer.DateRegistered == null);
+				|| officer.LastName == null);
 			
 		}
 	}
