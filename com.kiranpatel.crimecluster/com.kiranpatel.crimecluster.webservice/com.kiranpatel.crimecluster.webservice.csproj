@@ -83,6 +83,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\OfficerController.cs" />
     <Compile Include="Models\ResponseResultModel.cs" />
+    <Compile Include="Controllers\IncidentController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
