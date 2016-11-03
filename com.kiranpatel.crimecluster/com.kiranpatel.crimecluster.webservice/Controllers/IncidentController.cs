@@ -16,12 +16,12 @@
 		/// <summary>
 		/// The incident service.
 		/// </summary>
-		private readonly IncidentService incidentService;
+		private readonly IIncidentService incidentService;
 
 		/// <summary>
 		/// The incident backlog service.
 		/// </summary>
-		private readonly IncidentBacklogService incidentBacklogService; 
+		private readonly IIncidentBacklogService incidentBacklogService; 
 
 		/// <summary>
 		/// Initializes a new instance of the
@@ -38,8 +38,8 @@
 			IConfigurationService configService,
 			ILogger logger,
 			ISerialisationService serialisationService, 
-			IncidentService incidentService, 
-			IncidentBacklogService incidentBacklogService)
+			IIncidentService incidentService, 
+			IIncidentBacklogService incidentBacklogService)
 			: base(repository, configService, logger, serialisationService)
 		{
 			this.incidentService = incidentService;
@@ -54,7 +54,36 @@
 		[HttpPost]
 		public String Save(String serialisedIncident)
 		{
-			throw new NotImplementedException(); 	
+			if (String.IsNullOrEmpty(serialisedIncident))
+			{
+				var model = this.logError("Serialised Incident was null or empty");
+				return this.serialisationService.serialise(model);  
+			}
+
+			Incident incident;
+			if ((incident = this.serialisationService.deserialise<Incident>(serialisedIncident)) == null)
+			{
+				var model = this.logError("Serialised Incident failed to deserialise");
+				return this.serialisationService.serialise(model); 
+			}
+
+			if (!this.incidentService.validate(incident))
+			{
+				var model = this.logError("Incident failed to validation");
+				return this.serialisationService.serialise(model);
+			}
+
+			this.logger.info(String.Format("Adding Incident {0} to data store and backlog", incident.ID.ToString())); 
+			this.incidentService.Save(incident);
+			this.incidentBacklogService.add(incident);
+
+			var responseModel = new ResponseResultModel()
+			{
+				Status = ResponseResultType.OK,
+				Message = "Incident Added"
+			};
+
+			return this.serialisationService.serialise(responseModel); 	
 		}
 
 		/// <summary>
@@ -65,7 +94,28 @@
 		[HttpGet]
 		public String Get(String ID)
 		{
-			throw new NotImplementedException();
+			Guid incidentID; 
+			if (String.IsNullOrEmpty(ID) || !Guid.TryParse(ID, out incidentID))
+			{
+				var model = this.logError("Incident ID was invalid");
+				return this.serialisationService.serialise(model);
+			}
+
+			Incident incident;
+			if ((incident = this.incidentService.Get(incidentID)) == null)
+			{
+				var model = this.logError("Incident does not exist");
+				return this.serialisationService.serialise(model);
+			}
+
+			var resultModel = new ResponseResultModel()
+			{
+				Status = ResponseResultType.OK,
+				Message = "Incident found",
+				Response = this.serialisationService.serialise(incident)
+			};
+
+			return this.serialisationService.serialise(resultModel);
 		}
 
 		/// <summary>

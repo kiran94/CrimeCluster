@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\OfficerControllerTests.cs" />
+    <Compile Include="Controllers\IncidentControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
