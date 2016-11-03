@@ -51,6 +51,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="app.config" />
+    <None Include="scripts\System.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj">
@@ -60,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="mappings\" />
+    <Folder Include="scripts\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
