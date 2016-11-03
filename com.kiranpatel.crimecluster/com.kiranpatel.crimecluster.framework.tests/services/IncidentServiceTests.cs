@@ -162,6 +162,39 @@
 		}
 
 		/// <summary>
+		/// Ensures when the incident is invalid, false is returned
+		/// </summary>
+		[Test]
+		public void validate_InvalidIncident_False()
+		{
+			Incident incident = new Incident()
+			{
+				DateCreated = new DateTime(),
+				Grading = null,
+				Location = null
+			};
+
+			var result = this.GetInstance().validate(incident);
+			Assert.False(result); 
+		}
+
+		/// <summary>
+		/// Ensures when the incident is valid true is returned
+		/// </summary>
+		public void validate_ValidIncident_True()
+		{
+			Incident incident = new Incident()
+			{
+				DateCreated = new DateTime(),
+				Grading = new IncidentGrading(),
+				Location = new Location()
+			};
+
+			var result = this.GetInstance().validate(incident);
+			Assert.True(result);
+		}
+
+		/// <summary>
 		/// Gets the instance.
 		/// </summary>
 		/// <returns>The instance.</returns>

@@ -98,6 +98,12 @@
 			return this.repository.Query<Incident>().ToList(); 
 		}
 
+		// <inheritdoc>
+		public bool validate(Incident toValidate)
+		{
+			return !(toValidate.Grading == null || toValidate.Location == null);
+		}
+
 		/// <summary>
 		/// Releases all resource used by the <see cref="T:com.kiranpatel.crimecluster.framework.IncidentService"/> object.
 		/// </summary>

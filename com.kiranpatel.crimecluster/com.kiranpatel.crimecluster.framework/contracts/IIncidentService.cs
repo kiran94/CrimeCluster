@@ -1,11 +1,13 @@
 ﻿namespace com.kiranpatel.crimecluster.framework
 {
 	using System;
-	using System.Collections.Generic; 
+	using System.Collections.Generic;
+	using com.kiranpatel.crimecluster.framework;
+
 	/// <summary>
 	/// Contract for the Incident Service
 	/// </summary>
-	public interface IIncidentService : IEntityService<Incident>
+	public interface IIncidentService : IEntityService<Incident>, IValidator<Incident>
 	{
 		/// <summary>
 		/// Allocates the new incident.
