@@ -17,11 +17,12 @@
 			this.Table("Person");
 
 			this.Id(o => o.ID);
+			this.Property(o => o.Title); 
 			this.Property(o => o.FirstName); 
+			this.Property(o => o.LastName);
 			this.Property(o => o.DOB);
 			this.Property(o => o.DateRegistered);
 			this.Property(o => o.BadgeNumber);
-			this.Property(o => o.FirstName);
 			this.Property(o => o.Status);
 
 			this.ManyToOne(o => o.Location, map => 
