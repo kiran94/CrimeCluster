@@ -63,7 +63,7 @@ namespace com.kiranpatel.crimecluster.webservice.App_Start
         }
 
         /// <summary>
-        /// Load your modules or register your services here!
+        /// Register contracts to services
         /// </summary>
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
@@ -71,7 +71,10 @@ namespace com.kiranpatel.crimecluster.webservice.App_Start
 			kernel.Bind<ILogger>().ToMethod(x => LoggerService.GetInstance());
 			kernel.Bind<IConfigurationService>().To<ConfigurationService>(); 
 
-			kernel.Bind<ISession>().ToMethod(x => new MySQLConnection(kernel.Get<IConfigurationService>()).getSession());
+			kernel.Bind<ISession>()
+			      .ToMethod(x => new MySQLConnection(kernel.Get<IConfigurationService>()).getSession())
+			      .InRequestScope();
+			
 			kernel.Bind<IRepository>().To<Repository>();
 			kernel.Bind<ISerialisationService>().To<SerialisationService>();
 
@@ -80,6 +83,7 @@ namespace com.kiranpatel.crimecluster.webservice.App_Start
 			kernel.Bind<IIncidentOutcomeService>().To<IncidentOutcomeService>();
 			kernel.Bind<IIncidentService>().To<IncidentService>();
 			kernel.Bind<IIncidentBacklogService>().To<IncidentBacklogService>(); 
+
 
         }        
     }
