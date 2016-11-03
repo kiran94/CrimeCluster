@@ -21,7 +21,17 @@
 		/// <summary>
 		/// The location service.
 		/// </summary>
-		private readonly ILocationService locationService; 
+		private readonly ILocationService locationService;
+
+		/// <summary>
+		/// The incident service.
+		/// </summary>
+		private readonly IIncidentService incidentService;
+
+		/// <summary>
+		/// The outcome service. 
+		/// </summary>
+		private readonly IIncidentOutcomeService outcomeService; 
 
 		/// <summary>
 		/// Initializes a new instance of the
@@ -33,17 +43,22 @@
 		/// <param name="serialisationService">Serialisation service.</param>
 		/// <param name="officerService">Officer service.</param>
 		/// <param name="locationService">Location service.</param>
+		/// <param name="incidentService"Incident service.</param>
 		public OfficerController(
 			IRepository repository,
 			IConfigurationService configService,
 			ILogger logger,
 			ISerialisationService serialisationService,
 			IOfficerService officerService,
-			ILocationService locationService)
+			ILocationService locationService,
+			IIncidentService incidentService, 
+			IIncidentOutcomeService incidentOutcomeService)
 			: base(repository, configService, logger, serialisationService)
 		{
 			this.officerService = officerService;
 			this.locationService = locationService;
+			this.incidentService = incidentService;
+			this.outcomeService = incidentOutcomeService; 
 		}
 
 		///// <summary>
@@ -135,34 +150,23 @@
 		[HttpPost]
 		public String updateLocation(String ID, String serialisedLocation)
 		{
-			if (String.IsNullOrEmpty(ID))
-			{
-				var model = this.logError("Officer: null or empty ID");
-				return this.serialisationService.serialise(model);
-			}
-
-			if (String.IsNullOrEmpty(serialisedLocation))
-			{
-				var model = this.logError("Officer: null or empty serialise location");
-				return this.serialisationService.serialise(model);
-			}
-
 			Guid officerID;
-			if (!Guid.TryParse(ID, out officerID))
+			if (String.IsNullOrEmpty(ID) || String.IsNullOrEmpty(serialisedLocation) || !Guid.TryParse(ID, out officerID))
 			{
-				var model = this.logError("Officer: invalid officer id");
+				var model = this.logError("Officer Update Location: invalid parameters");
 				return this.serialisationService.serialise(model);
 			}
 
-			Location location = this.serialisationService.deserialise<Location>(serialisedLocation);
-			if (location == null || !this.locationService.validate(location))
+			Location location = null;
+			if ((location = this.serialisationService.deserialise<Location>(serialisedLocation)) == null 
+			    || !this.locationService.validate(location))
 			{
 				var model = this.logError("Officer: location failed to serialise or did not validate");
 				return this.serialisationService.serialise(model);
 			}
 
-			Officer officer = this.officerService.Get(officerID);
-			if (officer == null)
+			Officer officer;
+			if ((officer = this.officerService.Get(officerID)) == null)
 			{
 				var model = this.logError("Officer: officer could not be found");
 				return this.serialisationService.serialise(model);
@@ -186,12 +190,50 @@
 		/// POST: /SaveOutcome
 		/// </summary>
 		/// <returns>result of the outcome save operation</returns>
-		/// <param name="ID">ID of the Incident</param>
 		/// <param name="serialisedOutcome">Serialised incident outcome.</param>
 		[HttpPost]
-		public String SaveOutcome(String ID, String serialisedOutcome)
+		public String SaveOutcome(String serialisedOutcome)
 		{
-			throw new NotImplementedException();
+			if (String.IsNullOrEmpty(serialisedOutcome))
+			{
+				var model = this.logError("Officer Save Outcome: serialised outcome was null or empty");
+				return this.serialisationService.serialise(model); 
+			}
+
+			IncidentOutcome incidentOutcome;
+			if ((incidentOutcome = this.serialisationService.deserialise<IncidentOutcome>(serialisedOutcome)) == null)
+			{
+				var model = this.logError("Officer Save Outcome: Deserialisation Failed");
+				return this.serialisationService.serialise(model); 
+			}
+
+			Incident incident;
+			if ((incident = this.incidentService.Get(incidentOutcome.Incident.ID)) == null)
+			{
+				var model = this.logError("Officer Save Outcome: Incident Not Found");
+				return this.serialisationService.serialise(model); 
+			}
+
+			if (!this.outcomeService.validate(incidentOutcome))
+			{
+				var model = this.logError("Officer Save Outcome: IncidentOutcome failed validation");
+				return this.serialisationService.serialise(model);
+			}
+
+			if (incident.Outcome == null) incident.Outcome = new List<IncidentOutcome>(); 
+
+			incident.Outcome.Add(incidentOutcome);
+			this.incidentService.Update(incident);
+
+			this.logger.info(String.Format("Saved Incident Outcome {0} to Incident {1}", incidentOutcome.ID.ToString(), incident.ID.ToString()));
+
+			var responseResultModel = new ResponseResultModel()
+			{
+				Status = ResponseResultType.OK,
+				Message = "Saved Incident Outcome"
+			};
+
+			return this.serialisationService.serialise<ResponseResultModel>(responseResultModel); 
 		}
 
 		/// <summary>
@@ -225,6 +267,11 @@
 			if (this.locationService != null)
 			{
 				this.locationService.Dispose(); 
+			}
+
+			if (this.outcomeService != null)
+			{
+				this.outcomeService.Dispose();
 			}
 		}
     }

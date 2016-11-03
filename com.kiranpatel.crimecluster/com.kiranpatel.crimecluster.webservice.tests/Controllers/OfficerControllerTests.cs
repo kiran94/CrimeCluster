@@ -1,6 +1,7 @@
 ﻿namespace com.kiranpatel.crimecluster.webservice.tests
 {
 	using System;
+	using System.Linq; 
 	using NUnit.Framework;
 	using Moq;
 	using com.kiranpatel.crimecluster.framework;
@@ -40,7 +41,17 @@
 		/// <summary>
 		/// The location service mock
 		/// </summary>
-		private Mock<ILocationService> locationService; 
+		private Mock<ILocationService> locationService;
+
+		/// <summary>
+		/// The incident service mock
+		/// </summary>
+		private Mock<IIncidentService> incidentService;
+
+		/// <summary>
+		/// The outcome service mock
+		/// </summary>
+		private Mock<IIncidentOutcomeService> outcomeService; 
 
 		/// <summary>
 		/// Sets up.
@@ -53,7 +64,9 @@
 			this.loggerService = new Mock<ILogger>();
 			this.serialisationService = new Mock<ISerialisationService>();
 			this.officerService = new Mock<IOfficerService>();
-			this.locationService = new Mock<ILocationService>(); 
+			this.locationService = new Mock<ILocationService>();
+			this.incidentService = new Mock<IIncidentService>();
+			this.outcomeService = new Mock<IIncidentOutcomeService>();
 		}
 
 		/// <summary>
@@ -226,12 +239,12 @@
 		public void updateLocation_EmptyOrNullID_ErrorReturned(String param)
 		{
 			this.serialisationService
-			    .Setup(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer: null or empty ID")))
+			    .Setup(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer Update Location: invalid parameters")))
 			    .Verifiable(); 
 
 			this.GetInstance().updateLocation(param, "seralised");
 
-			this.serialisationService.Verify(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer: null or empty ID")), Times.Once);
+			this.serialisationService.Verify(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer Update Location: invalid parameters")), Times.Once);
 		}
 
 		/// <summary>
@@ -243,12 +256,12 @@
 		public void updateLocation_EmptyOrNullSerialisedLocation_ErrorReturned(String param)
 		{
 			this.serialisationService
-				.Setup(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer: null or empty serialise location")))
+				.Setup(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer Update Location: invalid parameters")))
 				.Verifiable();
 
 			this.GetInstance().updateLocation("ID", param);
 
-			this.serialisationService.Verify(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer: null or empty serialise location")), Times.Once);
+			this.serialisationService.Verify(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer Update Location: invalid parameters")), Times.Once);
 		}
 
 		/// <summary>
@@ -258,12 +271,12 @@
 		public void updateLocation_IncorrectGuidFormat_ErrorReturned()
 		{
 			this.serialisationService
-				.Setup(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer: invalid officer id")))
+				.Setup(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer Update Location: invalid parameters")))
 				.Verifiable();
 
 			this.GetInstance().updateLocation("INVALIDID", "serialisedLocation");
 
-			this.serialisationService.Verify(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer: invalid officer id")), Times.Once);
+			this.serialisationService.Verify(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer Update Location: invalid parameters")), Times.Once);
 		}
 
 		/// <summary>
@@ -358,6 +371,78 @@
 		}
 
 		/// <summary>
+		/// Ensures when the string is empty or null, an error is returned
+		/// </summary>
+		[Test]
+		[TestCase("")]
+		[TestCase(null)]
+		public void SaveOutcome_NullOrEmptySerialisedOutcome_ErrorReturned(String param)
+		{
+			this.serialisationService
+				.Setup(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer Save Outcome: serialised outcome was null or empty")))
+				.Verifiable();
+
+			this.GetInstance().SaveOutcome(param);
+
+			this.serialisationService
+				.Verify(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer Save Outcome: serialised outcome was null or empty")), Times.Once);                                              
+		}
+
+		/// <summary>
+		/// Ensures when the IncidentOutcome fails deserialistion, an error is returned
+		/// </summary>
+		[Test]
+		public void SaveOutcome_OutcomeFailsDeserialisation_ErrorReturned()
+		{
+			String serialisedObject = "serialised";
+			this.serialisationService.Setup(x => x.deserialise<IncidentOutcome>(serialisedObject)).Returns((IncidentOutcome)null);
+			this.serialisationService.Setup(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer Save Outcome: Deserialisation Failed"))).Verifiable();
+
+			this.GetInstance().SaveOutcome(serialisedObject);
+
+			this.serialisationService.Verify(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer Save Outcome: Deserialisation Failed")), Times.Once);
+		}
+
+		/// <summary>
+		/// Ensures when the incident is not found, an error is returned
+		/// </summary>
+		[Test]
+		public void SaveOutcome_IncidentNotFound_ErrorReturned()
+		{
+			String serialised = "serialisedIncidentOutcome"; 
+
+			this.incidentService.Setup(x => x.Get(It.IsAny<Guid>())).Returns((Incident)null);
+			this.serialisationService.Setup(x => x.deserialise<IncidentOutcome>(serialised)).Returns(new IncidentOutcome() { Incident = new Incident() }); 
+			this.serialisationService
+				.Setup(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer Save Outcome: Incident Not Found")))
+				.Verifiable();
+
+			this.GetInstance().SaveOutcome(serialised); 
+
+			this.serialisationService
+				.Verify(x => x.serialise(It.Is<ResponseResultModel>(y => y.Message == "Officer Save Outcome: Incident Not Found")), Times.Once);
+		}
+
+		/// <summary>
+		/// Ensures in the normal case, the outcome is assigned to the incident an is saved
+		/// </summary>
+		[Test]
+		public void SaveOutcome_NormalCase_OutcomeAssignedToIncidentAndSaved()
+		{
+			String incidentOutcome = "serialised";
+			IncidentOutcome outcome = new IncidentOutcome() { Incident = new Incident() };
+
+			this.serialisationService.Setup(x => x.deserialise<IncidentOutcome>(incidentOutcome)).Returns(outcome);
+			this.incidentService.Setup(x => x.Get(outcome.Incident.ID)).Returns(outcome.Incident);
+			this.incidentService.Setup(x => x.Update(It.Is<Incident>(y => y.Outcome.Any(k => k == outcome)))).Verifiable();
+			this.outcomeService.Setup(x => x.validate(outcome)).Returns(true); 
+
+			this.GetInstance().SaveOutcome(incidentOutcome);
+
+			this.incidentService.Verify(x => x.Update(It.Is<Incident>(y => y.Outcome.Any(k => k == outcome))), Times.Once); 
+		}
+
+		/// <summary>
 		/// Gets the instance.
 		/// </summary>
 		/// <returns>The instance.</returns>
@@ -369,7 +454,9 @@
 				this.loggerService.Object, 
 				this.serialisationService.Object, 
 				this.officerService.Object, 
-				this.locationService.Object); 
+				this.locationService.Object,
+				this.incidentService.Object,
+				this.outcomeService.Object); 
 		}
 	}
 }
