@@ -203,7 +203,6 @@
 			    .Verify(x => x.serialise<ResponseResultModel>(It.Is<ResponseResultModel>(y => y.Message == "Incident found" && y.Status == ResponseResultType.OK)), Times.Once);
 		}
 
-
 		/// <summary>
 		/// Gets the instance.
 		/// </summary>
@@ -218,6 +217,5 @@
 				this.incidentService.Object,
 				this.backlogService.Object); 
 		}
-
 	}
 }

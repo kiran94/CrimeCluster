@@ -31,7 +31,7 @@
 		/// <summary>
 		/// The outcome service. 
 		/// </summary>
-		private readonly IIncidentOutcomeService outcomeService; 
+		private readonly IIncidentOutcomeService outcomeService;
 
 		/// <summary>
 		/// Initializes a new instance of the
