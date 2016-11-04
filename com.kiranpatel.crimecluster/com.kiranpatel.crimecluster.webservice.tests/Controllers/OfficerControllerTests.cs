@@ -51,7 +51,12 @@
 		/// <summary>
 		/// The outcome service mock
 		/// </summary>
-		private Mock<IIncidentOutcomeService> outcomeService; 
+		private Mock<IIncidentOutcomeService> outcomeService;
+
+		/// <summary>
+		/// The dto service mock.
+		/// </summary>
+		private Mock<IDataTransferService<Officer, OfficerDTO>> dtoService; 
 
 		/// <summary>
 		/// Sets up.
@@ -67,6 +72,7 @@
 			this.locationService = new Mock<ILocationService>();
 			this.incidentService = new Mock<IIncidentService>();
 			this.outcomeService = new Mock<IIncidentOutcomeService>();
+			this.dtoService = new Mock<IDataTransferService<Officer, OfficerDTO>>();
 		}
 
 		/// <summary>
@@ -133,13 +139,13 @@
 			this.officerService.Setup(x => x.Get(officer.ID)).Returns(officer);
 			this.serialisationService.Setup(x => x.serialise(officer)).Returns("serialise"); 
 			this.serialisationService
-			    .Setup(x => x.serialise<ResponseResultModel>(It.Is<ResponseResultModel>(y => y.Message == "Officer Retrieved" && y.Response == "serialise")))
+			    .Setup(x => x.serialise<ResponseResultModel>(It.Is<ResponseResultModel>(y => y.Message == "Officer Retrieved")))
 				.Verifiable();
 			
 			this.GetInstance().Get(officer.ID.ToString()); 
 
 			this.serialisationService
-				.Verify(x => x.serialise<ResponseResultModel>(It.Is<ResponseResultModel>(y => y.Message == "Officer Retrieved" && y.Response == "serialise")), Times.Once);
+			    .Verify(x => x.serialise<ResponseResultModel>(It.Is<ResponseResultModel>(y => y.Message == "Officer Retrieved")), Times.Once);
 
 		}
 
@@ -456,7 +462,8 @@
 				this.officerService.Object, 
 				this.locationService.Object,
 				this.incidentService.Object,
-				this.outcomeService.Object); 
+				this.outcomeService.Object,
+				this.dtoService.Object); 
 		}
 	}
 }

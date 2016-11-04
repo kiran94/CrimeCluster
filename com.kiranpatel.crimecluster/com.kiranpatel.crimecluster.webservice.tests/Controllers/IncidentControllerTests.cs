@@ -42,6 +42,11 @@
 		private Mock<IIncidentBacklogService> backlogService;
 
 		/// <summary>
+		/// The dto service mock.
+		/// </summary>
+		private Mock<IDataTransferService<Incident, IncidentDTO>> dtoService;
+
+		/// <summary>
 		/// Sets up.
 		/// </summary>
 		[SetUp]
@@ -52,7 +57,8 @@
 			this.loggerService = new Mock<ILogger>();
 			this.serialisationService = new Mock<ISerialisationService>();
 			this.incidentService = new Mock<IIncidentService>();
-			this.backlogService = new Mock<IIncidentBacklogService>(); 
+			this.backlogService = new Mock<IIncidentBacklogService>();
+			this.dtoService = new Mock<IDataTransferService<Incident, IncidentDTO>>(); 
 		}
 
 		/// <summary>
@@ -215,7 +221,8 @@
 				this.loggerService.Object, 
 				this.serialisationService.Object, 
 				this.incidentService.Object,
-				this.backlogService.Object); 
+				this.backlogService.Object,
+				this.dtoService.Object); 
 		}
 	}
 }
