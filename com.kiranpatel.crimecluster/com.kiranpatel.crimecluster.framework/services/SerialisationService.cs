@@ -11,29 +11,47 @@
 		/// <summary>
 		/// The logger instance
 		/// </summary>
-		private readonly ILogger logger; 
+		private readonly ILogger logger;
+
+		/// <summary>
+		/// The config service instance 
+		/// </summary>
+		private readonly IConfigurationService configService; 
+
+		/// <summary>
+		/// JSON Serialiser Settings
+		/// </summary>
+		private JsonSerializerSettings settings;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.SerialisationService"/> class.
 		/// </summary>
 		/// <param name="logger">Logger.</param>
-		public SerialisationService(ILogger logger)
+		/// <param name="configService">Config Service.</param>
+		public SerialisationService(ILogger logger, IConfigurationService configService)
 		{
-			this.logger = logger; 
+			this.logger = logger;
+			this.settings = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+
+			var indent = Boolean.Parse(this.configService.Get(ConfigurationKey.SerialiserIndent, "false"));
+			if (indent)
+			{
+				this.settings.Formatting = Formatting.Indented;
+			}
 		}
 
 		// <inheritdoc>
 		public string serialise<T>(T toSerialise)
 		{
 			this.logger.info("Serialising Object"); 
-			return JsonConvert.SerializeObject(toSerialise); 
+			return JsonConvert.SerializeObject(toSerialise, this.settings); 
 		}
 
 		// <inheritdoc>
 		public T deserialise<T>(string toDeserialise)
 		{
 			this.logger.info("Deserialising Object");
-			return JsonConvert.DeserializeObject<T>(toDeserialise); 
+			return JsonConvert.DeserializeObject<T>(toDeserialise, this.settings); 
 		}
 
 		/// <summary>

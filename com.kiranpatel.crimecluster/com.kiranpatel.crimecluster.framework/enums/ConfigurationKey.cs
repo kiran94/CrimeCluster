@@ -25,6 +25,11 @@
 		/// <summary>
 		/// Represents the number of columns from an incident csv file
 		/// </summary>
-		CSVIncidentColumnNumber
+		CSVIncidentColumnNumber,
+
+		/// <summary>
+		/// Represents if the serialiser should intent the output
+		/// </summary>
+		SerialiserIndent
 	}
 }
