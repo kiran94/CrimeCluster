@@ -21,7 +21,12 @@
 		/// <summary>
 		/// The incident backlog service.
 		/// </summary>
-		private readonly IIncidentBacklogService incidentBacklogService; 
+		private readonly IIncidentBacklogService incidentBacklogService;
+
+		/// <summary>
+		/// Data Transfer Mapper
+		/// </summary>
+		private readonly IDataTransferService<Incident, IncidentDTO> mapper; 
 
 		/// <summary>
 		/// Initializes a new instance of the
@@ -33,17 +38,20 @@
 		/// <param name="serialisationService">Serialisation service.</param>
 		/// <param name="incidentService">Incident service.</param>
 		/// <param name="incidentBacklogService">Incident backlog service.</param>
+		/// <param name="mapper">Data Transfer Mapper</param>
 		public IncidentController(
 			IRepository repository,
 			IConfigurationService configService,
 			ILogger logger,
 			ISerialisationService serialisationService, 
 			IIncidentService incidentService, 
-			IIncidentBacklogService incidentBacklogService)
+			IIncidentBacklogService incidentBacklogService,
+			IDataTransferService<Incident, IncidentDTO> mapper)
 			: base(repository, configService, logger, serialisationService)
 		{
 			this.incidentService = incidentService;
-			this.incidentBacklogService = incidentBacklogService; 
+			this.incidentBacklogService = incidentBacklogService;
+			this.mapper = mapper;
 		}
 
 		/// <summary>
@@ -112,7 +120,7 @@
 			{
 				Status = ResponseResultType.OK,
 				Message = "Incident found",
-				Response = this.serialisationService.serialise(incident)
+				Response = this.serialisationService.serialise(this.mapper.toDTO(incident))
 			};
 
 			return this.serialisationService.serialise(resultModel);

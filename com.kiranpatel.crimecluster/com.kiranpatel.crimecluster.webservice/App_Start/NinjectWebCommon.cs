@@ -7,6 +7,7 @@ namespace com.kiranpatel.crimecluster.webservice.App_Start
 	using System.Web;
 	using com.kiranpatel.crimecluster.dataaccess;
 	using com.kiranpatel.crimecluster.framework;
+	using com.kiranpatel.crimecluster.webservice.Controllers;
 	using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 	using NHibernate;
 	using Ninject;
@@ -86,6 +87,9 @@ namespace com.kiranpatel.crimecluster.webservice.App_Start
 			kernel.Bind<IIncidentOutcomeService>().To<IncidentOutcomeService>();
 			kernel.Bind<IIncidentService>().To<IncidentService>();
 			kernel.Bind<IIncidentBacklogService>().To<IncidentBacklogService>();
+
+			kernel.Bind<IDataTransferService<Officer, OfficerDTO>>().To<OfficerDTOMapper>();
+			kernel.Bind<IDataTransferService<Incident, IncidentDTO>>().To<IncidentDTOMapper>();
         }        
     }
 }

@@ -34,6 +34,11 @@
 		private readonly IIncidentOutcomeService outcomeService;
 
 		/// <summary>
+		/// Data Transfer Mapper
+		/// </summary>
+		private readonly IDataTransferService<Officer, OfficerDTO> mapper;
+
+		/// <summary>
 		/// Initializes a new instance of the
 		/// <see cref="T:com.kiranpatel.crimecluster.webservice.Controllers.OfficerController"/> class.
 		/// </summary>
@@ -44,6 +49,7 @@
 		/// <param name="officerService">Officer service.</param>
 		/// <param name="locationService">Location service.</param>
 		/// <param name="incidentService"Incident service.</param>
+		/// <param name="mapper">mapper.</param>
 		public OfficerController(
 			IRepository repository,
 			IConfigurationService configService,
@@ -52,13 +58,15 @@
 			IOfficerService officerService,
 			ILocationService locationService,
 			IIncidentService incidentService, 
-			IIncidentOutcomeService incidentOutcomeService)
+			IIncidentOutcomeService incidentOutcomeService,
+			IDataTransferService<Officer, OfficerDTO> mapper)
 			: base(repository, configService, logger, serialisationService)
 		{
 			this.officerService = officerService;
 			this.locationService = locationService;
 			this.incidentService = incidentService;
-			this.outcomeService = incidentOutcomeService; 
+			this.outcomeService = incidentOutcomeService;
+			this.mapper = mapper;
 		}
 
 		///// <summary>
@@ -94,7 +102,7 @@
 			{ 
 				Status = ResponseResultType.OK, 
 				Message = "Officer Retrieved", 
-				Response = this.serialisationService.serialise(officer)
+				Response = this.serialisationService.serialise(this.mapper.toDTO(officer))
 			};
 
 			return this.serialisationService.serialise(responseResultModel); 
