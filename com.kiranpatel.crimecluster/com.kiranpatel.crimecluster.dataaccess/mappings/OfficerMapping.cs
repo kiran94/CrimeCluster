@@ -2,6 +2,7 @@
 {
 	using System;
 	using NHibernate.Mapping.ByCode.Conformist;
+	using NHibernate.Mapping.ByCode; 
 	using com.kiranpatel.crimecluster.framework;
 
 	/// <summary>
@@ -29,8 +30,15 @@
 			{
 				map.Class(typeof(Location));
 				map.Column("LocationID");
-				map.Cascade(NHibernate.Mapping.ByCode.Cascade.All);
-			}); 
+				map.Cascade(Cascade.All);
+			});
+
+			this.ManyToOne(o => o.Incident, map =>
+			{
+				map.Class(typeof(Incident));
+				map.Column("IncidentID");
+				map.Cascade(Cascade.All);
+			});
 		}
 	}
 }

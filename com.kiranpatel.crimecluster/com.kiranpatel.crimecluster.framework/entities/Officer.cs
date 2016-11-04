@@ -18,5 +18,11 @@
 		/// </summary>
 		/// <value>The location.</value>
 		public virtual Location Location { get; set; }
+
+		/// <summary>
+		/// Gets or sets the incident.
+		/// </summary>
+		/// <value>The incident.</value>
+		public virtual Incident Incident { get; set; }
 	}
 }
