@@ -33,12 +33,12 @@
 				map.Cascade(Cascade.All);
 			});
 
-			//this.ManyToOne(o => o.Incident, map =>
-			//{
-			//	map.Class(typeof(Incident));
-			//	map.Column("IncidentID");
-			//	map.Cascade(Cascade.All);
-			//});
+			this.ManyToOne(o => o.Incident, map =>
+			{
+				map.Class(typeof(Incident));
+				map.Column("IncidentID");
+				map.Cascade(Cascade.All);
+			});
 		}
 	}
 }
