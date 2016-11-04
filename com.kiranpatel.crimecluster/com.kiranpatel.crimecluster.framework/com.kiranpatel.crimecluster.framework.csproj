@@ -84,6 +84,11 @@
     <Compile Include="services\FIleIOService.cs" />
     <Compile Include="contracts\IValidator.cs" />
     <Compile Include="structures\IncidentHeap.cs" />
+    <Compile Include="contracts\IDataTransferService.cs" />
+    <Compile Include="datatransferobjects\mappers\OfficerDTOMapper.cs" />
+    <Compile Include="datatransferobjects\entities\OfficerDTO.cs" />
+    <Compile Include="datatransferobjects\entities\IncidentDTO.cs" />
+    <Compile Include="datatransferobjects\mappers\IncidentDTOMapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
@@ -94,6 +99,9 @@
     <Folder Include="resources\" />
     <Folder Include="structures\" />
     <Folder Include="comparers\" />
+    <Folder Include="datatransferobjects\" />
+    <Folder Include="datatransferobjects\mappers\" />
+    <Folder Include="datatransferobjects\entities\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

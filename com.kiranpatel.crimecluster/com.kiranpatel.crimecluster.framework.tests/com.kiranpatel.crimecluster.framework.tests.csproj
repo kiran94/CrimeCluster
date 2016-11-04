@@ -44,6 +44,7 @@
     <Folder Include="entities\" />
     <Folder Include="comparers\" />
     <Folder Include="structures\" />
+    <Folder Include="datatransferobjects\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="services\LocationServiceTests.cs" />
