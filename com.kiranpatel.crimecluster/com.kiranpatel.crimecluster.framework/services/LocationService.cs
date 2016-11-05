@@ -39,8 +39,8 @@
 			{
 				return null; 
 			}
-
-			if (listOfLocations == null || listOfLocations.Count == 0)
+			 
+			if (listOfLocations.IsNullOrEmpty())
 			{
 				return null; 
 			}
