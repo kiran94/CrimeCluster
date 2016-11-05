@@ -94,8 +94,10 @@
 				return incident;
 			}
 
-			this.logger.warn("Error parsing CSV row"); 
-			return null; 
+			this.logger.warn(string.Format("Error parsing CSV row: Date {0}, Longitude: {1}, Latitude: {2}",
+				validateChecks[0], validateChecks[1], validateChecks[2])); 
+			
+			return default(Incident); 
 		}
 
 		/// <summary>
