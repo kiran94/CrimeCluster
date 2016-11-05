@@ -18,10 +18,10 @@
 		{
 			var dto = new IncidentDTO()
 			{
-				Summary = domainEntity.Summary,
+				Summary = domainEntity.CrimeType,
 				DateCreated = domainEntity.DateCreated.ToLongTimeString(),
 				LocationID = (domainEntity.Location != null) ? domainEntity.Location.ID.ToString() : null,
-				IncidentGrading = (domainEntity.Grading != null) ? domainEntity.Grading.ID.ToString() : null 
+				IncidentGradingID = (domainEntity.Grading != null) ? domainEntity.Grading.ID.ToString() : null 
 			};
 
 			if (domainEntity.Outcome != null || domainEntity.Outcome.Count != 0)

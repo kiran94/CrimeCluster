@@ -58,29 +58,38 @@
 				return default(Incident); 
 			}
 
+		 	String date = row[1];
+			String longitude = row[4];
+			String latitude = row[5];
+		
 			DateTime extractedDate;
 			Double extractedLongitude;
 			Double extractedLatitude;
-			String extractedCrimeType = row[9];
-			String extractedOutcome = row[10];
-
+		
 			bool[] validateChecks =
 			{
-				this.validateDate(row[1], out extractedDate),
-				this.validateLongitudeOrLatitude(row[4], out extractedLatitude),
-				this.validateLongitudeOrLatitude(row[5], out extractedLongitude)
+				this.validateDate(date, out extractedDate),
+				this.validateLongitudeOrLatitude(longitude, out extractedLongitude),
+				this.validateLongitudeOrLatitude(latitude, out extractedLatitude)
 			};
 
 			if (validateChecks.All(x => x))
 			{
-				var incident = new Incident() { DateCreated = extractedDate, Summary = extractedCrimeType };
-				var location = new Location() { DateLogged = extractedDate, Latitude = extractedLatitude, Longitude = extractedLongitude };
-				var outcome = new IncidentOutcome() { DateCreated = extractedDate, Outcome = extractedOutcome, Incident = incident };
-				var grading = new IncidentGrading() { GradeValue = null, Description = "Imported" };
-
-				incident.Location = location;
-				incident.Outcome = new List<IncidentOutcome>() { outcome };
-				incident.Grading = grading; 
+				var incident = new Incident()
+				{
+					CrimeID = row[0],
+					DateCreated = extractedDate,
+					ReportedBy = row[2],
+					FallsWithin = row[3],
+					LocationDesc = row[6],
+					LSOACode = row[7],
+					LSOAName = row[8],
+					CrimeType = row[9],
+					LastOutcomeCategory = row[10],
+					Context = row[11],
+					Location = new Location() { DateLogged = extractedDate, Latitude = extractedLatitude, Longitude = extractedLongitude },
+					Grading = new IncidentGrading() { GradeValue = null, Description = "Imported" }
+				};
 
 				return incident;
 			}
@@ -96,8 +105,7 @@
 		/// <param name="date">Date.</param>
 		private bool validateDate(String date, out DateTime toConvert)
 		{
-			var outDate = new DateTime();
-
+			var outDate = new DateTime(); 
 			bool result = Regex.IsMatch(date, this.dateRegex) && DateTime.TryParseExact(date, "yyyy-MM", this.culture, DateTimeStyles.None, out outDate);
 
 			toConvert = outDate; 

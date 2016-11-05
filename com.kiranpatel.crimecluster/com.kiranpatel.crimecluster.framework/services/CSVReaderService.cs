@@ -44,7 +44,7 @@
 		}
 
 		// <inheritdoc>
-		public ICollection<T> parseCSV<T>(String fileLocation, CSVParseType parseType) where T : EntityBase
+		public ICollection<T> parseCSV<T>(String fileLocation, CSVParseType parseType, bool hasHeader = false) where T : EntityBase
 		{
 			if (String.IsNullOrEmpty(fileLocation))
 			{
@@ -52,13 +52,13 @@
 				return null; 
 			}
 
-			ICSVParseStrategy parseStrategy = getStrategy(parseType);
-			ICollection<T> returnSet = new HashSet<T>();
+			var parseStrategy = getStrategy(parseType);
+			var returnSet = new HashSet<T>();
 			int numberOfHeadersExpected = Int32.Parse(this.configService.Get(ConfigurationKey.CSVIncidentColumnNumber, "12")); 
 
 			using (Stream underlyingStream = this.fileIOService.openStream(fileLocation, FileMode.Open, FileAccess.Read, FileShare.Read))
 			using (TextReader reader = new StreamReader(underlyingStream))
-			using (this.reader = new CsvReader(reader, true))
+			using (this.reader = new CsvReader(reader, hasHeader))
 			{
 				var headers = this.reader.GetFieldHeaders();
 				if (numberOfHeadersExpected != headers.Length)

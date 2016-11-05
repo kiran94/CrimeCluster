@@ -29,7 +29,7 @@
 		/// Gets or sets the incident graiding.
 		/// </summary>
 		/// <value>The incident graiding.</value>
-		public string IncidentGrading { get; set; }
+		public string IncidentGradingID { get; set; }
 
 		/// <summary>
 		/// Gets or sets the outcome identifier.

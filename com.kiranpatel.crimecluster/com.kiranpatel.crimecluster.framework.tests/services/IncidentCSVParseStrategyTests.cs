@@ -106,17 +106,19 @@
 
 			Assert.NotNull(result);
 			Assert.AreEqual(new DateTime(2009, 01, 01), result.DateCreated);
-			StringAssert.AreEqualIgnoringCase("Crime Type", result.Summary);
+			StringAssert.AreEqualIgnoringCase("Reported", result.ReportedBy); 
+			StringAssert.AreEqualIgnoringCase("Falls Within", result.FallsWithin);
+			StringAssert.AreEqualIgnoringCase("Location", result.LocationDesc);
+			StringAssert.AreEqualIgnoringCase("LSOA Code", result.LSOACode);
+			StringAssert.AreEqualIgnoringCase("LSOA Name", result.LSOAName);
+			StringAssert.AreEqualIgnoringCase("Crime Type", result.CrimeType);
+			StringAssert.AreEqualIgnoringCase("Outcome", result.LastOutcomeCategory);
+			StringAssert.AreEqualIgnoringCase("context", result.Context);
 
 			Assert.NotNull(result.Location);
-			Assert.AreEqual(1.0D, result.Location.Latitude); 
-			Assert.AreEqual(2.0D, result.Location.Longitude);
+			Assert.AreEqual(2.0D, result.Location.Latitude); 
+			Assert.AreEqual(1.0D, result.Location.Longitude);
 			Assert.AreEqual(new DateTime(2009, 01, 01), result.Location.DateLogged);
-
-			Assert.NotNull(result.Outcome);
-			Assert.NotNull(result.Outcome.FirstOrDefault());
-			Assert.AreEqual(new DateTime(2009, 01, 01), result.Outcome.FirstOrDefault().DateCreated); 
-			Assert.AreEqual("Outcome", result.Outcome.FirstOrDefault().Outcome);
 
 			Assert.NotNull(result.Grading);
 			StringAssert.AreEqualIgnoringCase("Imported", result.Grading.Description);

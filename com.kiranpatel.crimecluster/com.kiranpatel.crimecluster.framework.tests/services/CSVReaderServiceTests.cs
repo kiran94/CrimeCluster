@@ -56,7 +56,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 		[TestCase("")]
 		public void parseCSV_NullOrEmptyFileLocation_Null(String testCase)
 		{
-			var result = this.GetInstance().parseCSV<Incident>(testCase, CSVParseType.IncidentParse);
+			var result = this.GetInstance().parseCSV<Incident>(testCase, CSVParseType.IncidentParse, true);
 			Assert.Null(result); 
 		}
 
@@ -80,7 +80,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 				this.fileIOService.Setup(x => x.openStream(fileLocation, FileMode.Open, FileAccess.Read, FileShare.Read)).Returns(stream);
 
 				var service = this.GetInstance();
-				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse);
+				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, true);
 
 				CollectionAssert.IsEmpty(result); 
 			}
@@ -106,7 +106,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 				this.fileIOService.Setup(x => x.openStream(fileLocation, FileMode.Open, FileAccess.Read, FileShare.Read)).Returns(stream);
 
 				var service = this.GetInstance();
-				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse);
+				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, true);
 
 				CollectionAssert.IsEmpty(result);
 			}
@@ -132,7 +132,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 				this.fileIOService.Setup(x => x.openStream(fileLocation, FileMode.Open, FileAccess.Read, FileShare.Read)).Returns(stream);
 
 				var service = this.GetInstance();
-				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse);
+				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, true);
 
 				CollectionAssert.IsEmpty(result);
 			}
@@ -158,7 +158,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 				this.fileIOService.Setup(x => x.openStream(fileLocation, FileMode.Open, FileAccess.Read, FileShare.Read)).Returns(stream);
 
 				var service = this.GetInstance();
-				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse);
+				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, true);
 
 				CollectionAssert.IsEmpty(result);
 			}
@@ -184,7 +184,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 				this.fileIOService.Setup(x => x.openStream(fileLocation, FileMode.Open, FileAccess.Read, FileShare.Read)).Returns(stream);
 
 				var service = this.GetInstance();
-				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse);
+				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, true);
 
 				Assert.NotNull(result);
 				Assert.AreEqual(1, result.Count);
@@ -192,10 +192,10 @@ namespace com.kiranpatel.crimecluster.framework.tests
 				var resultIncident = result.First(); 
 
 				Assert.AreEqual(new DateTime(2016, 07, 01), resultIncident.DateCreated);
-				Assert.AreEqual(Double.Parse("-0.113767"), resultIncident.Location.Latitude); 
-				Assert.AreEqual(Double.Parse("51.517372"), resultIncident.Location.Longitude);
-				Assert.AreEqual("Bicycle theft", resultIncident.Summary);
-				Assert.AreEqual("Under investigation", resultIncident.Outcome.First().Outcome); 
+				Assert.AreEqual(Double.Parse("51.517372"), resultIncident.Location.Latitude); 
+				Assert.AreEqual(Double.Parse("-0.113767"), resultIncident.Location.Longitude);
+				Assert.AreEqual("Bicycle theft", resultIncident.CrimeType);
+				Assert.AreEqual("Under investigation", resultIncident.LastOutcomeCategory); 
 			}
 		}
 
