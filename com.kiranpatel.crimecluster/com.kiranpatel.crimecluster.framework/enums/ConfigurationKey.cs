@@ -25,6 +25,11 @@
 		/// <summary>
 		/// Represents the number of columns from an incident csv file
 		/// </summary>
-		CSVIncidentColumnNumber
+		CSVIncidentColumnNumber,
+
+		/// <summary>
+		/// Import location for csv incidents
+		/// </summary>
+		ImportLocation
 	}
 }
