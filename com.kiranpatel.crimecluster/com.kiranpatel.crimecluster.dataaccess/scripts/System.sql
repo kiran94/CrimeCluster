@@ -1,18 +1,10 @@
-﻿CREATE DATABASE `CrimeCluster` 
+﻿DROP DATABASE IF EXISTS `CrimeCluster`; 
+
+CREATE DATABASE `CrimeCluster` 
 CHARACTER SET 'utf8' 
 COLLATE 'utf8_general_ci'; 
 
--- Table for Logs
--- Index on the Date Created for quick retrieval
-CREATE TABLE IF NOT EXISTS `Log`
-(
-	`ID` CHAR(36) PRIMARY KEY NOT NULL, 
-	`Message` VARCHAR(255) NOT NULL, 
-	`Level` VARCHAR(5),
-	`DateCreated` DATETIME NOT NULL,
-	`Exception` VARCHAR(1023),
-	INDEX `IX_DateCreated` (`DateCreated`)
-);
+USE `CrimeCluster`;
 
 -- Table for Grades of an Inciden Report
 CREATE TABLE IF NOT EXISTS `IncidentGrading`
@@ -57,10 +49,18 @@ CREATE TABLE IF NOT EXISTS `Person`
 CREATE TABLE `Incident`
 (
 	`ID` CHAR(36) PRIMARY KEY NOT NULL, 
-    `Summary` VARCHAR(1023) NOT NULL, 
-    `DateCreated` DATETIME NOT NULL,
-    `LocationID` CHAR(36) NOT NULL, 
-    `IncidentGradingID` CHAR(36) NOT NULL,
+    `CrimeID` CHAR(64) NULL,
+	`DateCreated` DATETIME NOT NULL, 
+    `ReportedBy` VARCHAR(255) NOT NULL, 
+    `FallsWithin` VARCHAR(255) NULL NULL, 
+	`LocationID` CHAR(36) NOT NULL,
+    `LocationDesc` VARCHAR(255) NOT NULL, 
+    `LSOACode` VARCHAR(9) NOT NULL, 
+    `LSOAName` VARCHAR(31) NOT NULL, 
+    `CrimeType` VARCHAR(31) NOT NULL, 
+    `LastOutcomeCategory` VARCHAR(63) NOT NULL,
+    `Context` VARCHAR(255) NULL,
+    `IncidentGradingID` CHAR(36) NULL,
     `IsDeleted` TINYINT(1) NOT NULL,
     FOREIGN KEY `FK_Incident_Location` (`LocationID`) REFERENCES `Location`(`ID`),
     FOREIGN KEY `FK_Incident_IncidentGrading` (`IncidentGradingID`) REFERENCES `IncidentGrading`(`ID`)

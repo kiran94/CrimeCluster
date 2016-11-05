@@ -17,9 +17,17 @@
 		{
 			this.Table("Incident");
 
-			this.Id(o => o.ID);
-			this.Property(o => o.Summary); 
-			this.Property(o => o.DateCreated);
+			this.Id(x => x.ID);
+			this.Property(x => x.CrimeID); 
+			this.Property(x => x.DateCreated);
+			this.Property(x => x.ReportedBy);
+			this.Property(x => x.FallsWithin);
+			this.Property(x => x.LocationDesc);
+			this.Property(x => x.LSOACode); 
+			this.Property(x => x.LSOAName);
+			this.Property(x => x.CrimeType);
+			this.Property(x => x.LastOutcomeCategory);
+			this.Property(x => x.Context);
 			this.Property(o => o.IsDeleted);
 
 			this.ManyToOne(o => o.Location, 
@@ -44,6 +52,8 @@
 				map.Key(k => k.Column("IncidentID"));
 				map.Inverse(true);
 			}, x => x.OneToMany(y => y.Class(typeof(IncidentOutcome)))); 
+
+			this.Where("IsDeleted = 0");
 		}
 	}
 }
