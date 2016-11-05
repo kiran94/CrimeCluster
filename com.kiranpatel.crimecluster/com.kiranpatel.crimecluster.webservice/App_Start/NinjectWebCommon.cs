@@ -79,9 +79,7 @@ namespace com.kiranpatel.crimecluster.webservice.App_Start
 			kernel.Bind<IRepository>().To<Repository>();
 			kernel.Bind<ISerialisationService>().To<SerialisationService>();
 			kernel.Bind<IFileIOService>().To<FileIOService>();
-			kernel.Bind<ICSVParseStrategy>().To<IncidentCSVParseStrategy>();
-			kernel.Bind<ICSVReaderService>().To<CSVReaderService>(); 
-
+		
 			kernel.Bind<IOfficerService>().To<OfficerService>();
 			kernel.Bind<ILocationService>().To<LocationService>();
 			kernel.Bind<IIncidentOutcomeService>().To<IncidentOutcomeService>();
