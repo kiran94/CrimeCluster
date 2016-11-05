@@ -19,17 +19,17 @@
 
 	<!-- ROOT -->
     <root>
-        <level value="DEBUG" />
+        <level value="INFO" />
         <appender-ref ref="Console" />
 <!--		 <appender-ref ref="FileAppender" />-->
     </root>
 	
 	<logger name="NHibernate">
-      <level value="WARN" />
+      <level value="ERROR" />
     </logger>
 
     <logger name="NHibernate.SQL">
-      <level value="INFO" />
+      <level value="ERROR" />
     </logger>
 	
 </log4net>
