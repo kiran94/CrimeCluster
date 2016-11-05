@@ -89,6 +89,8 @@
     <Compile Include="datatransferobjects\entities\OfficerDTO.cs" />
     <Compile Include="datatransferobjects\entities\IncidentDTO.cs" />
     <Compile Include="datatransferobjects\mappers\IncidentDTOMapper.cs" />
+    <Compile Include="contracts\IIncidentGradingService.cs" />
+    <Compile Include="services\IncidentGradingService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />

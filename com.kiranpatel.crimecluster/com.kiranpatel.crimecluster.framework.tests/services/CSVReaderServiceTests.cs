@@ -16,17 +16,22 @@ namespace com.kiranpatel.crimecluster.framework.tests
 		/// <summary>
 		/// The file IO Service mock
 		/// </summary>
-		Mock<IFileIOService> fileIOService = new Mock<IFileIOService>();
+		private Mock<IFileIOService> fileIOService;
 
 		/// <summary>
 		/// The config service mock
 		/// </summary>
-		Mock<IConfigurationService> configService = new Mock<IConfigurationService>();
+		private Mock<IConfigurationService> configService;
 
 		/// <summary>
 		/// The logger service mock
 		/// </summary>
-		Mock<ILogger> loggerService = new Mock<ILogger>();
+		private Mock<ILogger> loggerService;
+
+		/// <summary>
+		/// The strategy mock
+		/// </summary>
+		private ICSVParseStrategy strategy; 
 
 		/// <summary>
 		/// The header of a test CSV file
@@ -45,7 +50,8 @@ namespace com.kiranpatel.crimecluster.framework.tests
 			this.configService.Setup(x => x.Get(ConfigurationKey.CSVIncidentColumnNumber, "12")).Returns("12");
 
 			this.fileIOService = new Mock<IFileIOService>();
-			this.loggerService = new Mock<ILogger>(); 
+			this.loggerService = new Mock<ILogger>();
+			this.strategy = new IncidentCSVParseStrategy(this.configService.Object, this.loggerService.Object);
 		}
 
 		/// <summary>
@@ -56,7 +62,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 		[TestCase("")]
 		public void parseCSV_NullOrEmptyFileLocation_Null(String testCase)
 		{
-			var result = this.GetInstance().parseCSV<Incident>(testCase, CSVParseType.IncidentParse, true);
+			var result = this.GetInstance().parseCSV<Incident>(testCase, CSVParseType.IncidentParse, this.strategy, true);
 			Assert.Null(result); 
 		}
 
@@ -80,7 +86,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 				this.fileIOService.Setup(x => x.openStream(fileLocation, FileMode.Open, FileAccess.Read, FileShare.Read)).Returns(stream);
 
 				var service = this.GetInstance();
-				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, true);
+				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, this.strategy, true);
 
 				CollectionAssert.IsEmpty(result); 
 			}
@@ -106,7 +112,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 				this.fileIOService.Setup(x => x.openStream(fileLocation, FileMode.Open, FileAccess.Read, FileShare.Read)).Returns(stream);
 
 				var service = this.GetInstance();
-				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, true);
+				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, this.strategy, true);
 
 				CollectionAssert.IsEmpty(result);
 			}
@@ -132,7 +138,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 				this.fileIOService.Setup(x => x.openStream(fileLocation, FileMode.Open, FileAccess.Read, FileShare.Read)).Returns(stream);
 
 				var service = this.GetInstance();
-				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, true);
+				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, this.strategy, true);
 
 				CollectionAssert.IsEmpty(result);
 			}
@@ -158,7 +164,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 				this.fileIOService.Setup(x => x.openStream(fileLocation, FileMode.Open, FileAccess.Read, FileShare.Read)).Returns(stream);
 
 				var service = this.GetInstance();
-				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, true);
+				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, this.strategy, true);
 
 				CollectionAssert.IsEmpty(result);
 			}
@@ -184,7 +190,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 				this.fileIOService.Setup(x => x.openStream(fileLocation, FileMode.Open, FileAccess.Read, FileShare.Read)).Returns(stream);
 
 				var service = this.GetInstance();
-				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, true);
+				var result = service.parseCSV<Incident>(fileLocation, CSVParseType.IncidentParse, this.strategy, true);
 
 				Assert.NotNull(result);
 				Assert.AreEqual(1, result.Count);

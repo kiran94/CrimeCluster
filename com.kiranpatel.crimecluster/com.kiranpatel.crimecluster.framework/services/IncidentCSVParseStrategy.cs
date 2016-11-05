@@ -24,7 +24,7 @@
 		/// <summary>
 		/// The culture for the date
 		/// </summary>
-		private CultureInfo culture; 
+		private CultureInfo culture;
 
 		/// <summary>
 		/// The config service instance
@@ -35,6 +35,11 @@
 		/// The logger instance
 		/// </summary>
 		private readonly ILogger logger; 
+
+		/// <summary>
+		/// The Grading to assign imported incidents 
+		/// </summary>
+		public IncidentGrading grading { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.IncidentCSVParseStrategy`1"/> class.
@@ -88,7 +93,7 @@
 					LastOutcomeCategory = row[10],
 					Context = row[11],
 					Location = new Location() { DateLogged = extractedDate, Latitude = extractedLatitude, Longitude = extractedLongitude },
-					Grading = new IncidentGrading() { GradeValue = null, Description = "Imported" }
+					Grading = this.grading
 				};
 
 				return incident;
@@ -98,6 +103,12 @@
 				validateChecks[0], validateChecks[1], validateChecks[2])); 
 			
 			return default(Incident); 
+		}
+
+		// <inheritdoc>
+		public void setDefaultValue(object value)
+		{
+			this.grading = (IncidentGrading)value;
 		}
 
 		/// <summary>

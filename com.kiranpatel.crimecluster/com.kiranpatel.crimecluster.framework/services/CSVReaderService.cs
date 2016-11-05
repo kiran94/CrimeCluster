@@ -24,7 +24,7 @@
 		/// <summary>
 		/// The file IO Service instance
 		/// </summary>
-		private IFileIOService fileIOService; 
+		private IFileIOService fileIOService;
 
 		/// <summary>
 		/// The CSV reader instance
@@ -34,17 +34,25 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.CSVReaderService"/> class.
 		/// </summary>
+		/// <param name="fileIOService">File IO service.</param>
 		/// <param name="configService">Config service.</param>
 		/// <param name="logger">Logger.</param>
-		public CSVReaderService(IFileIOService fileIOService, IConfigurationService configService, ILogger logger)
+		public CSVReaderService(
+			IFileIOService fileIOService, 
+			IConfigurationService configService, 
+			ILogger logger)
 		{
 			this.fileIOService = fileIOService; 
 			this.configService = configService;
-			this.logger = logger; 
+			this.logger = logger;
 		}
 
 		// <inheritdoc>
-		public ICollection<T> parseCSV<T>(String fileLocation, CSVParseType parseType, bool hasHeader = false) where T : EntityBase
+		public ICollection<T> parseCSV<T>(
+			String fileLocation, 
+			CSVParseType parseType,
+			ICSVParseStrategy parseStrategy,
+			bool hasHeader = false) where T : EntityBase
 		{
 			if (String.IsNullOrEmpty(fileLocation))
 			{
@@ -52,7 +60,7 @@
 				return null; 
 			}
 
-			var parseStrategy = getStrategy(parseType);
+			//var parseStrategy = getStrategy(parseType);
 			var returnSet = new HashSet<T>();
 			int numberOfHeadersExpected = Int32.Parse(this.configService.Get(ConfigurationKey.CSVIncidentColumnNumber, "12")); 
 
@@ -85,23 +93,6 @@
 			}
 
 			return returnSet; 
-		}
-
-		/// <summary>
-		/// Gets the strategy for parsing the CSV
-		/// </summary>
-		/// <returns>The strategy type.</returns>
-		/// <param name="type">Type of object to parse.</param>
-		private ICSVParseStrategy getStrategy(CSVParseType type) 
-		{ 
-			switch (type)
-			{
-				case CSVParseType.IncidentParse:
-				return new IncidentCSVParseStrategy(this.configService, this.logger); 
-
-				default:
-					return null; 
-			}
 		}
 
 		/// <summary>

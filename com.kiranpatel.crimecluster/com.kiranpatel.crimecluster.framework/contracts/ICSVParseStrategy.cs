@@ -12,5 +12,10 @@
 		/// </summary>
 		/// <param name="row">Row.</param>
 		object parse(String[] row);
+
+		/// <summary>
+		/// Sets the default value.
+		/// </summary>
+		void setDefaultValue(object value); 
 	}
 }

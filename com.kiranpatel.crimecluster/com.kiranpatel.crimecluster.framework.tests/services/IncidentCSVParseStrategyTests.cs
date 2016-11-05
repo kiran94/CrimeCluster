@@ -101,7 +101,9 @@
 		{
 			String[] rows = { "ID", "2009-01", "Reported", "Falls Within", "1.0", "2.0", "Location", "LSOA Code", "LSOA Name", "Crime Type", "Outcome", "context" };
 
-			var parser = this.GetInstance(); 
+			var parser = this.GetInstance();
+			parser.grading = new IncidentGrading() { GradeValue = null, Description = "Imported" }; 
+
 			Incident result = (Incident)parser.parse(rows);
 
 			Assert.NotNull(result);

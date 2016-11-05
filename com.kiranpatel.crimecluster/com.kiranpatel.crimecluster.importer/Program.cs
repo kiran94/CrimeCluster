@@ -28,6 +28,10 @@
 			var configService = kernel.Get<IConfigurationService>();
 			var importFiles = GetImportFiles(configService.Get(ConfigurationKey.ImportLocation, "/tmp/CrimeCluster/"));
 
+			var incidentGrading = kernel.Get<IIncidentGradingService>(); 
+			var csvParseStrategy = kernel.Get<ICSVParseStrategy>();
+			csvParseStrategy.setDefaultValue(incidentGrading.GetImportIncidentGrading()); 
+
 			int count = 0;
 			using (var csvService = kernel.Get<ICSVReaderService>())
 			using (var incidentService = kernel.Get<IIncidentService>())
@@ -35,7 +39,7 @@
 				foreach (String currentFile in importFiles)
 				{
 					logger.info(String.Format("Importing {0}", currentFile));
-					var importedIncidents = csvService.parseCSV<Incident>(currentFile, CSVParseType.IncidentParse, true);
+					var importedIncidents = csvService.parseCSV<Incident>(currentFile, CSVParseType.IncidentParse, csvParseStrategy, true);
 
 					foreach (Incident currentIncident in importedIncidents)
 					{
@@ -50,6 +54,7 @@
 						}
 					}
 				}
+				logger.info("Flushing"); 
 			}
 
 			logger.info(String.Format("Imported {0} in total.", count));
@@ -96,6 +101,7 @@
 
 			kernel.Bind<IOfficerService>().To<OfficerService>();
 			kernel.Bind<ILocationService>().To<LocationService>();
+			kernel.Bind<IIncidentGradingService>().To<IncidentGradingService>(); 
 			kernel.Bind<IIncidentOutcomeService>().To<IncidentOutcomeService>();
 			kernel.Bind<IIncidentBacklogService>().To<IncidentBacklogService>();
 			kernel.Bind<IIncidentService>().To<IncidentService>();
