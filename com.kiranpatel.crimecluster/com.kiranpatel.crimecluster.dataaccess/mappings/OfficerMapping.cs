@@ -39,6 +39,8 @@
 				map.Column("IncidentID");
 				map.Cascade(Cascade.All);
 			});
+
+			this.Where("IsDeleted = 0");
 		}
 	}
 }

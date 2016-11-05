@@ -36,6 +36,8 @@
 				map.Column("OfficerID");
 				map.Cascade(Cascade.All); 
 			}); 
+
+			this.Where("IsDeleted = 0");
 		}
 	}
 }

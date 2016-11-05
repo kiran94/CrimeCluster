@@ -22,6 +22,8 @@
 			this.Property(x => x.Longitude, map => { map.NotNullable(true); });
 			this.Property(x => x.DateLogged, map => { map.NotNullable(true); });
 			this.Property(x => x.IsDeleted, map => { map.NotNullable(true); }); 
+
+			this.Where("IsDeleted = 0");
 		}
 	}
 }

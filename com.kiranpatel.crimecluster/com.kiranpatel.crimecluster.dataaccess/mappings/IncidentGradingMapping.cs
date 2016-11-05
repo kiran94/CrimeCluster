@@ -20,6 +20,8 @@
 			this.Property(o => o.GradeValue);
 			this.Property(o => o.Description);
 			this.Property(o => o.IsDeleted); 
+
+			this.Where("IsDeleted = 0");
 		}
 	}
 }
