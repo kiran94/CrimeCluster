@@ -1,6 +1,7 @@
 ﻿namespace com.kiranpatel.crimecluster.importer
 {
 	using System;
+	using System.Linq;
 	using com.kiranpatel.crimecluster.framework;
 	using com.kiranpatel.crimecluster.dataaccess;
 	using Ninject;
@@ -19,11 +20,34 @@
 		{
 			var kernel = GenerateKernel();
 
-			var logger = kernel.Get<ILogger>();
 			var configService = kernel.Get<IConfigurationService>();
-			var reposiory = kernel.Get<IRepository>();
-			var csvService = kernel.Get<ICSVReaderService>();
-			var incidentService = kernel.Get<IIncidentService>();
+			var logger = kernel.Get<ILogger>();
+			logger.info("Importer Started.");
+
+			using (var csvService = kernel.Get<ICSVReaderService>())
+			using (var incidentService = kernel.Get<IIncidentService>())
+			{
+				var importLocation = configService.Get(ConfigurationKey.ImportLocation, "");
+				var importedIncidents = csvService.parseCSV<Incident>(importLocation, CSVParseType.IncidentParse, true);
+				int count = 0; 
+
+				foreach (Incident currentIncident in importedIncidents)
+				{
+					if (incidentService.validate(currentIncident))
+					{
+						if (++count % 100 == 0)
+						{
+							logger.info("Imported 100 Incidents."); 
+						}
+
+						//incidentService.Save(currentIncident);
+					}
+				}
+
+				logger.info(String.Format("Imported {0} in total.", count));
+			}
+
+			logger.info("Importer Completed."); 
 		}
 
 		/// <summary>
@@ -41,7 +65,7 @@
 			      .ToMethod(x => new MySQLConnection(kernel.Get<IConfigurationService>()).getSession())
 			      .InThreadScope(); 
 			
-			kernel.Bind<IRepository>().To<IRepository>();
+			kernel.Bind<IRepository>().To<Repository>();
 			kernel.Bind<ICSVReaderService>().To<CSVReaderService>();
 			kernel.Bind<ICSVParseStrategy>().To<IncidentCSVParseStrategy>();
 
