@@ -2,7 +2,9 @@
 {
 	using System;
 	using com.kiranpatel.crimecluster.framework;
+	using com.kiranpatel.crimecluster.dataaccess;
 	using Ninject;
+	using NHibernate;
 
 	/// <summary>
 	/// Main class.
@@ -19,10 +21,9 @@
 
 			var logger = kernel.Get<ILogger>();
 			var configService = kernel.Get<IConfigurationService>();
-
-			var import = configService.Get(ConfigurationKey.ImportLocation, "defaultimport"); 
-
-			logger.debug(import);
+			var reposiory = kernel.Get<IRepository>();
+			var csvService = kernel.Get<ICSVReaderService>();
+			var incidentService = kernel.Get<IIncidentService>();
 		}
 
 		/// <summary>
@@ -34,6 +35,21 @@
 			IKernel kernel = new StandardKernel();
 			kernel.Bind<ILogger>().ToMethod(x => LoggerService.GetInstance());
 			kernel.Bind<IConfigurationService>().To<ConfigurationService>();
+			kernel.Bind<IFileIOService>().To<FileIOService>();
+
+			kernel.Bind<ISession>()
+			      .ToMethod(x => new MySQLConnection(kernel.Get<IConfigurationService>()).getSession())
+			      .InThreadScope(); 
+			
+			kernel.Bind<IRepository>().To<IRepository>();
+			kernel.Bind<ICSVReaderService>().To<CSVReaderService>();
+			kernel.Bind<ICSVParseStrategy>().To<IncidentCSVParseStrategy>();
+
+			kernel.Bind<IOfficerService>().To<OfficerService>();
+			kernel.Bind<ILocationService>().To<LocationService>();
+			kernel.Bind<IIncidentOutcomeService>().To<IncidentOutcomeService>();
+			kernel.Bind<IIncidentBacklogService>().To<IncidentBacklogService>();
+			kernel.Bind<IIncidentService>().To<IncidentService>();
 
 			return kernel;
 		}
