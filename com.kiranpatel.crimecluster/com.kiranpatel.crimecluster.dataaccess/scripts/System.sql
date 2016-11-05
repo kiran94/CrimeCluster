@@ -94,3 +94,7 @@ ALTER TABLE `Person`
 ADD CONSTRAINT `FK_Officer_Incident` 
 FOREIGN KEY (`IncidentID`) 
 REFERENCES `Incident`(`ID`)
+
+-- Indexes
+ALTER TABLE Incident
+ADD INDEX `IX_DateCreated`(`DateCreated`); 
