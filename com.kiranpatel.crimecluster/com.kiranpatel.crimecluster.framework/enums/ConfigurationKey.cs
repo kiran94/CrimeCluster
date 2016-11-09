@@ -30,6 +30,11 @@
 		/// <summary>
 		/// Import location for csv incidents
 		/// </summary>
-		ImportLocation
+		ImportLocation,
+
+		/// <summary>
+		/// K Means Number of Clusters
+		/// </summary>
+		KMeansClusterNumber
 	}
 }

@@ -6,28 +6,58 @@
 
 	using Accord.MachineLearning;
 
-	public class KMeansAlgorithm : IPredictionService
+	/// <summary>
+	/// K-Means Algorithm Implementation
+	/// </summary>
+	public class KMeansAlgorithm<T> : IClusteringService<T> where T: EntityBase
 	{
-		public KMeansAlgorithm()
+		/// <summary>
+		/// The config service.
+		/// </summary>
+		private readonly IConfigurationService configService; 
+
+		/// <summary>
+		/// The Logger instance. 
+		/// </summary>
+		private readonly ILogger logger;
+
+		/// <summary>
+		/// The k means.
+		/// </summary>
+		private readonly KMeans kMeans; 
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.KMeansAlgorithm`1"/> class.
+		/// </summary>
+		/// <param name="logger">Logger.</param>
+		public KMeansAlgorithm(IConfigurationService configService, ILogger logger)
 		{
+			this.configService = configService; 
+			this.logger = logger;
+
+			int noClusters = Int32.Parse(this.configService.Get(ConfigurationKey.KMeansClusterNumber, "3"));
+			this.kMeans = new KMeans(noClusters);
 		}
 
-		public ICollection<Incident> predict(ICollection<Incident> dataSet)
+		// <inheritdoc>
+		public double[][] Learn(ICollection<T> data, Func<T, double[]> attributes)
 		{
-			double[][] obs = dataSet.Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value }).ToArray(); 
-
-			KMeans kmeans = new KMeans(14);
-			KMeansClusterCollection collection = kmeans.Learn(obs);
-
-
-
-			foreach (var col in collection.Clusters)
+			if (data == null || attributes == null)
 			{
-				Console.WriteLine(String.Join(",", col.Covariance[0][0], col.Covariance[1][0])); 
+				return null;
 			}
 
+			this.logger.info("Running K-Means Algorithm");
+			double[][] obs = data.Select(x => attributes.Invoke(x)).ToArray();
 
-			throw new NotImplementedException();
+			var collection = this.kMeans.Learn(obs);
+			return collection.Clusters.Select(x => x.Centroid).ToArray(); 
+		}
+
+		// <inheritdoc>
+		public int findNearest(double[] point)
+		{
+			return this.kMeans.Clusters.Decide(point); 
 		}
 	}
 }

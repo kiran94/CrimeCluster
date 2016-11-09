@@ -112,6 +112,7 @@
     <Compile Include="contracts\IPredictionService.cs" />
     <Compile Include="extensions\ICollectionExtensions.cs" />
     <Compile Include="services\PredictionAlgorithms\KMeansAlgorithm.cs" />
+    <Compile Include="contracts\IClusteringService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
