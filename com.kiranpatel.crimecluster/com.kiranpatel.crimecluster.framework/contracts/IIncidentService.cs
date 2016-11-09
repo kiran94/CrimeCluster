@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using com.kiranpatel.crimecluster.framework;
 
 	/// <summary>
@@ -18,8 +19,8 @@
 
 		/// <summary>
 		/// Gets all incidents
-		/// </summary>
+		/// </summary>t
 		/// <returns>The all.</returns>
-		ICollection<Incident> getAll(); 
+		IQueryable<Incident> getAll(); 
 	}
 }
