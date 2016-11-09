@@ -30,7 +30,14 @@
 
 			var incidentGrading = kernel.Get<IIncidentGradingService>(); 
 			var csvParseStrategy = kernel.Get<ICSVParseStrategy>();
-			csvParseStrategy.setDefaultValue(incidentGrading.GetImportIncidentGrading()); 
+			var defaultGrading = incidentGrading.GetImportIncidentGrading();
+
+			if (defaultGrading == null)
+			{
+				defaultGrading = new IncidentGrading() { GradeValue = null, Description = "Imported" }; 
+			}
+
+			csvParseStrategy.setDefaultValue(defaultGrading);
 
 			int count = 0;
 			using (var csvService = kernel.Get<ICSVReaderService>())
@@ -45,16 +52,16 @@
 					{
 						if (incidentService.validate(currentIncident))
 						{
-							if (++count % 100 == 0)
+							if (++count % 50000 == 0)
 							{
-								logger.info("Imported 100 Incidents.");
+								logger.info("Imported 50,000 Incidents.");
 							}
 
 							incidentService.Save(currentIncident);
 						}
 					}
 				}
-				logger.info("Flushing"); 
+				logger.info("Flushing.."); 
 			}
 
 			logger.info(String.Format("Imported {0} in total.", count));
