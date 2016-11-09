@@ -113,6 +113,8 @@
     <Compile Include="extensions\ICollectionExtensions.cs" />
     <Compile Include="services\PredictionAlgorithms\KMeansAlgorithm.cs" />
     <Compile Include="contracts\IClusteringService.cs" />
+    <Compile Include="enums\CrimeType.cs" />
+    <Compile Include="extensions\CrimeTypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />

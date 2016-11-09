@@ -59,6 +59,7 @@
     <Compile Include="services\IncidentCSVParseStrategyTests.cs" />
     <Compile Include="services\IncidentOutcomeServiceTests.cs" />
     <Compile Include="extensions\ICollectionExtensionsTests.cs" />
+    <Compile Include="extensions\CrimeTypeExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj">
