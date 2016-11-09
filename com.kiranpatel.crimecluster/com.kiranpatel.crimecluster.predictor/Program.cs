@@ -19,23 +19,28 @@
 		/// <param name="args">The command-line arguments.</param>
 		public static void Main(string[] args)
 		{
-			var kernel = GenerateKernel();
+			IKernel kernel = GenerateKernel();
 
 			ILogger logger = kernel.Get<ILogger>();
 			logger.debug("Starting Predictor");
 
+			IConfigurationService configService = kernel.Get<IConfigurationService>(); 
 			IIncidentService incidentService = kernel.Get<IIncidentService>();
+			IClusteringService<Incident> clusteringService = kernel.Get<IClusteringService<Incident>>(); 
+			//IPredictionService predictionService = kernel.Get<IPredictionService>();
 
-			DateTime start = new DateTime(2015, 08, 01);
-			DateTime end = new DateTime(2015, 09, 01); 
+			String startStr = configService.Get(ConfigurationKey.StartCrimeSamplingDate, "01/08/2015");
+			String endStr = configService.Get(ConfigurationKey.EndCrimeSamplingDate, "01/09/2015");
+			String crimeType = CrimeType.AntiSocialBehaviour.GetDescription();
 
-			ICollection<Incident> incidents = new HashSet<Incident>(incidentService.getAll()
-			                                                        .Where(o => o.DateCreated >= start 
-			                                                               && o.DateCreated <= end 
-			                                                               && o.CrimeType == "Anti-social behaviour"));
+			DateTime start = Convert.ToDateTime(startStr); 
+			DateTime end = Convert.ToDateTime(endStr); 
 
-			IPredictionService predictionService = kernel.Get<IPredictionService>();
-			predictionService.predict(incidents); 
+			IQueryable<Incident> query = incidentService.getAll().Where(o => o.DateCreated >= start && o.DateCreated <= end && o.CrimeType == crimeType);
+			ICollection<Incident> incidents = new HashSet<Incident>(query);
+
+			clusteringService.Learn(incidents, x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value }); 
+			//predictionService.predict(incidents);
 		}
 
 		/// <summary>
@@ -64,7 +69,7 @@
 			kernel.Bind<IIncidentBacklogService>().To<IncidentBacklogService>();
 			kernel.Bind<IIncidentService>().To<IncidentService>();
 
-			kernel.Bind<IPredictionService>().To<KMeansAlgorithm>(); 
+			kernel.Bind<IClusteringService<Incident>>().To<KMeansAlgorithm<Incident>>(); 
 
 			return kernel;
 		}

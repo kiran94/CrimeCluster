@@ -35,6 +35,16 @@
 		/// <summary>
 		/// K Means Number of Clusters
 		/// </summary>
-		KMeansClusterNumber
+		KMeansClusterNumber,
+
+		/// <summary>
+		/// Start Date for Crime Sampling 
+		/// </summary>
+		StartCrimeSamplingDate,
+
+		/// <summary>
+		/// End Date for Crime Sampling
+		/// </summary>
+		EndCrimeSamplingDate
 	}
 }
