@@ -48,7 +48,8 @@
 		public IncidentCSVParseStrategy(IConfigurationService configService, ILogger logger)
 		{
 			this.configService = configService;
-			this.logger = logger; 
+			this.logger = logger;
+
 
 			this.dateRegex = this.configService.Get(ConfigurationKey.CSVIncidentDateFormatRegex, @"[0-9]{4}-[0-9]{2}");
 			this.culture = new CultureInfo(this.configService.Get(ConfigurationKey.CultureInfo, "en-GB"));
@@ -99,8 +100,8 @@
 				return incident;
 			}
 
-			this.logger.warn(string.Format("Error parsing CSV row: Date {0}, Longitude: {1}, Latitude: {2}",
-				validateChecks[0], validateChecks[1], validateChecks[2])); 
+			//this.logger.warn(string.Format("Error parsing CSV row: Date {0}, Longitude: {1}, Latitude: {2}",
+			//	validateChecks[0], validateChecks[1], validateChecks[2])); 
 			
 			return default(Incident); 
 		}

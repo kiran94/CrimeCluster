@@ -93,9 +93,9 @@
 		}
 
 		// <inheritdoc>
-		public ICollection<Incident> getAll()
+		public IQueryable<Incident> getAll()
 		{
-			return this.repository.Query<Incident>().ToList(); 
+			return this.repository.Query<Incident>(); 
 		}
 
 		// <inheritdoc>

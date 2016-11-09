@@ -75,6 +75,7 @@
 					return new HashSet<T>(); 
 				}
 
+				int errors = 0; 
 				while (this.reader.ReadNextRecord())
 				{
 					String[] row = new String[headers.Length];
@@ -89,7 +90,13 @@
 					{
 						returnSet.Add(result);
 					}
+					else
+					{
+						errors++; 
+					}
 				}
+
+				this.logger.warn(String.Format("{0} invalid rows", errors));
 			}
 
 			return returnSet; 
