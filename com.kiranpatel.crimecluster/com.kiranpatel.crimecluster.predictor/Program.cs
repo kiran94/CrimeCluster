@@ -24,15 +24,14 @@
 			var logger = kernel.Get<ILogger>();
 			logger.debug("Starting Predictor");
 
-			var configService = kernel.Get<IConfigurationService>(); 
 			var incidentService = kernel.Get<IIncidentService>();
-			var distanceMeasure = kernel.Get<IDistanceMeasure>();
-			var djCluster = new DJClusterAlgorithm(configService, logger, distanceMeasure);
+			var djCluster = kernel.Get<IClusteringService>(); 
 
-			var dataSet = incidentService.getAll().Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value }).ToArray();
+			var dataSet = incidentService.getAll()
+			                             .Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value })
+			                             .ToArray();
 
-			var cluster = djCluster.Learn(dataSet);
-			logger.info(String.Format("Generated {0} clusters", cluster.Count));
+			djCluster.Learn(dataSet);
 		}
 
 		/// <summary>
@@ -61,7 +60,8 @@
 			kernel.Bind<IIncidentBacklogService>().To<IncidentBacklogService>();
 			kernel.Bind<IIncidentService>().To<IncidentService>();
 
-			kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>(); 
+			kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>();
+			kernel.Bind<IClusteringService>().To<DJClusterAlgorithm>(); 
 
 			return kernel;
 		}
