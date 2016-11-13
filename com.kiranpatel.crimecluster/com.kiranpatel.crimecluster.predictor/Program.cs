@@ -19,28 +19,21 @@
 		/// <param name="args">The command-line arguments.</param>
 		public static void Main(string[] args)
 		{
-			IKernel kernel = GenerateKernel();
+			var kernel = GenerateKernel();
 
-			ILogger logger = kernel.Get<ILogger>();
+			var logger = kernel.Get<ILogger>();
 			logger.debug("Starting Predictor");
 
-			IConfigurationService configService = kernel.Get<IConfigurationService>(); 
-			IIncidentService incidentService = kernel.Get<IIncidentService>();
-			IClusteringService<Incident> clusteringService = kernel.Get<IClusteringService<Incident>>(); 
-			//IPredictionService predictionService = kernel.Get<IPredictionService>();
+			var configService = kernel.Get<IConfigurationService>(); 
+			var incidentService = kernel.Get<IIncidentService>();
+			var distanceMeasure = kernel.Get<IDistanceMeasure>();
+			var djCluster = new DJClusterAlgorithm(configService, logger, distanceMeasure);
 
-			String startStr = configService.Get(ConfigurationKey.StartCrimeSamplingDate, "01/08/2015");
-			String endStr = configService.Get(ConfigurationKey.EndCrimeSamplingDate, "01/09/2015");
-			String crimeType = CrimeType.AntiSocialBehaviour.GetDescription();
+			var dataSet = incidentService.getAll().Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value }).ToArray();
 
-			DateTime start = Convert.ToDateTime(startStr); 
-			DateTime end = Convert.ToDateTime(endStr); 
+			var cluster = djCluster.Learn(dataSet);
 
-			IQueryable<Incident> query = incidentService.getAll().Where(o => o.DateCreated >= start && o.DateCreated <= end && o.CrimeType == crimeType);
-			ICollection<Incident> incidents = new HashSet<Incident>(query);
-
-			clusteringService.Learn(incidents, x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value }); 
-			//predictionService.predict(incidents);
+			logger.debug("done");
 		}
 
 		/// <summary>
@@ -69,7 +62,7 @@
 			kernel.Bind<IIncidentBacklogService>().To<IncidentBacklogService>();
 			kernel.Bind<IIncidentService>().To<IncidentService>();
 
-			kernel.Bind<IClusteringService<Incident>>().To<KMeansAlgorithm<Incident>>(); 
+			kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>(); 
 
 			return kernel;
 		}

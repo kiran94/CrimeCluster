@@ -45,6 +45,16 @@
 		/// <summary>
 		/// End Date for Crime Sampling
 		/// </summary>
-		EndCrimeSamplingDate
+		EndCrimeSamplingDate,
+
+		/// <summary>
+		/// Minimum raduis for DJ Clustering algorithm to consider a point in a cluster
+		/// </summary>
+		DJClusterRadiusEps,
+
+		/// <summary>
+		/// Minimum number of points for DJ Clustering algorithm to consider a cluster a cluster
+		/// </summary>
+		DJClusterMinPts
 	}
 }
