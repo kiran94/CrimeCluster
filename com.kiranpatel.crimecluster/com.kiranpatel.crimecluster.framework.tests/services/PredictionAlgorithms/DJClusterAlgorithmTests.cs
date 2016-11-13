@@ -65,8 +65,8 @@
 				new double[] {44, 15}  // cluster 2
 			};
 
-			this.configService.Setup(x => x.Get(ConfigurationKey.DJClusterRadiusEps, "10")).Returns("10");
-			this.configService.Setup(x => x.Get(ConfigurationKey.DJClusterMinPts, "10")).Returns("2");
+			this.configService.Setup(x => x.Get(ConfigurationKey.DJClusterRadiusEps, It.IsAny<String>())).Returns("10");
+			this.configService.Setup(x => x.Get(ConfigurationKey.DJClusterMinPts, It.IsAny<String>())).Returns("2");
 
 			var clusters = this.GetInstance().Learn(dataSet);
 
@@ -90,8 +90,8 @@
 				new double[] {51, 5}  // cluster 2
 			};
 
-			this.configService.Setup(x => x.Get(ConfigurationKey.DJClusterRadiusEps, "10")).Returns("10");
-			this.configService.Setup(x => x.Get(ConfigurationKey.DJClusterMinPts, "10")).Returns("2");
+			this.configService.Setup(x => x.Get(ConfigurationKey.DJClusterRadiusEps, It.IsAny<String>())).Returns("10");
+			this.configService.Setup(x => x.Get(ConfigurationKey.DJClusterMinPts, It.IsAny<String>())).Returns("2");
 
 			var clusters = this.GetInstance().Learn(dataSet);
 
