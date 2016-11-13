@@ -11,7 +11,7 @@ com.kiranpatel.crimecluster.framework.tests: Encapsulates unit tests for com.kir
 
 com.kiranpatel.crimecluster.importer: Encapsulates the CSV importer for reading historic crimes. 
 
-com.kiranpatel.crimecluster.framework.predictor: Encapsulates prediction aspects of the application. 
+com.kiranpatel.crimecluster.predictor: Encapsulates prediction aspects of the application. 
 
 com.kiranpatel.crimecluster.webservice: Encapsulates JSON API entry point to access data on the server. (ASP.NET MVC) 
 
