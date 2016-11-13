@@ -32,8 +32,7 @@
 			var dataSet = incidentService.getAll().Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value }).ToArray();
 
 			var cluster = djCluster.Learn(dataSet);
-
-			logger.debug("done");
+			logger.info(String.Format("Generated {0} clusters", cluster.Count));
 		}
 
 		/// <summary>

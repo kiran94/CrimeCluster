@@ -116,6 +116,7 @@
     <Compile Include="services\PredictionAlgorithms\DJClusterAlgorithm.cs" />
     <Compile Include="contracts\IDistanceMeasure.cs" />
     <Compile Include="services\PredictionAlgorithms\EuclideanDistance.cs" />
+    <Compile Include="contracts\IClusteringService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />

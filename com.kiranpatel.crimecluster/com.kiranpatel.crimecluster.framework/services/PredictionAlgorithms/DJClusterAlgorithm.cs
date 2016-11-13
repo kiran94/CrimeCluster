@@ -7,7 +7,7 @@
 	/// <summary>
 	/// DJ Cluster Algorithm implementation
 	/// </summary>
-	public class DJClusterAlgorithm
+	public class DJClusterAlgorithm : IClusteringService
 	{
 		/// <summary>
 		/// The config service.
@@ -61,6 +61,7 @@
 				throw new ArgumentNullException(nameof(dataSet)); 
 			}
 
+			this.logger.info(String.Format("Computing clusters with paramters: Eps: {0} MinPts: {1}", this.raduisEps, this.minPoints));
 			var clusters = new List<HashSet<double[]>>();
 
 			this.logger.debug("Generating Clusters"); 
