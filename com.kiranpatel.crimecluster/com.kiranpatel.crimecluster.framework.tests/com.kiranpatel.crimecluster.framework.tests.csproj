@@ -46,6 +46,7 @@
     <Folder Include="structures\" />
     <Folder Include="datatransferobjects\" />
     <Folder Include="extensions\" />
+    <Folder Include="services\PredictionAlgorithms\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="services\LocationServiceTests.cs" />
@@ -60,6 +61,8 @@
     <Compile Include="services\IncidentOutcomeServiceTests.cs" />
     <Compile Include="extensions\ICollectionExtensionsTests.cs" />
     <Compile Include="extensions\CrimeTypeExtensionsTests.cs" />
+    <Compile Include="services\PredictionAlgorithms\EuclideanDistanceTests.cs" />
+    <Compile Include="services\PredictionAlgorithms\DJClusterAlgorithmTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj">

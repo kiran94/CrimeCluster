@@ -115,6 +115,9 @@
     <Compile Include="contracts\IClusteringService.cs" />
     <Compile Include="enums\CrimeType.cs" />
     <Compile Include="extensions\CrimeTypeExtensions.cs" />
+    <Compile Include="services\PredictionAlgorithms\DJClusterAlgorithm.cs" />
+    <Compile Include="contracts\IDistanceMeasure.cs" />
+    <Compile Include="services\PredictionAlgorithms\EuclideanDistance.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
