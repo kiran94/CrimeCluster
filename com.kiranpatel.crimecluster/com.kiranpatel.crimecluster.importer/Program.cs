@@ -26,10 +26,10 @@
 			logger.info("Importer Started.");
 
 			var configService = kernel.Get<IConfigurationService>();
-			var importFiles = GetImportFiles(configService.Get(ConfigurationKey.ImportLocation, "/tmp/CrimeCluster/"));
-
-			var incidentGrading = kernel.Get<IIncidentGradingService>(); 
+			var incidentGrading = kernel.Get<IIncidentGradingService>();
 			var csvParseStrategy = kernel.Get<ICSVParseStrategy>();
+
+			var importFiles = GetImportFiles(configService.Get(ConfigurationKey.ImportLocation, "/data/CrimeCluster/"));
 			var defaultGrading = incidentGrading.GetImportIncidentGrading();
 
 			if (defaultGrading == null)
@@ -73,7 +73,7 @@
 		/// </summary>
 		/// <returns>The import files.</returns>
 		/// <param name="DirectoryLocation">Directory location.</param>
-		private static String[] GetImportFiles(String DirectoryLocation)
+		private static IList<String> GetImportFiles(String DirectoryLocation)
 		{
 			IList<String> files = new List<String>(); 
 			foreach (String currentDirectory in Directory.GetDirectories(DirectoryLocation))
@@ -84,7 +84,7 @@
 				}
 			}
 
-			return files.ToArray(); 
+			return files;
 		}
 
 		/// <summary>
