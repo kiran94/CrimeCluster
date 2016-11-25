@@ -61,39 +61,30 @@
 				throw new ArgumentNullException(nameof(dataSet)); 
 			}
 
-			this.logger.info(String.Format("Computing clusters with paramters: Eps: {0} MinPts: {1}", this.raduisEps, this.minPoints));
-			var clusters = new List<HashSet<double[]>>();
+			this.logger.info(String.Format("Generating clusters with paramters: Eps: {0} MinPts: {1}", this.raduisEps, this.minPoints));
 
-			this.logger.debug("Generating Clusters"); 
+			var clusters = new List<HashSet<double[]>>();
 			for (int i = 0; i < dataSet.Length; i++)
 			{
-				bool mergedCluster = false;
 				var cluster = this.calcNeighbourhood(dataSet[i], dataSet);
 
-				if (cluster == null) continue;
-
-				for (int currentCluster = 0; currentCluster < clusters.Count; currentCluster++)
+				if (cluster == null)
 				{
-					if (clusters.ElementAt(currentCluster).Intersect(cluster).Count() != 0)
-					{
-						clusters[currentCluster] = new HashSet<double[]>(clusters.ElementAt(currentCluster).Union(cluster));
-						mergedCluster = true;
-						break;
-					}
+					continue;	
 				}
 
-				if (!mergedCluster)
+				if (!mergeClusters(clusters, cluster))
 				{
 					clusters.Add(cluster);
 				}
 			}
 
-			this.logger.debug(String.Format("Generated {0} clusters", clusters.Count)); 
+			this.logger.debug(String.Format("Generated {0} Clusters", clusters.Count)); 
 			return clusters; 
 		}
 
 		/// <summary>
-		/// Calculates the neighbourhood of a given point
+		/// Calculates the neighbourhood of a given point using the minimum raduis and minpoints
 		/// </summary>
 		/// <returns>clustering of the point</returns>
 		/// <param name="currentPoint">Current point.</param>
@@ -105,11 +96,32 @@
 			{
 				if (this.measure.measure(currentPoint, dataSet[i]) <= this.raduisEps)
 				{
-					cluster.Add(dataSet[i]); 
+					cluster.Add(dataSet[i]);
 				}
 			}
 
 			return (cluster.Count <= this.minPoints) ? cluster : null;
+		}
+
+		/// <summary>
+		/// Merges the generated cluster with the list of clusters if there are any intersecting points, 
+		/// if there are any intersecting points the clusters are merged.
+		/// </summary>
+		/// <returns><c>true</c>, if clusters was merged, <c>false</c> otherwise.</returns>
+		/// <param name="clusters">Clusters.</param>
+		/// <param name="cluster">Cluster.</param>
+		private bool mergeClusters(List<HashSet<double[]>> clusters, HashSet<double[]> cluster)
+		{
+			for (int currentCluster = 0; currentCluster < clusters.Count; currentCluster++)
+			{
+				if (clusters[currentCluster].Intersect(cluster).Count() != 0)
+				{
+					clusters[currentCluster] = new HashSet<double[]>(clusters[currentCluster].Union(cluster));
+					return true; 
+				}
+			}
+
+			return false; 
 		}
 	}
 }
