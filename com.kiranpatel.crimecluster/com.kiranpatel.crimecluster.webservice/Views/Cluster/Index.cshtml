@@ -1,4 +1,5 @@
-﻿@{
+﻿@model CrimeTypeModel
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,8 +9,11 @@
 
 <div id='map'></div>
 
+@Html.LabelFor(x => Model.type)
+<br/>
+@Html.EnumDropDownListFor(x => Model.type)
+
 
 <script type='text/javascript' src='~/Scripts/jquery-3.1.1.min.js'></script>
 <script type='text/javascript' src='~/Scripts/GoogleMaps.js'></script>
 <script type='text/javascript' src=@String.Format("https://maps.googleapis.com/maps/api/js?key={0}&callback=initMap", ViewBag.GoogleMapsKey)></script>
-

@@ -40,7 +40,7 @@
 			}
 
 			this.logger.debug("Google Maps Key Loaded"); 
-			ViewBag.GoogleMapsKey = googleMapsKey; 
+			ViewBag.GoogleMapsKey = googleMapsKey;
 		}
 
 		/// <summary>
@@ -48,7 +48,8 @@
 		/// </summary>
         public ActionResult Index()
 		{
-            return View ();
+			CrimeTypeModel model = new CrimeTypeModel();
+            return View (model);
         }
     }
 }
