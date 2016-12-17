@@ -44,7 +44,7 @@
 		}
 
 		/// <summary>
-		/// Index this instance.
+		/// GET: /Index
 		/// </summary>
         public ActionResult Index()
 		{
