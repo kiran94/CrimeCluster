@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel='stylesheet' type="text/css" href='~/Content/Site.css' />
+
+<h1>Crime Cluster</h1>
+
+<div id='map'></div>
+
+
+<script type='text/javascript' src='~/Scripts/jquery-3.1.1.min.js'></script>
+<script type='text/javascript' src='~/Scripts/GoogleMaps.js'></script>
+<script type='text/javascript' src=@String.Format("https://maps.googleapis.com/maps/api/js?key={0}&callback=initMap", ViewBag.GoogleMapsKey)></script>
+

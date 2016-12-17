@@ -86,6 +86,7 @@
     <Folder Include="Models\" />
     <Folder Include="Scripts\" />
     <Folder Include="Views\Home\" />
+    <Folder Include="Views\Cluster\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Models\ResponseResultModel.cs" />
     <Compile Include="Controllers\IncidentController.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="Controllers\ClusterController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
@@ -107,6 +109,14 @@
     <Content Include="Web.config" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
+    <Content Include="Views\Cluster\Index.cshtml" />
+    <Content Include="Scripts\GoogleMaps.js" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.js" />
+    <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.js" />
+    <Content Include="Scripts\jquery-3.1.1-vsdoc.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj">
@@ -120,6 +130,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="log4net.xml" />
+    <None Include="Scripts\jquery-3.1.1.slim.min.map" />
+    <None Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

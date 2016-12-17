@@ -55,6 +55,11 @@
 		/// <summary>
 		/// Minimum number of points for DJ Clustering algorithm to consider a cluster a cluster
 		/// </summary>
-		DJClusterMinPts
+		DJClusterMinPts,
+
+		/// <summary>
+		/// Google Maps Key 
+		/// </summary>
+		GoogleMapsKey
 	}
 }
