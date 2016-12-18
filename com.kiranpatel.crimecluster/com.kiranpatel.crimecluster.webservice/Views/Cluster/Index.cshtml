@@ -9,9 +9,16 @@
 
 <div id='map'></div>
 
-@Html.LabelFor(x => Model.type)
-<br/>
-@Html.EnumDropDownListFor(x => Model.type)
+<div id='controls'>
+	@Html.LabelFor(x => Model.type)
+	<br/>
+	@Html.EnumDropDownListFor(x => Model.type)
+</div>
+
+<div id='results'>
+	Locations Found: <span id='locationsfound'></span>
+</div>
+
 
 
 <script type='text/javascript' src='~/Scripts/jquery-3.1.1.min.js'></script>
