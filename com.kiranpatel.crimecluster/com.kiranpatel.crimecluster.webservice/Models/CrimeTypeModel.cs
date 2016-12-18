@@ -9,6 +9,10 @@
 	/// </summary>
 	public class CrimeTypeModel
 	{
+		/// <summary>
+		/// Gets or sets the crime type.
+		/// </summary>
+		/// <value>The type.</value>
 		[DisplayName("Crime Type")]
 		public CrimeType type { get; set; }
 	}

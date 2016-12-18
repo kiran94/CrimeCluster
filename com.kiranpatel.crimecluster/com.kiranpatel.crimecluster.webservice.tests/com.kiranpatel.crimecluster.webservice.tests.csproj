@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Controllers\OfficerControllerTests.cs" />
     <Compile Include="Controllers\IncidentControllerTests.cs" />
+    <Compile Include="Controllers\ClusterControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

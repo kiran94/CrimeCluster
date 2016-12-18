@@ -101,6 +101,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\ClusterController.cs" />
     <Compile Include="Models\CrimeTypeModel.cs" />
+    <Compile Include="Models\LocationModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Web.config" />
