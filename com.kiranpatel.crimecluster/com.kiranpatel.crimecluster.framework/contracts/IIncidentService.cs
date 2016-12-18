@@ -21,6 +21,13 @@
 		/// Gets all incidents
 		/// </summary>t
 		/// <returns>The all.</returns>
-		IQueryable<Incident> getAll(); 
+		IQueryable<Incident> getAll();
+
+		/// <summary>
+		/// Gets all the incidents for a particular crime type
+		/// </summary>
+		/// <returns>A collection of incidents.</returns>
+		/// <param name="type">crime type to filter by.</param>
+		ICollection<Incident> getAllForCrimeType(CrimeType type); 
 	}
 }

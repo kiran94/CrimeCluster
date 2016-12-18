@@ -162,6 +162,49 @@
 		}
 
 		/// <summary>
+		/// Ensures when the crime type is set to AntiSocialBehavior then only those are returned. 
+		/// </summary>
+		[Test]
+		public void getAllForCrimeType_AntiSocialBehavior_OnlyAntiSocialBehaviorFiltered()
+		{
+			var crimes = new List<Incident>()
+			{
+				new Incident() {CrimeType = CrimeType.AntiSocialBehaviour.ToString() },
+				new Incident() {CrimeType = CrimeType.BicycleTheft.ToString() },
+				new Incident() {CrimeType = CrimeType.AntiSocialBehaviour.ToString() },
+				new Incident() {CrimeType = CrimeType.Burglary.ToString() }
+			};
+
+			this.repository.Setup(x => x.Query<Incident>()).Returns(crimes.AsQueryable());
+
+			var result = this.GetInstance().getAllForCrimeType(CrimeType.AntiSocialBehaviour);
+
+			Assert.AreEqual(2, result.Count);
+			Assert.That(result.All(x => x.CrimeType == CrimeType.AntiSocialBehaviour.ToString()));  
+		}
+
+		/// <summary>
+		/// Ensures when there are no matching records with the crime type, non are returned. 
+		/// </summary>
+		[Test]
+		public void getAllForCrimeType_NoneMatching_NoneReturned()
+		{
+			var crimes = new List<Incident>()
+			{
+				new Incident() {CrimeType = CrimeType.BicycleTheft.ToString() },
+				new Incident() {CrimeType = CrimeType.BicycleTheft.ToString() },
+				new Incident() {CrimeType = CrimeType.BicycleTheft.ToString() },
+				new Incident() {CrimeType = CrimeType.Burglary.ToString() }
+			};
+
+			this.repository.Setup(x => x.Query<Incident>()).Returns(crimes.AsQueryable());
+
+			var result = this.GetInstance().getAllForCrimeType(CrimeType.AntiSocialBehaviour);
+
+			Assert.AreEqual(0, result.Count);
+		}
+
+		/// <summary>
 		/// Ensures when the incident is invalid, false is returned
 		/// </summary>
 		[Test]
