@@ -101,7 +101,7 @@
 		// <inheritdoc>
 		public ICollection<Incident> getAllForCrimeType(CrimeType type)
 		{
-			return this.repository.Query<Incident>().Where(x => x.CrimeType == type.ToString()).ToList(); 
+			return this.repository.Query<Incident>().Where(x => x.CrimeType == type.GetDescription()).ToList(); 
 		}
 
 		// <inheritdoc>

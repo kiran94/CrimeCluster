@@ -169,10 +169,10 @@
 		{
 			var crimes = new List<Incident>()
 			{
-				new Incident() {CrimeType = CrimeType.AntiSocialBehaviour.ToString() },
-				new Incident() {CrimeType = CrimeType.BicycleTheft.ToString() },
-				new Incident() {CrimeType = CrimeType.AntiSocialBehaviour.ToString() },
-				new Incident() {CrimeType = CrimeType.Burglary.ToString() }
+				new Incident() {CrimeType = CrimeType.AntiSocialBehaviour.GetDescription() },
+				new Incident() {CrimeType = CrimeType.BicycleTheft.GetDescription() },
+				new Incident() {CrimeType = CrimeType.AntiSocialBehaviour.GetDescription() },
+				new Incident() {CrimeType = CrimeType.Burglary.GetDescription() }
 			};
 
 			this.repository.Setup(x => x.Query<Incident>()).Returns(crimes.AsQueryable());
@@ -180,7 +180,7 @@
 			var result = this.GetInstance().getAllForCrimeType(CrimeType.AntiSocialBehaviour);
 
 			Assert.AreEqual(2, result.Count);
-			Assert.That(result.All(x => x.CrimeType == CrimeType.AntiSocialBehaviour.ToString()));  
+			Assert.That(result.All(x => x.CrimeType == CrimeType.AntiSocialBehaviour.GetDescription()));  
 		}
 
 		/// <summary>
