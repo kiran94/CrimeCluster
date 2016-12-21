@@ -14,67 +14,80 @@
 	public class MainClass
 	{
 		/// <summary>
+		/// The kernel.
+		/// </summary>
+		private static IKernel kernel = GenerateKernel(); 
+
+		/// <summary>
 		/// The entry point of the program, where the program control starts and ends.
 		/// </summary>
 		/// <param name="args">The command-line arguments.</param>
 		public static void Main(string[] args)
 		{
-			var kernel = GenerateKernel();
-
 			var logger = kernel.Get<ILogger>();
 			logger.debug("Starting Predictor");
 
 			var incidentService = kernel.Get<IIncidentService>();
-			var djCluster = kernel.Get<IClusteringService>();
-
-			// remove magic strings after proof
-			var crimeTypeDict = new Dictionary<String, double>(6)
-			{
-				{ "Anti-social behaviour", 1},
-				{ "Bicycle theft", 2},
-				{ "Burglary", 3},
-				{ "Criminal damage and arson", 4},
-				{ "Drugs", 5},
-				{ "Other crime", 6},
-				{ "Other theft", 7},
-				{ "Possession of weapons", 8},
-				{ "Public order", 9},
-				{ "Robbery", 10},
-				{ "Shoplifting", 11},
-				{ "Theft from the person", 12},
-				{ "Vehicle crime", 13},
-				{ "Violence and sexual offences", 14},
-			};
 
 			var dataSet = incidentService.getAllForCrimeType(CrimeType.AntiSocialBehaviour)
-			                             .Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value, crimeTypeDict[x.CrimeType] })
+			                             .Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value })
 			                             .ToArray();
 
-			var clusters = djCluster.Learn(dataSet);
+			var clusters = generateClusters(dataSet);
+			var emissionMatrix = generateEmissionMatrix(clusters);
 
-			// Average for each cluster for each attribute
-			// 3 = Number of Attributes
-			var emissionMatrix = new double[3, clusters.Count];
+			Console.WriteLine($"Generated {clusters.Count} clusters"); 
+			printArray("Emission Matrix", emissionMatrix); 
+		}
 
-			int count = 0; 
+		/// <summary>
+		/// Generates the clusters.
+		/// </summary>
+		/// <returns>The clusters.</returns>
+		/// <param name="dataset">Dataset.</param>
+		private static List<HashSet<double[]>> generateClusters(double[][] dataset)
+		{
+			var djCluster = kernel.Get<IClusteringService>();
+			return djCluster.Learn(dataset);
+		}
+
+		/// <summary>
+		/// Generates the emission matrix.
+		/// </summary>
+		/// <returns>The emission matrix.</returns>
+		/// <param name="clusters">Clusters.</param>
+		private static double[,] generateEmissionMatrix(List<HashSet<double[]>> clusters)
+		{
+			var emissionMatrix = new double[2, clusters.Count];
+
+			int count = 0;
 			foreach (var currentCluster in clusters)
 			{
-				emissionMatrix[0, count] = currentCluster.Average(x => x[0]);
-				emissionMatrix[1, count] = currentCluster.Average(x => x[1]);
-				emissionMatrix[2, count] = currentCluster.Average(x => x[2]);
-
-				Console.WriteLine(String.Format(
-					"Cluster {0}: Lat: {1},\tLong: {2},\tType: {3}\t{4} Points",
-					++count,
-					Math.Round(currentCluster.Average(x => x[0]), 4),
-					Math.Round(currentCluster.Average(x => x[1]), 4),
-					currentCluster.Average(x => x[2]),
-					currentCluster.Count));
+				emissionMatrix[0, count] = Math.Round(currentCluster.Average(x => x[0]), 4);
+				emissionMatrix[1, count] = Math.Round(currentCluster.Average(x => x[1]), 4);
+				count++;
 			}
 
-			Console.WriteLine(String.Empty); 
-			Console.WriteLine("Emission Matrix"); 
-			//printArray(emissionMatrix); 
+			return emissionMatrix; 
+		}
+
+		/// <summary>
+		/// Prints the array.
+		/// </summary>
+		/// <param name="array">Array.</param>
+		private static void printArray(String title, double[,] array)
+		{
+			Console.WriteLine(title); 
+			for (int i = 0; i < array.GetLength(0); i++)
+			{
+				for (int j = 0; j < array.GetLength(1); j++)
+				{
+					Console.Write(array[i, j] + "\t"); 
+				}
+
+				Console.WriteLine(String.Empty); 
+			}
+
 		}
 
 		/// <summary>
@@ -83,48 +96,30 @@
 		/// <returns>The kernel.</returns>
 		private static IKernel GenerateKernel()
 		{
-			IKernel kernel = new StandardKernel();
-			kernel.Bind<ILogger>().ToMethod(x => LoggerService.GetInstance());
-			kernel.Bind<IConfigurationService>().To<ConfigurationService>();
-			kernel.Bind<IFileIOService>().To<FileIOService>();
+			IKernel _kernel = new StandardKernel();
+			_kernel.Bind<ILogger>().ToMethod(x => LoggerService.GetInstance());
+			_kernel.Bind<IConfigurationService>().To<ConfigurationService>();
+			_kernel.Bind<IFileIOService>().To<FileIOService>();
 
-			kernel.Bind<ISession>()
-				  .ToMethod(x => new MySQLConnection(kernel.Get<IConfigurationService>()).getSession())
+			_kernel.Bind<ISession>()
+				  .ToMethod(x => new MySQLConnection(_kernel.Get<IConfigurationService>()).getSession())
 				  .InThreadScope();
 
-			kernel.Bind<IRepository>().To<Repository>();
-			kernel.Bind<ICSVReaderService>().To<CSVReaderService>();
-			kernel.Bind<ICSVParseStrategy>().To<IncidentCSVParseStrategy>();
+			_kernel.Bind<IRepository>().To<Repository>();
+			_kernel.Bind<ICSVReaderService>().To<CSVReaderService>();
+			_kernel.Bind<ICSVParseStrategy>().To<IncidentCSVParseStrategy>();
 
-			kernel.Bind<IOfficerService>().To<OfficerService>();
-			kernel.Bind<ILocationService>().To<LocationService>();
-			kernel.Bind<IIncidentGradingService>().To<IncidentGradingService>();
-			kernel.Bind<IIncidentOutcomeService>().To<IncidentOutcomeService>();
-			kernel.Bind<IIncidentBacklogService>().To<IncidentBacklogService>();
-			kernel.Bind<IIncidentService>().To<IncidentService>();
+			_kernel.Bind<IOfficerService>().To<OfficerService>();
+			_kernel.Bind<ILocationService>().To<LocationService>();
+			_kernel.Bind<IIncidentGradingService>().To<IncidentGradingService>();
+			_kernel.Bind<IIncidentOutcomeService>().To<IncidentOutcomeService>();
+			_kernel.Bind<IIncidentBacklogService>().To<IncidentBacklogService>();
+			_kernel.Bind<IIncidentService>().To<IncidentService>();
 
-			kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>();
-			kernel.Bind<IClusteringService>().To<DJClusterAlgorithm>(); 
+			_kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>();
+			_kernel.Bind<IClusteringService>().To<DJClusterAlgorithm>();
 
-			return kernel;
-		}
-
-		/// <summary>
-		/// Prints the array.
-		/// </summary>
-		/// <param name="array">Array.</param>
-		private static void printArray(double[,] array)
-		{
-			for (int i = 0; i < array.GetLength(0); i++)
-			{
-				for (int j = 0; j < array.GetLength(1); j++)
-				{
-					Console.Write(Math.Round(array[i, j],4) + "\t"); 
-				}
-
-				Console.WriteLine(""); 
-			}
-
+			return _kernel;
 		}
 	}
 }
