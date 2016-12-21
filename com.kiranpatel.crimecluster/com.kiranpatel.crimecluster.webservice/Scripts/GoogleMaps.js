@@ -5,6 +5,8 @@ var map;
 /* Markers to plot */
 var markers = []; 
 
+var defaultLocation = {lat: 51.513413, lng: -0.088961}; 
+
 /* DOM element reference to the locations found label */
 var locationsFound = $('#locationsfound'); 
 
@@ -31,7 +33,7 @@ function initMap()
 {
 	map = new google.maps.Map(document.getElementById('map'), 
 	{
-		center: {lat: 51.513413, lng: -0.088961},
+		center: defaultLocation,
 	    scrollwheel: false,
 	    zoom: 12
 	});
@@ -164,6 +166,13 @@ function clearLegend()
 /* Plots the legend onto the page */
 function plotLegend()
 {
+	if (!clusterLegend[1])
+	{
+		map.setCenter(defaultLocation); 
+		legend.append("No Clusters Found."); 
+		return; 
+	}
+
 	for(var currentItem in clusterLegend)
 	{
 		var colorBlock = "<span style='background-color:#" + clusterLegend[currentItem] + ";' class='clusterLegendItem'>"; 
