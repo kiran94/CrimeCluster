@@ -166,7 +166,7 @@ function plotLegend()
 {
 	for(var currentItem in clusterLegend)
 	{
-		var colorBlock = "<span style='background-color:#" + clusterLegend[currentItem] + ";width:20px;height:20px;color:white;'>"; 
+		var colorBlock = "<span style='background-color:#" + clusterLegend[currentItem] + ";' class='clusterLegendItem'>"; 
 		colorBlock += "Cluster " + currentItem; 
 		colorBlock += "</span>"
 
