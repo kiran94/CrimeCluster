@@ -46,7 +46,7 @@
 				{ "Violence and sexual offences", 14},
 			};
 
-			var dataSet = incidentService.getAll()
+			var dataSet = incidentService.getAllForCrimeType(CrimeType.AntiSocialBehaviour)
 			                             .Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value, crimeTypeDict[x.CrimeType] })
 			                             .ToArray();
 
@@ -64,16 +64,17 @@
 				emissionMatrix[2, count] = currentCluster.Average(x => x[2]);
 
 				Console.WriteLine(String.Format(
-					"Cluster {0}: Lat: {1},\tLong: {2},\tType: {3}",
+					"Cluster {0}: Lat: {1},\tLong: {2},\tType: {3}\t{4} Points",
 					++count,
 					Math.Round(currentCluster.Average(x => x[0]), 4),
 					Math.Round(currentCluster.Average(x => x[1]), 4),
-					currentCluster.Average(x => x[2])));
+					currentCluster.Average(x => x[2]),
+					currentCluster.Count));
 			}
 
 			Console.WriteLine(String.Empty); 
 			Console.WriteLine("Emission Matrix"); 
-			printArray(emissionMatrix); 
+			//printArray(emissionMatrix); 
 		}
 
 		/// <summary>
