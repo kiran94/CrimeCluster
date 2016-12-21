@@ -54,6 +54,22 @@
 		}
 
 		// <inheritdoc>
+		public List<double[]> CalculateCentroids(List<HashSet<double[]>> clusters)
+		{
+			var centroids = new List<double[]>();
+			foreach (var currentCluster in clusters)
+			{
+				var currentCentroid = new double[2]; 
+				currentCentroid[0] = currentCluster.Average(x => x[0]); 
+				currentCentroid[1] = currentCluster.Average(x => x[1]);
+
+				centroids.Add(currentCentroid); 
+			}
+
+			return centroids; 
+		}
+
+		// <inheritdoc>
 		public List<HashSet<double[]>> Learn(double[][] dataSet)
 		{
 			if (dataSet == null)
@@ -100,7 +116,7 @@
 				}
 			}
 
-			return (cluster.Count <= this.minPoints) ? cluster : null;
+			return (cluster.Count >= this.minPoints) ? cluster : null;
 		}
 
 		/// <summary>
