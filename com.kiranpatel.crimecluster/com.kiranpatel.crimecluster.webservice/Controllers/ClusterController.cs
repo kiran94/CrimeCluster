@@ -71,6 +71,9 @@
 		/// </summary>
         public ActionResult Index()
 		{
+			ViewBag.Eps = Convert.ToDouble(this.configService.Get(ConfigurationKey.DJClusterRadiusEps, "0.05"));
+			ViewBag.MinPts = Convert.ToInt32(this.configService.Get(ConfigurationKey.DJClusterMinPts, "10"));
+
 			CrimeTypeModel model = new CrimeTypeModel();
             return View (model);
         }
@@ -86,20 +89,20 @@
 		{
 			if (String.IsNullOrEmpty(crimeType))
 			{
-				this.logger.warn("Crime Type was null or empty");
+				this.logger.warn($"{nameof(crimeType)} was null or empty");
 				return new JsonResult(); 
 			}
 
 			int parsedType = 0;
 			if (!int.TryParse(crimeType, out parsedType))
 			{
-				this.logger.warn("crime type could not be parsed into an integer");
+				this.logger.warn($"{nameof(crimeType)} could not be parsed into an integer");
 				return new JsonResult(); 
 			}
 
 			if (!this.crimeTypes.ContainsKey(parsedType))
 			{
-				this.logger.warn("dictionary does not contain the parsed type key");
+				this.logger.warn($"{nameof(this.crimeTypes)} does not contain {nameof(parsedType)}");
 				return new JsonResult();
 			}
 
@@ -125,7 +128,6 @@
 		[HttpPost]
 		public JsonResult Cluster(String CrimeType)
 		{
-			// check for null or empty input 
 			if (String.IsNullOrEmpty(CrimeType))
 			{
 				this.logger.warn($"{nameof(CrimeType)} was null");
@@ -135,7 +137,7 @@
 			int parsedType = 0;
 			if (!int.TryParse(CrimeType, out parsedType))
 			{
-				this.logger.warn($"{CrimeType} could not be parsed into an integer");
+				this.logger.warn($"{nameof(CrimeType)} could not be parsed into an integer");
 				return new JsonResult(); 
 			}
 
@@ -165,13 +167,7 @@
 				clusterNo++; 
 			}
 
-
-			var result = new JsonResult()
-			{
-				Data = this.serialisationService.serialise<List<LocationModel>>(locationModel)
-			};
-
-			return result; 
+			return new JsonResult() { Data = this.serialisationService.serialise<List<LocationModel>>(locationModel) };
 		}
     }
 }

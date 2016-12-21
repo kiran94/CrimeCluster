@@ -23,7 +23,9 @@
 <div id='clusters' class='section'>
 	@Html.Label("Clusters", new { id = "clusterlabel" })
 	<button id='clusterbutton'>Cluster</button>
-
+	<div>Raduis: @ViewBag.Eps</div>
+	<div>MinPts: @ViewBag.MinPts</div>
+	
 	<span id='clustersfound'>Clusters Found: <span id='numofclusters'></span></span>
 	<div id='legend-content'></div>
 </div>
