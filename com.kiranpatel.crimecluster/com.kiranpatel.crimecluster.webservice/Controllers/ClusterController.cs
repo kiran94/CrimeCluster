@@ -18,6 +18,11 @@
 		private readonly IIncidentService incidentService;
 
 		/// <summary>
+		/// The clustering service.
+		/// </summary>
+		private readonly IClusteringService clusteringService; 
+
+		/// <summary>
 		/// The crime types.
 		/// </summary>
 		private readonly IDictionary<int, CrimeType> crimeTypes; 
@@ -36,10 +41,12 @@
 			IConfigurationService configService,
 			ILogger logger,
 			ISerialisationService serialisationService,
-			IIncidentService incidentService) 
+			IIncidentService incidentService,
+			IClusteringService clusteringService) 
 			: base(repository, configService, logger, serialisationService)
 		{
-			this.incidentService = incidentService; 
+			this.incidentService = incidentService;
+			this.clusteringService = clusteringService;
 
 			var googleMapsKey = this.configService.Get(ConfigurationKey.GoogleMapsKey, string.Empty);
 			if (String.IsNullOrEmpty(googleMapsKey))
@@ -105,6 +112,62 @@
 
 			JsonResult result = new JsonResult();
 			result.Data = this.serialisationService.serialise<List<LocationModel>>(locations);
+
+			return result; 
+		}
+
+		/// <summary>
+		/// POST: /Cluster
+		/// </summary>
+		/// <param name="CrimeType">Crime type.</param>
+		[HttpPost]
+		public JsonResult Cluster(String CrimeType)
+		{
+			// check for null or empty input 
+			if (String.IsNullOrEmpty(CrimeType))
+			{
+				this.logger.warn($"{nameof(CrimeType)} was null");
+				return new JsonResult(); 
+			}
+
+			int parsedType = 0;
+			if (!int.TryParse(CrimeType, out parsedType))
+			{
+				this.logger.warn($"{CrimeType} could not be parsed into an integer");
+				return new JsonResult(); 
+			}
+
+			var descType = this.crimeTypes[parsedType];
+			var incidents = this.incidentService.getAllForCrimeType(descType);
+
+			if (incidents.IsNullOrEmpty())
+			{
+				this.logger.warn($"{nameof(incidents)} was null or empty");
+				return new JsonResult(); 
+			}
+
+			var clusters = this.clusteringService.Learn(incidents
+														.Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value })
+														.ToArray());
+
+			int clusterNo = 1;
+			var locationModel = new List<LocationModel>(); 
+			foreach (var currentCluster in clusters)
+			{
+				foreach (var currentPoint in currentCluster)
+				{
+					LocationModel model = new LocationModel(currentPoint[0].ToString(), currentPoint[1].ToString(), clusterNo);
+					locationModel.Add(model); 
+				}
+
+				clusterNo++; 
+			}
+
+
+			var result = new JsonResult()
+			{
+				Data = this.serialisationService.serialise<List<LocationModel>>(locationModel)
+			};
 
 			return result; 
 		}

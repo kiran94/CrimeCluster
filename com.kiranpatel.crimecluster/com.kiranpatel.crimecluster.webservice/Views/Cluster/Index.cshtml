@@ -9,17 +9,27 @@
 
 <div id='map'></div>
 
-<div id='controls'>
-	@Html.LabelFor(x => Model.type)
+<div id='controls' class='section'>
+	@Html.LabelFor(x => Model.type, new { id = "crimelabel" })
 	<br/>
-	@Html.EnumDropDownListFor(x => Model.type)
+	@Html.EnumDropDownListFor(x => Model.type, new { id = "crimelabeldropdown" })
+	<br/>
+	<br/>
+	<div id='results'>
+		Incidents Found: <span id='locationsfound'></span>
+	</div>
+	<br/>
+	<span id='loader'>Retrieving..</span>
 </div>
 
-<div id='results'>
-	Locations Found: <span id='locationsfound'></span>
-</div>
-
-
+<div id='clusters' class='section'>
+	@Html.Label("Clusters", new { id = "clusterlabel" })
+	<br/>
+	<button id='clusterbutton'>Cluster</button>
+	<br/>
+	<br/>
+	<span id='clustersfound'>Clusters Found: <span id='numofclusters'></span></span>
+<div> 
 
 <script type='text/javascript' src='~/Scripts/jquery-3.1.1.min.js'></script>
 <script type='text/javascript' src='~/Scripts/GoogleMaps.js'></script>

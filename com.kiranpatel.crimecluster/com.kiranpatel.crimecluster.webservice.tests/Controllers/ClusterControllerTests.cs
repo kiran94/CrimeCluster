@@ -1,6 +1,7 @@
 ﻿namespace com.kiranpatel.crimecluster.webservice.tests
 {
 	using System;
+	using System.Linq;
 	using com.kiranpatel.crimecluster.framework;
 	using com.kiranpatel.crimecluster.webservice.Controllers;
 	using NUnit.Framework;
@@ -35,7 +36,12 @@
 		/// <summary>
 		/// The incident service.
 		/// </summary>
-		private Mock<IIncidentService> incidentService; 
+		private Mock<IIncidentService> incidentService;
+
+		/// <summary>
+		/// The clustering service.
+		/// </summary>
+		private Mock<IClusteringService> clusteringService; 
 
 		/// <summary>
 		/// Sets up.
@@ -48,6 +54,7 @@
 			this.logger = new Mock<ILogger>();
 			this.serialisationService = new Mock<ISerialisationService>();
 			this.incidentService = new Mock<IIncidentService>();
+			this.clusteringService = new Mock<IClusteringService>();
 
 			this.configService.Setup(x => x.Get(ConfigurationKey.GoogleMapsKey, It.IsAny<String>())).Returns("key"); 
 		}
@@ -108,6 +115,53 @@
 		}
 
 		/// <summary>
+		/// Ensures when the crime type passed is null or empty, null is returned in the data 
+		/// </summary>
+		[Test]
+		[TestCase("")]
+		[TestCase(null)]
+		public void Cluster_NullOrEmptyCrimeType_ReturnNull(String param)
+		{
+			var result = this.GetInstance().Cluster(param);
+			Assert.IsNull(result.Data); 
+		}
+
+		/// <summary>
+		/// Ensures when there are no incidents under the crime type, null is returned in the data
+		/// </summary>
+		[Test]
+		public void Cluster_NoIncidentsUnderCrimeType_ReturnNull()
+		{
+			this.incidentService.Setup(x => x.getAllForCrimeType(CrimeType.AntiSocialBehaviour)).Returns(new List<Incident>()); 
+			var result = this.GetInstance().Cluster("1");
+			Assert.IsNull(result.Data);
+		}
+
+		/// <summary>
+		/// Ensures when there are incidents found in the crime type, the cluster output is returned
+		/// </summary>
+		[Test]
+		public void Cluster_IncidentsFoundInCrimeType_ClustersReturned()
+		{
+			var incidents = new List<Incident>()
+			{
+				new Incident() { CrimeType = CrimeType.AntiSocialBehaviour.ToString(), Location = new Location() { Latitude = 1D, Longitude = 1D } },
+				new Incident() { CrimeType = CrimeType.AntiSocialBehaviour.ToString(), Location = new Location() { Latitude = 1D, Longitude = 1D } }
+			};
+
+			var clusters = new List<HashSet<double[]>>() { new HashSet<double[]>() { new double[] { 1D, 1D } }};
+			var centroids = new List<double[]>() { new double[] { 1D, 1D }};
+
+			this.incidentService.Setup(x => x.getAllForCrimeType(CrimeType.AntiSocialBehaviour)).Returns(incidents);
+			this.clusteringService.Setup(x => x.Learn(It.IsAny<double[][]>())).Returns(clusters);
+			this.clusteringService.Setup(x => x.CalculateCentroids(clusters)).Returns(centroids); 
+			this.serialisationService.Setup(x => x.serialise<List<LocationModel>>(It.IsAny<List<LocationModel>>())).Returns("serialised");
+
+			var result = this.GetInstance().Cluster("1");
+			StringAssert.AreEqualIgnoringCase("serialised", result.Data.ToString()); 
+		}
+
+		/// <summary>
 		/// Gets the instance.
 		/// </summary>
 		/// <returns>The instance.</returns>
@@ -118,7 +172,8 @@
 				this.configService.Object, 
 				this.logger.Object, 
 				this.serialisationService.Object, 
-				this.incidentService.Object); 
+				this.incidentService.Object,
+				this.clusteringService.Object); 
 		}
 	}
 }
