@@ -77,6 +77,7 @@
 
 		/// <summary>
 		/// POST: /Filter
+		/// Filters the crimes by a given crime type and returns the location points.
 		/// </summary>
 		/// <returns>the filtered json response of incidents</returns>
 		/// <param name="crimeType">The crime type to filter by.</param>
@@ -118,6 +119,7 @@
 
 		/// <summary>
 		/// POST: /Cluster
+		/// Clusters the crimes by a given crime type and returns those location points along with cluster labels. 
 		/// </summary>
 		/// <param name="CrimeType">Crime type.</param>
 		[HttpPost]
