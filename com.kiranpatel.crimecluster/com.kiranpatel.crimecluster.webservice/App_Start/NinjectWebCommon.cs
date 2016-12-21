@@ -86,6 +86,9 @@ namespace com.kiranpatel.crimecluster.webservice.App_Start
 			kernel.Bind<IIncidentService>().To<IncidentService>();
 			kernel.Bind<IIncidentBacklogService>().To<IncidentBacklogService>();
 
+			kernel.Bind<IClusteringService>().To<DJClusterAlgorithm>();
+			kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>(); 
+
 			kernel.Bind<IDataTransferService<Officer, OfficerDTO>>().To<OfficerDTOMapper>();
 			kernel.Bind<IDataTransferService<Incident, IncidentDTO>>().To<IncidentDTOMapper>();
         }        
