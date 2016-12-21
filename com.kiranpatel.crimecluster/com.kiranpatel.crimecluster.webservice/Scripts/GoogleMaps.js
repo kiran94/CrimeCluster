@@ -23,12 +23,15 @@ var colours = ["0", "ff0000"];
 /* Legend of the Clusters mapping cluster number to colour */
 var clusterLegend = {}; 
 
+/* DOM element reference to the legend */
+var legend = $("#legend-content"); 
+
 /* Initialises the map instance */
 function initMap()
 {
 	map = new google.maps.Map(document.getElementById('map'), 
 	{
-		center: {lat: 51.5331414, lng: -0.4773218},
+		center: {lat: 51.513413, lng: -0.088961},
 	    scrollwheel: false,
 	    zoom: 12
 	});
@@ -112,6 +115,7 @@ function filterByCrimeType(crimeType, callback)
 			map.fitBounds(bound); 
 
 			locationsFound.html(locations); 
+			plotLegend(); 
 			callback(); 
 		}
 	});
@@ -144,6 +148,7 @@ function cluster(crimeType, callback)
 			map.fitBounds(bound); 
 
 			locationsFound.html(locations); 
+			plotLegend(); 
 			callback(); 
 		}
 	}); 
@@ -153,12 +158,21 @@ function cluster(crimeType, callback)
 function clearLegend()
 {
 	clusterLegend = {}; 
+	legend.empty(); 
 }
 
 /* Plots the legend onto the page */
 function plotLegend()
 {
-	// TODO
+	for(var currentItem in clusterLegend)
+	{
+		var colorBlock = "<span style='background-color:#" + clusterLegend[currentItem] + ";width:20px;height:20px;color:white;'>"; 
+		colorBlock += "Cluster " + currentItem; 
+		colorBlock += "</span>"
+
+		legend.append(colorBlock); 
+		legend.append("<br/>"); 
+	}
 }
 
 /* Adds the passed key entry with the value if the key does not already exist in the legend */
