@@ -1,11 +1,12 @@
-﻿
-body
+﻿body
 {
 	height: 100%; 
 	width: 100%; 
 
 	font-family: Arial,"Helvetica Neue",Helvetica,sans-serif;
 	font-size: .8em; 
+	padding: 0; 
+	margin: 0; 
 }
 
 h1
@@ -19,18 +20,18 @@ h1
 	height: 500px; 
 	width: 100%;  
 
-	border: 1px solid black; 
+	padding: 0; 
+	margin: 0; 
 }
 
 .section
 {
 	display: inline-block;
 	padding: 10px; 
-	width: 30%; 
-
+	width: 25%; 
 	height: 120px; 
 
-	border: 1px solid black; 
+	border-left: 1px solid grey; 
 }
 
 
@@ -48,10 +49,9 @@ h1
 
 #loader
 {
-	display: block; 
 	margin: 0 auto; 
-	text-align: center; 
 	display: none;
+	text-align: center; 
 }
 
 #clusterlabel
