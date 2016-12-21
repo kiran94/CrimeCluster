@@ -29,9 +29,8 @@
 
 			var incidentService = kernel.Get<IIncidentService>();
 
-			var dataSet = incidentService.getAllForCrimeType(CrimeType.AntiSocialBehaviour)
-			                             .Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value })
-			                             .ToArray();
+			var incidents = incidentService.getAllForCrimeType(CrimeType.AntiSocialBehaviour);
+			var dataSet = incidents.Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value }).ToArray();
 
 			var clusters = generateClusters(dataSet);
 			var emissionMatrix = generateEmissionMatrix(clusters);
