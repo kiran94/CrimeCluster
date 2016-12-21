@@ -27,12 +27,12 @@
 		/// <summary>
 		/// The raduis eps for the points. 
 		/// </summary>
-		private double raduisEps;
+		private readonly double raduisEps;
 
 		/// <summary>
 		/// The minimum points for the cluster. 
 		/// </summary>
-		private int minPoints; 
+		private readonly int minPoints; 
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.DJClusterAlgorithm`1"/> class.
