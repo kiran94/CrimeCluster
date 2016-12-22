@@ -57,17 +57,8 @@
 		/// <param name="clusters">Clusters.</param>
 		private static double[,] generateEmissionMatrix(List<HashSet<double[]>> clusters)
 		{
-			var emissionMatrix = new double[2, clusters.Count];
-
-			int count = 0;
-			foreach (var currentCluster in clusters)
-			{
-				emissionMatrix[0, count] = Math.Round(currentCluster.Average(x => x[0]), 4);
-				emissionMatrix[1, count] = Math.Round(currentCluster.Average(x => x[1]), 4);
-				count++;
-			}
-
-			return emissionMatrix; 
+			var model = kernel.Get<IHiddenMarkovModel>();
+			return model.generateEmissionMatrix(clusters); 
 		}
 
 		/// <summary>
@@ -117,6 +108,7 @@
 
 			_kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>();
 			_kernel.Bind<IClusteringService>().To<DJClusterAlgorithm>();
+			_kernel.Bind<IHiddenMarkovModel>().To<HiddenMarkovModel>(); 
 
 			return _kernel;
 		}

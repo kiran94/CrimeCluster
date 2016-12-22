@@ -118,6 +118,8 @@
     <Compile Include="services\PredictionAlgorithms\EuclideanDistance.cs" />
     <Compile Include="contracts\IClusteringService.cs" />
     <Compile Include="services\PredictionAlgorithms\LocationDistance.cs" />
+    <Compile Include="contracts\IHiddenMarkovModel.cs" />
+    <Compile Include="services\PredictionAlgorithms\HiddenMarkovModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
