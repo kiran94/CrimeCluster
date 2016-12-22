@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.IO;
-	using System.Linq;
 	using com.kiranpatel.crimecluster.framework;
 	using com.kiranpatel.crimecluster.dataaccess;
 	using Ninject;
@@ -30,31 +29,25 @@
 			var csvParseStrategy = kernel.Get<ICSVParseStrategy>();
 
 			var importFiles = GetImportFiles(configService.Get(ConfigurationKey.ImportLocation, "/data/CrimeCluster/"));
-			var defaultGrading = incidentGrading.GetImportIncidentGrading();
-
-			if (defaultGrading == null)
-			{
-				defaultGrading = new IncidentGrading() { GradeValue = null, Description = "Imported" }; 
-			}
-
-			csvParseStrategy.setDefaultValue(defaultGrading);
+			setDefaultGrading(incidentGrading, csvParseStrategy); 
 
 			int count = 0;
+			int printThreshold = 50000; 
 			using (var csvService = kernel.Get<ICSVReaderService>())
 			using (var incidentService = kernel.Get<IIncidentService>())
 			{
 				foreach (String currentFile in importFiles)
 				{
-					logger.info(String.Format("Importing {0}", currentFile));
+					logger.info($"Importing {currentFile}");
 					var importedIncidents = csvService.parseCSV<Incident>(currentFile, CSVParseType.IncidentParse, csvParseStrategy, true);
 
 					foreach (Incident currentIncident in importedIncidents)
 					{
 						if (incidentService.validate(currentIncident))
 						{
-							if (++count % 50000 == 0)
+							if (++count % printThreshold == 0)
 							{
-								logger.info("Imported 50,000 Incidents.");
+								logger.info($"Imported {printThreshold} Incidents.");
 							}
 
 							incidentService.Save(currentIncident);
@@ -64,8 +57,24 @@
 				logger.info("Flushing.."); 
 			}
 
-			logger.info(String.Format("Imported {0} in total.", count));
-			logger.info("Importer Completed.");
+			logger.info($"Imported {count} in total. Complete.");
+		}
+
+		/// <summary>
+		/// Sets the default grading.
+		/// </summary>
+		/// <param name="incidentGradingService">Incident grading service.</param>
+		/// <param name="csvParseStrategy">Csv parse strategy.</param>
+		private static void setDefaultGrading(IIncidentGradingService incidentGradingService, ICSVParseStrategy csvParseStrategy)
+		{
+			var defaultGrading = incidentGradingService.GetImportIncidentGrading();
+
+			if (defaultGrading == null)
+			{
+				defaultGrading = new IncidentGrading() { GradeValue = null, Description = "Imported" };
+			}
+
+			csvParseStrategy.setDefaultValue(defaultGrading);
 		}
 
 		/// <summary>
