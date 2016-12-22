@@ -63,6 +63,7 @@
     <Compile Include="extensions\CrimeTypeExtensionsTests.cs" />
     <Compile Include="services\PredictionAlgorithms\EuclideanDistanceTests.cs" />
     <Compile Include="services\PredictionAlgorithms\DJClusterAlgorithmTests.cs" />
+    <Compile Include="services\PredictionAlgorithms\LocationDistanceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj">

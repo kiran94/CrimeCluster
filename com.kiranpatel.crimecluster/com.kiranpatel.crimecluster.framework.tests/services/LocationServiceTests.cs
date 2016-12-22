@@ -23,13 +23,19 @@
 		private Mock<ILogger> logger;
 
 		/// <summary>
+		/// Mock of the distance measure
+		/// </summary>
+		private Mock<IDistanceMeasure> distanceMeasure; 
+
+		/// <summary>
 		/// Sets up.
 		/// </summary>
 		[SetUp]
 		public void setUp()
 		{
 			this.repository = new Mock<IRepository>();
-			this.logger = new Mock<ILogger>(); 
+			this.logger = new Mock<ILogger>();
+			this.distanceMeasure = new Mock<IDistanceMeasure>(); 
 		}
 
 		/// <summary>
@@ -69,9 +75,14 @@
 			Location loc1 = new Location() { Latitude = 36.12, Longitude = -86.67 }; 
 			Location loc2 = new Location() { Latitude = 33.94, Longitude = -118.4 };
 
+			double[] set1 = { loc1.Latitude.Value, loc1.Longitude.Value };
+			double[] set2 = { loc2.Latitude.Value, loc2.Longitude.Value };
+
+			this.distanceMeasure.Setup(x => x.measure(set1, set2)).Returns(2888D);
+
 			var result = this.GetInstance().calculateDifference(loc1, loc2);
-			    
-			Assert.That(result, Is.EqualTo(2888D).Within(5D).Percent);
+
+			Assert.AreEqual(2888D, result); 
 		}
 
 		/// <summary>
@@ -192,7 +203,7 @@
 		/// <returns>The instance.</returns>
 		private ILocationService GetInstance()
 		{
-			return new LocationService(repository.Object, logger.Object); 
+			return new LocationService(repository.Object, logger.Object, this.distanceMeasure.Object); 
 		}
 	}
 }

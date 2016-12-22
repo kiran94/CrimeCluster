@@ -117,6 +117,7 @@
     <Compile Include="contracts\IDistanceMeasure.cs" />
     <Compile Include="services\PredictionAlgorithms\EuclideanDistance.cs" />
     <Compile Include="contracts\IClusteringService.cs" />
+    <Compile Include="services\PredictionAlgorithms\LocationDistance.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
