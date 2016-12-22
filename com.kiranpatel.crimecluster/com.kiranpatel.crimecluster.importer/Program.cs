@@ -116,6 +116,7 @@
 			kernel.Bind<ICSVParseStrategy>().To<IncidentCSVParseStrategy>();
 
 			kernel.Bind<IOfficerService>().To<OfficerService>();
+			kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>(); 
 			kernel.Bind<ILocationService>().To<LocationService>();
 			kernel.Bind<IIncidentGradingService>().To<IncidentGradingService>(); 
 			kernel.Bind<IIncidentOutcomeService>().To<IncidentOutcomeService>();
