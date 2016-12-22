@@ -20,7 +20,7 @@ var dropdown = $('#crimelabeldropdown');
 var clusterButton = $("#clusterbutton");
 
 /* Marker Colors */
-var colours = ["0", "ff0000"];
+var colours = [];
 
 /* Legend of the Clusters mapping cluster number to colour */
 var clusterLegend = {}; 
@@ -42,7 +42,10 @@ function initMap()
 /* Generates the marker colours array */
 function generateMarkerColours()
 {
-	for(var i=0; i < 100; i++)
+	var defaultColours = ["000000", "ff0000", "00ff00", "0000ff", "800080", "561743", "8c8c8c", "c61051"]
+	colours = defaultColours; 
+
+	for (var i = 0; i < 50; i++)
 	{
 		colours.push(Math.floor(Math.random()*16777215).toString(16)); 
 	}
