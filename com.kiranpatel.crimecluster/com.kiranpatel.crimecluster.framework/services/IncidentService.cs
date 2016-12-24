@@ -93,15 +93,15 @@
 		}
 
 		// <inheritdoc>
-		public IQueryable<Incident> getAll()
+		public IEnumerable<Incident> getAll()
 		{
-			return this.repository.Query<Incident>(); 
+			return this.repository.Query<Incident>().AsEnumerable(); 
 		}
 
 		// <inheritdoc>
 		public ICollection<Incident> getAllForCrimeType(CrimeType type)
 		{
-			return this.repository.Query<Incident>().Where(x => x.CrimeType == type.GetDescription()).ToList(); 
+			return this.repository.Query<Incident>().Where(x => x.CrimeType == type.GetDescription()).OrderBy(x => x.DateCreated).ToList(); 
 		}
 
 		// <inheritdoc>

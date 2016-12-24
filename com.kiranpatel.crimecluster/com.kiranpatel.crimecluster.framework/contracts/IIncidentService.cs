@@ -19,9 +19,9 @@
 
 		/// <summary>
 		/// Gets all incidents
-		/// </summary>t
+		/// </summary>
 		/// <returns>The all.</returns>
-		IQueryable<Incident> getAll();
+		IEnumerable<Incident> getAll();
 
 		/// <summary>
 		/// Gets all the incidents for a particular crime type
