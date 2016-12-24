@@ -33,10 +33,21 @@
 			var dataSet = incidents.Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value }).ToArray();
 
 			var clusters = generateClusters(dataSet);
+
+			var clusterList = new List<Cluster>();
+			for (int i = 0; i < clusters.Count; i++)
+			{
+				clusterList.Add(new Cluster(i.ToString(), clusters[i])); 
+			}
+
 			var emissionMatrix = generateEmissionMatrix(clusters);
+			var transitionMatrix = generateTransitionMatrix(incidents, clusterList);
+			var initialDist = generateInitialDistribution(incidents, clusterList); 
 
 			Console.WriteLine($"Generated {clusters.Count} clusters"); 
-			printArray("Emission Matrix", emissionMatrix); 
+			printArray("Emission Matrix", emissionMatrix);
+			printArray("Transition Matrix", transitionMatrix);
+			printArray("Initial Distribution", initialDist); 
 		}
 
 		/// <summary>
@@ -51,6 +62,17 @@
 		}
 
 		/// <summary>
+		/// Generates the transition matrix.
+		/// </summary>
+		/// <returns>The transition matrix.</returns>
+		/// <param name="incidents">Incidents.</param>
+		private static double[,] generateTransitionMatrix(ICollection<Incident> incidents, List<Cluster> clusters)
+		{
+			var model = kernel.Get<IHiddenMarkovModel>();
+			return model.generateTransitionMatrix(incidents, clusters); 
+		}
+
+		/// <summary>
 		/// Generates the emission matrix.
 		/// </summary>
 		/// <returns>The emission matrix.</returns>
@@ -59,6 +81,18 @@
 		{
 			var model = kernel.Get<IHiddenMarkovModel>();
 			return model.generateEmissionMatrix(clusters); 
+		}
+
+		/// <summary>
+		/// Generates the initial distribution.
+		/// </summary>
+		/// <returns>The initial distribution.</returns>
+		/// <param name="incidents">Incidents.</param>
+		/// <param name="clusters">Clusters.</param>
+		private static double[] generateInitialDistribution(ICollection<Incident> incidents, List<Cluster> clusters)
+		{
+			var model = kernel.Get<IHiddenMarkovModel>();
+			return model.generateInitialDistribution(incidents, clusters); 
 		}
 
 		/// <summary>
@@ -77,7 +111,23 @@
 
 				Console.WriteLine(String.Empty); 
 			}
+		}
 
+		/// <summary>
+		/// Prints the array.
+		/// </summary>
+		/// <param name="title">Title.</param>
+		/// <param name="array">Array.</param>
+		private static void printArray(String title, double[] array)
+		{
+			Console.WriteLine(title);
+
+			for (int i = 0; i < array.Length; i++)
+			{
+				Console.Write(array[i] + "\t"); 
+			}
+
+			Console.WriteLine(string.Empty); 
 		}
 
 		/// <summary>
