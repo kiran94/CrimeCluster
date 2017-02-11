@@ -13,7 +13,7 @@
 		/// Gets the label.
 		/// </summary>
 		/// <value>The label.</value>
-		public string Label { get; private set; }
+		public int Label { get; private set; }
 
 		/// <summary>
 		/// Gets the points.
@@ -26,9 +26,10 @@
 		/// </summary>
 		/// <param name="label">Label.</param>
 		/// <param name="cluster">Cluster.</param>
-		public Cluster(String label, HashSet<double[]> cluster)
+		public Cluster(int label, HashSet<double[]> cluster)
 		{
 			this.Label = label;
+			this.Points = new LocationBinaryTree(); 
 
 			foreach (var currentPoint in cluster)
 			{
@@ -39,11 +40,12 @@
 		/// <summary>
 		/// Checks wheather the passed point is contained in the cluster.
 		/// </summary>
-		/// <param name="toCheck">To check.</param>
 		/// <returns>flag indicating if the cluster contains the point.</returns>
-		public bool contains(double[] toCheck)
+		/// <param name="latitude">Latitude.</param>
+		/// <param name="longitude">Longitude.</param>
+		public bool Contains(double latitude, double longitude)
 		{
-			return this.Points.Search(toCheck[0], toCheck[1]); 
+			return this.Points.Search(latitude, longitude); 
 		}
 	}
 }
