@@ -37,17 +37,13 @@
 			var clusterList = new List<Cluster>();
 			for (int i = 0; i < clusters.Count; i++)
 			{
-				clusterList.Add(new Cluster(i.ToString(), clusters[i])); 
+				clusterList.Add(new Cluster(i, clusters[i])); 
 			}
 
-			var emissionMatrix = generateEmissionMatrix(clusters);
 			var transitionMatrix = generateTransitionMatrix(incidents, clusterList);
-			var initialDist = generateInitialDistribution(incidents, clusterList); 
 
-			Console.WriteLine($"Generated {clusters.Count} clusters"); 
-			printArray("Emission Matrix", emissionMatrix);
+			Console.WriteLine($"Generated {clusters.Count} clusters"); 		
 			printArray("Transition Matrix", transitionMatrix);
-			printArray("Initial Distribution", initialDist); 
 		}
 
 		/// <summary>
@@ -68,33 +64,10 @@
 		/// <param name="incidents">Incidents.</param>
 		private static double[,] generateTransitionMatrix(ICollection<Incident> incidents, List<Cluster> clusters)
 		{
-			var model = kernel.Get<IHiddenMarkovModel>();
+			var model = kernel.Get<IMarkovModel>();
 			return model.generateTransitionMatrix(incidents, clusters); 
 		}
-
-		/// <summary>
-		/// Generates the emission matrix.
-		/// </summary>
-		/// <returns>The emission matrix.</returns>
-		/// <param name="clusters">Clusters.</param>
-		private static double[,] generateEmissionMatrix(List<HashSet<double[]>> clusters)
-		{
-			var model = kernel.Get<IHiddenMarkovModel>();
-			return model.generateEmissionMatrix(clusters); 
-		}
-
-		/// <summary>
-		/// Generates the initial distribution.
-		/// </summary>
-		/// <returns>The initial distribution.</returns>
-		/// <param name="incidents">Incidents.</param>
-		/// <param name="clusters">Clusters.</param>
-		private static double[] generateInitialDistribution(ICollection<Incident> incidents, List<Cluster> clusters)
-		{
-			var model = kernel.Get<IHiddenMarkovModel>();
-			return model.generateInitialDistribution(incidents, clusters); 
-		}
-
+			
 		/// <summary>
 		/// Prints the array.
 		/// </summary>
@@ -158,7 +131,7 @@
 
 			_kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>();
 			_kernel.Bind<IClusteringService>().To<DJClusterAlgorithm>();
-			_kernel.Bind<IHiddenMarkovModel>().To<HiddenMarkovModel>(); 
+			_kernel.Bind<IMarkovModel>().To<MarkovModel>(); 
 
 			return _kernel;
 		}

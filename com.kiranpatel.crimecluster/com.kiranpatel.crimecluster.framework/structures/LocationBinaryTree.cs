@@ -44,7 +44,7 @@
 				return; 
 			}
 
-			this.add_helper(this.root, latitude, longitude); 
+			this.addHelper(this.root, latitude, longitude); 
 		}
 
 		/// <summary>
@@ -53,33 +53,33 @@
 		/// <param name="node">Node.</param>
 		/// <param name="latitude">Latitude.</param>
 		/// <param name="longitude">Longitude.</param>
-		private void add_helper(LocationBinaryNode node, double latitude, double longitude)
+		private void addHelper(LocationBinaryNode node, double latitude, double longitude)
 		{			
 			if (Math.Abs(node.Latitude - latitude) < Double.Epsilon)
 			{
-				node.addLongitude(longitude);
+				node.AddLongitude(longitude);
 				return; 
 			}
 
 			if (latitude < node.Latitude)
 			{
-				if (node.left == null)
+				if (node.Left == null)
 				{
-					node.left = new LocationBinaryNode(latitude, longitude);
+					node.Left = new LocationBinaryNode(latitude, longitude);
 					return; 
 				}
 
-				add_helper(node.left, latitude, longitude); 
+				this.addHelper(node.Left, latitude, longitude); 
 			}
 			else
 			{
-				if (node.right == null)
+				if (node.Right == null)
 				{
-					node.right = new LocationBinaryNode(latitude, longitude);
+					node.Right = new LocationBinaryNode(latitude, longitude);
 					return;
 				}
 
-				add_helper(node.right, latitude, longitude); 
+				this.addHelper(node.Right, latitude, longitude); 
 			}
 		}
 
@@ -90,7 +90,7 @@
 		/// <param name="longitude">Longitude.</param>
 		public bool Search(double latitude, double longitude)
 		{
-			return this.search(this.root, latitude, longitude);  
+			return this.searchHelper(this.root, latitude, longitude);  
 		}
 
 		/// <summary>
@@ -99,7 +99,7 @@
 		/// <param name="node">Node.</param>
 		/// <param name="latitude">Latitude.</param>
 		/// <param name="longitude">Longitude.</param>
-		public bool search(LocationBinaryNode node, double latitude, double longitude)
+		private bool searchHelper(LocationBinaryNode node, double latitude, double longitude)
 		{
 			if (node == null)
 			{
@@ -108,16 +108,16 @@
 
 			if (Math.Abs(node.Latitude - latitude) < Double.Epsilon)
 			{
-				return node.hasLongitude(longitude);
+				return node.HasLongitude(longitude);
 			}
 
 			if (latitude < node.Latitude)
 			{
-				return search(node.left, latitude, longitude);
+				return this.searchHelper(node.Left, latitude, longitude);
 			}
 			else
 			{
-				return search(node.right, latitude, longitude); 
+				return this.searchHelper(node.Right, latitude, longitude); 
 			}
 		}
 	}

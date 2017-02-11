@@ -23,13 +23,13 @@
 		/// Gets or sets the left LocationBinaryNode to this
 		/// </summary>
 		/// <value>The left.</value>
-		public LocationBinaryNode left { get; set; }
+		public LocationBinaryNode Left { get; set; }
 
 		/// <summary>
 		/// Gets or sets the right LocationBinaryNode to this
 		/// </summary>
 		/// <value>The right.</value>
-		public LocationBinaryNode right { get; set; } 
+		public LocationBinaryNode Right { get; set; } 
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.LocationBinaryNode"/> class.
@@ -41,7 +41,7 @@
 			this.Latitude = latitude;
 			this.LongitudeList = new HashSet<double>();
 
-			this.addLongitude(longitude); 
+			this.AddLongitude(longitude); 
 		}
 
 		/// <summary>
@@ -49,7 +49,7 @@
 		/// </summary>
 		/// <returns><c>true</c>, if latitude was found, <c>false</c> otherwise.</returns>
 		/// <param name="longitude">flag indicating if the latitude was found.</param>
-		public bool hasLongitude(double longitude)
+		public bool HasLongitude(double longitude)
 		{
 			return this.LongitudeList.Contains(longitude); 
 		}
@@ -58,7 +58,7 @@
 		/// Adds the longitude to the longitude list. 
 		/// </summary>
 		/// <param name="longitude">Longitude.</param>
-		public void addLongitude(double longitude)
+		public void AddLongitude(double longitude)
 		{
 			this.LongitudeList.Add(longitude); 
 		}
