@@ -64,6 +64,7 @@
     <Compile Include="services\PredictionAlgorithms\EuclideanDistanceTests.cs" />
     <Compile Include="services\PredictionAlgorithms\DJClusterAlgorithmTests.cs" />
     <Compile Include="services\PredictionAlgorithms\LocationDistanceTests.cs" />
+    <Compile Include="structures\LocationBinaryTreeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj">

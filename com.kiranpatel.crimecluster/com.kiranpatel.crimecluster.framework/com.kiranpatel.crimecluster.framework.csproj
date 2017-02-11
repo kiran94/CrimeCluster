@@ -121,6 +121,8 @@
     <Compile Include="contracts\IHiddenMarkovModel.cs" />
     <Compile Include="services\PredictionAlgorithms\HiddenMarkovModel.cs" />
     <Compile Include="entities\Cluster.cs" />
+    <Compile Include="structures\LocationBinaryNode.cs" />
+    <Compile Include="structures\LocationBinaryTree.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
