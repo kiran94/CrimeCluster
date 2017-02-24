@@ -9,9 +9,8 @@
 	public interface IPredictionService
 	{
 		/// <summary>
-		/// Predicts a list of potential <see cref="Incident"/> locations based on a data set of <see cref="Incident"/> cases
+		/// Predicts the next state based on the current state
 		/// </summary>
-		/// <param name="dataSet">Data set to make predictions on.</param>
-		ICollection<Incident> predict(ICollection<Incident> dataSet);
+		int predict();
 	}
 }

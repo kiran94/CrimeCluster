@@ -1,7 +1,6 @@
 ﻿namespace com.kiranpatel.crimecluster.framework
 {
 	using System;
-	using System.Linq;
 	using System.Collections.Generic;
 
 	/// <summary>
@@ -10,9 +9,26 @@
 	public class MarkovModel : IMarkovModel
 	{
 		/// <summary>
+		/// Gets the type of the crime.
+		/// </summary>
+		/// <value>The type of the crime.</value>
+		public CrimeType crimeType { get; private set; }
+
+		/// <summary>
+		/// Gets the current state of the model. 
+		/// </summary>
+		/// <value>The state of the current.</value>
+		public int currentState { get; private set; }
+
+		/// <summary>
 		/// The transition matrix.
 		/// </summary>
 		private double[,] _transitionMatrix;
+
+		/// <summary>
+		/// The clusters (states).
+		/// </summary>
+		private IList<Cluster> clusters; 
 
 		/// <summary>
 		/// The logger.
@@ -22,20 +38,33 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.MarkovModel"/> class.
 		/// </summary>
+		/// <param name="type">crime type this markov model instance is for.</param>
 		/// <param name="logger">Logger.</param>
-		public MarkovModel(ILogger logger)
+		public MarkovModel(CrimeType type, ILogger logger)
 		{
+			this.crimeType = type; 
 			this.logger = logger; 
 		}
 
 		// <inheritdoc>
 		public double[,] generateTransitionMatrix(ICollection<Incident> incidents, List<Cluster> clusters)
 		{
-			var clustersFound = new Queue<int>();
+			if (incidents == null)
+			{
+				throw new InvalidOperationException(nameof(incidents) + " should not be null");
+			}
 
+			if (clusters == null)
+			{
+				throw new InvalidOperationException(nameof(clusters) + " should not be null");
+			}
+
+			this.logger.debug($"Generating Transition matrix for {this.crimeType.GetDescription()}"); 
+
+			var clustersFound = new Queue<int>();
 			foreach (var currentIncident in incidents)
 			{
-				// maybe improve this? O(n^2)
+				// maybe improve this? O(n*c)
 				foreach (var currentCluster in clusters)
 				{
 					if (currentCluster.Contains(
@@ -43,12 +72,14 @@
 						currentIncident.Location.Longitude.Value))
 					{
 						clustersFound.Enqueue(currentCluster.Label);
-						continue; 
 					}
 				}
 			}
 
 			this._transitionMatrix = this.generateTransitionMatrix(clustersFound, clusters.Count);
+			this.clusters = clusters; 
+
+			// maybe make this set the current state?
 			return this._transitionMatrix; 
 		}
 
@@ -74,6 +105,7 @@
 			while (clustersFound.Count != 0)
 			{
 				int next = clustersFound.Dequeue();
+				// may need a value to determine how long ago this specific item took place so we can take into account crimes that took place a long time ago
 				transitionMatrix[previous, next]++;
 				rowTotals[previous]++; 
 
@@ -103,8 +135,38 @@
 		}
 
 		// <inheritdoc>
-		public ICollection<Incident> predict(ICollection<Incident> dataSet)
+		public int predict()
 		{
+			this.logger.debug($"Predicting for {this.crimeType.GetDescription()}");
+
+			int nextState = this.currentState;
+			double maxValue = Int32.MinValue;
+			 
+			for (int i = 0; i < this._transitionMatrix.GetLength(1); i++)
+			{
+				double currentValue = this._transitionMatrix[this.currentState, i];
+
+				if (currentValue > maxValue)
+				{
+					maxValue = currentValue;
+					nextState = i; 
+				}
+			}
+
+			this.currentState = nextState;
+			return this.currentState; 
+
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Gets the prediction point for the current state
+		/// </summary>
+		/// <returns>The prediction point.</returns>
+		public double[] getPredictionPoint()
+		{
+			// gets the average point for the current state
+			// BST in order traversal to get the average point for that cluster. 
 			throw new NotImplementedException();
 		}
 	}
