@@ -286,6 +286,20 @@
 		}
 
 		/// <summary>
+		/// Ensures when the model has not been generated and the prediction point has been called, a invalid operation exception is called. 
+		/// </summary>
+		[Test]
+		public void getPredictionPoint_ModelNotGenerated_InvalidOperationException()
+		{
+			var model = this.GetInstance(); 
+
+			Assert.Throws<InvalidOperationException>(delegate 
+			{
+				model.getPredictionPoint();	
+			});
+		}
+
+		/// <summary>
 		/// Gets the instance.
 		/// </summary>
 		/// <returns>The instance.</returns>

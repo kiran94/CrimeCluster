@@ -126,6 +126,14 @@
 		/// <returns>The prediction point.</returns>
 		public double[] getPredictionPoint()
 		{
+			if (!this.modelGenerated)
+			{
+				var message = "Called get prediction point when model was not generated.";
+				var e = new InvalidOperationException(message);
+				this.logger.error(message, e);
+				throw e;
+			}
+
 			if (this.currentState >= this.clusters.Count)
 			{
 				var e = new InvalidOperationException($"Invalid State {this.currentState}");
