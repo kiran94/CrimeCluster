@@ -47,5 +47,14 @@
 		{
 			return this.Points.Search(latitude, longitude); 
 		}
+
+		/// <summary>
+		/// Gets the average point in the cluster. 
+		/// </summary>
+		/// <returns>The average point.</returns>
+		public double[] GetAveragePoint()
+		{
+			return this.Points.averagePoint();
+		}
 	}
 }
