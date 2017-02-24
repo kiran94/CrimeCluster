@@ -28,7 +28,12 @@
 		/// <summary>
 		/// The clusters (states).
 		/// </summary>
-		private IList<Cluster> clusters; 
+		private IList<Cluster> clusters;
+
+		/// <summary>
+		/// Flag determining if the model has been generated yet. 
+		/// </summary>
+		private bool modelGenerated; 
 
 		/// <summary>
 		/// The logger.
@@ -42,7 +47,9 @@
 		/// <param name="logger">Logger.</param>
 		public MarkovModel(CrimeType type, ILogger logger)
 		{
-			this.crimeType = type; 
+			this.crimeType = type;
+			this.modelGenerated = false;
+			this.currentState = 0; 
 			this.logger = logger; 
 		}
 
@@ -77,10 +84,56 @@
 			}
 
 			this._transitionMatrix = this.generateTransitionMatrix(clustersFound, clusters.Count);
-			this.clusters = clusters; 
-
-			// maybe make this set the current state?
+			this.clusters = clusters;
+			this.modelGenerated = true; 
 			return this._transitionMatrix; 
+		}
+
+		// <inheritdoc>
+		public int predict()
+		{
+			if (!this.modelGenerated)
+			{
+				var message = "Called predict when model was not generated."; 
+				var e = new InvalidOperationException(message);
+				this.logger.error(message, e);
+				throw e; 
+			}
+
+			this.logger.debug($"Predicting for {this.crimeType.GetDescription()}");
+
+			int nextState = this.currentState;
+			double maxValue = Int32.MinValue;
+
+			for (int i = 0; i < this._transitionMatrix.GetLength(1); i++)
+			{
+				double currentValue = this._transitionMatrix[this.currentState, i];
+
+				if (currentValue > maxValue)
+				{
+					maxValue = currentValue;
+					nextState = i;
+				}
+			}
+
+			this.currentState = nextState;
+			return this.currentState;
+		}
+
+		/// <summary>
+		/// Gets the prediction point for the current state
+		/// </summary>
+		/// <returns>The prediction point.</returns>
+		public double[] getPredictionPoint()
+		{
+			if (this.currentState >= this.clusters.Count)
+			{
+				var e = new InvalidOperationException($"Invalid State {this.currentState}");
+				this.logger.error("Error getting prediction point", e);
+				throw e;
+			}
+
+			return this.clusters[this.currentState].GetAveragePoint();
 		}
 
 		/// <summary>
@@ -132,42 +185,6 @@
 			}
 
 			return transitionMatrix;
-		}
-
-		// <inheritdoc>
-		public int predict()
-		{
-			this.logger.debug($"Predicting for {this.crimeType.GetDescription()}");
-
-			int nextState = this.currentState;
-			double maxValue = Int32.MinValue;
-			 
-			for (int i = 0; i < this._transitionMatrix.GetLength(1); i++)
-			{
-				double currentValue = this._transitionMatrix[this.currentState, i];
-
-				if (currentValue > maxValue)
-				{
-					maxValue = currentValue;
-					nextState = i; 
-				}
-			}
-
-			this.currentState = nextState;
-			return this.currentState; 
-
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Gets the prediction point for the current state
-		/// </summary>
-		/// <returns>The prediction point.</returns>
-		public double[] getPredictionPoint()
-		{
-			// gets the average point for the current state
-			// BST in order traversal to get the average point for that cluster. 
-			throw new NotImplementedException();
 		}
 	}
 }

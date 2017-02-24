@@ -15,6 +15,11 @@
 		Mock<ILogger> logger;
 
 		/// <summary>
+		/// The precision of comparing double values. 
+		/// </summary>
+		const double PRECISION = 0.005;
+
+		/// <summary>
 		/// Sets up.
 		/// </summary>
 		[SetUp]
@@ -61,53 +66,53 @@
 		{
 			var rawCluster1 = new HashSet<double[]>();
 			var rawCluster2 = new HashSet<double[]>();
-			var rawCluster3 = new HashSet<double[]>(); 
-
+		
 			var incidents = new List<Incident>();
-
-			int twos = 0;
-			int threes = 0;
-			int other = 0; 
 
 			for (int i = 1; i <= 100; i++)
 			{
-				var incident = new Incident() { Location = new Location() { Latitude = i, Longitude = 100 % i } };
-				incidents.Add(incident);
+				var actualIncident = new Incident() { Location = new Location() { Latitude = i, Longitude = 100 % i } };
+				var inputIncident = new double[] { actualIncident.Location.Latitude.Value, actualIncident.Location.Longitude.Value };
+				incidents.Add(actualIncident);
 
-				if (i % 2 == 0)
+				if (i % 2 == 1)
 				{
-					rawCluster1.Add(new double[] { incident.Location.Latitude.Value, incident.Location.Longitude.Value });
-					twos++; 
-				}
-				else if (i % 3 == 0)
-				{
-					rawCluster2.Add(new double[] { incident.Location.Latitude.Value, incident.Location.Longitude.Value });
-					threes++;
+					rawCluster1.Add(inputIncident);
 				}
 				else
 				{
-					rawCluster3.Add(new double[] { incident.Location.Latitude.Value, incident.Location.Longitude.Value });
-					other++;
+					rawCluster2.Add(inputIncident);
 				}
+			}
+
+			for (int i = 0; i < 50; i++)
+			{
+				var actualIncident = new Incident() { Location = new Location() { Latitude = i % 100, Longitude = 1 } };
+				var inputIncident = new double[] { actualIncident.Location.Latitude.Value, actualIncident.Location.Longitude.Value };
+				incidents.Add(actualIncident);
+				rawCluster1.Add(inputIncident);
+			}
+
+			for (int i = 0; i < 10; i++)
+			{
+				var actualIncident = new Incident() { Location = new Location() { Latitude = i % 50, Longitude = 1 } };
+				var inputIncident = new double[] { actualIncident.Location.Latitude.Value, actualIncident.Location.Longitude.Value };
+				incidents.Add(actualIncident);
+				rawCluster2.Add(inputIncident);
 			}
 
 			var clusters = new List<Cluster>() 
 			{ 
 				new Cluster(0, rawCluster1), 
-				new Cluster(1, rawCluster2), 
-				new Cluster(2, rawCluster3) 
+				new Cluster(1, rawCluster2)			
 			};
 
-			var result = this.GetInstance().generateTransitionMatrix(incidents, clusters); 
+			var result = this.GetInstance().generateTransitionMatrix(incidents, clusters);
 
-
-
-
-
-
-
-
-			throw new NotImplementedException(); 
+			Assert.That(result[0, 0], Is.EqualTo(0.363636).Within(PRECISION));
+			Assert.That(result[0, 1], Is.EqualTo(0.636363).Within(PRECISION));
+			Assert.That(result[1, 0], Is.EqualTo(0.971813).Within(PRECISION));
+			Assert.That(result[1, 1], Is.EqualTo(0.028169).Within(PRECISION));
 		}
 
 		/// <summary>
@@ -116,7 +121,108 @@
 		[Test]
 		public void generateTransitionMatrix_NoClusterTransitionsFound_InvalidOperationException()
 		{
-			throw new NotImplementedException(); 
+			var rawCluster1 = new HashSet<double[]>();
+			var rawCluster2 = new HashSet<double[]>();
+
+			var incidents = new List<Incident>();
+
+			for (int i = 1; i <= 100; i++)
+			{
+				var actualIncident = new Incident() { Location = new Location() { Latitude = i, Longitude = 100 % i } };
+				var inputIncident = new double[] { actualIncident.Location.Latitude.Value, actualIncident.Location.Longitude.Value };
+
+				if (i % 2 == 1)
+				{
+					rawCluster1.Add(inputIncident);
+				}
+				else
+				{
+					rawCluster2.Add(inputIncident);
+				}
+			}
+
+			for (int i = 1; i <= 10; i++)
+			{
+				incidents.Add(new Incident() { Location = new Location() { Latitude = 100 % i, Longitude = i } }); 					
+			}
+
+			var clusters = new List<Cluster>();
+			clusters.Add(new Cluster(0, rawCluster1));
+			clusters.Add(new Cluster(1, rawCluster2));
+
+			Assert.Throws<InvalidOperationException>(delegate 
+			{
+				this.GetInstance().generateTransitionMatrix(incidents, clusters);					
+			});
+		}
+
+		/// <summary>
+		/// Ensures when the model is generated, and the predict method is called, the max transition from the current state is choosen and the next state returned. 
+		/// </summary>
+		[Test]
+		public void predict_ModelGenerated_MaxTransitionChosenAndNextStateChosen()
+		{
+			var rawCluster1 = new HashSet<double[]>();
+			var rawCluster2 = new HashSet<double[]>();
+
+			var incidents = new List<Incident>();
+
+			for (int i = 1; i <= 100; i++)
+			{
+				var actualIncident = new Incident() { Location = new Location() { Latitude = i, Longitude = 100 % i } };
+				var inputIncident = new double[] { actualIncident.Location.Latitude.Value, actualIncident.Location.Longitude.Value };
+				incidents.Add(actualIncident);
+
+				if (i % 2 == 1)
+				{
+					rawCluster1.Add(inputIncident);
+				}
+				else
+				{
+					rawCluster2.Add(inputIncident);
+				}
+			}
+
+			for (int i = 0; i < 50; i++)
+			{
+				var actualIncident = new Incident() { Location = new Location() { Latitude = i % 100, Longitude = 1 } };
+				var inputIncident = new double[] { actualIncident.Location.Latitude.Value, actualIncident.Location.Longitude.Value };
+				incidents.Add(actualIncident);
+				rawCluster1.Add(inputIncident);
+			}
+
+			for (int i = 0; i < 10; i++)
+			{
+				var actualIncident = new Incident() { Location = new Location() { Latitude = i % 50, Longitude = 1 } };
+				var inputIncident = new double[] { actualIncident.Location.Latitude.Value, actualIncident.Location.Longitude.Value };
+				incidents.Add(actualIncident);
+				rawCluster2.Add(inputIncident);
+			}
+
+			var clusters = new List<Cluster>()
+			{
+				new Cluster(0, rawCluster1),
+				new Cluster(1, rawCluster2)
+			};
+
+			var model = this.GetInstance();
+			model.generateTransitionMatrix(incidents, clusters);
+			int nextState = model.predict();
+
+			Assert.AreEqual(1, nextState); 
+		}
+
+		/// <summary>
+		/// Ensures when the model is not generated and predict is called, an invalid operation exception is thrown. 
+		/// </summary>
+		[Test]
+		public void predict_ModelNotGenerated_InvalidOperationException()
+		{
+			var model = this.GetInstance(); 
+			Assert.Throws<InvalidOperationException>(delegate 
+			{
+				model.predict();	
+			});
 		}
 
 		/// <summary>
