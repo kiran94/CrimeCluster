@@ -226,6 +226,66 @@
 		}
 
 		/// <summary>
+		/// Ensures when the current state is set, the average point is returned. 
+		/// </summary>
+		[Test]
+		public void getPredictionPoint_CurrentState1_AveragePoint()
+		{
+			var rawCluster1 = new HashSet<double[]>();
+			var rawCluster2 = new HashSet<double[]>();
+
+			var incidents = new List<Incident>();
+
+			for (int i = 1; i <= 100; i++)
+			{
+				var actualIncident = new Incident() { Location = new Location() { Latitude = i, Longitude = 100 % i } };
+				var inputIncident = new double[] { actualIncident.Location.Latitude.Value, actualIncident.Location.Longitude.Value };
+				incidents.Add(actualIncident);
+
+				if (i % 2 == 1)
+				{
+					rawCluster1.Add(inputIncident);
+				}
+				else
+				{
+					rawCluster2.Add(inputIncident);
+				}
+			}
+
+			for (int i = 0; i < 50; i++)
+			{
+				var actualIncident = new Incident() { Location = new Location() { Latitude = i % 100, Longitude = 1 } };
+				var inputIncident = new double[] { actualIncident.Location.Latitude.Value, actualIncident.Location.Longitude.Value };
+				incidents.Add(actualIncident);
+				rawCluster1.Add(inputIncident);
+			}
+
+			for (int i = 0; i < 10; i++)
+			{
+				var actualIncident = new Incident() { Location = new Location() { Latitude = i % 50, Longitude = 1 } };
+				var inputIncident = new double[] { actualIncident.Location.Latitude.Value, actualIncident.Location.Longitude.Value };
+				incidents.Add(actualIncident);
+				rawCluster2.Add(inputIncident);
+			}
+
+			var clusters = new List<Cluster>()
+			{
+				new Cluster(0, rawCluster1),
+				new Cluster(1, rawCluster2)
+			};
+
+			var model = this.GetInstance();
+			model.generateTransitionMatrix(incidents, clusters);
+
+			var state = model.predict();
+			var predictionPoint = model.getPredictionPoint();
+
+			Assert.AreEqual(1, state);
+			Assert.That(predictionPoint[0], Is.EqualTo(43.25D).Within(PRECISION));
+			Assert.That(predictionPoint[1], Is.EqualTo(14.16667D).Within(PRECISION));
+		}
+
+		/// <summary>
 		/// Gets the instance.
 		/// </summary>
 		/// <returns>The instance.</returns>
