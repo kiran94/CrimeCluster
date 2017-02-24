@@ -1,5 +1,6 @@
 ﻿namespace com.kiranpatel.crimecluster.framework
 {
+	using System.Linq;
 	using System.Collections.Generic;
 
 	/// <summary>
@@ -17,7 +18,7 @@
 		/// Gets or sets the longitude list.
 		/// </summary>
 		/// <value>The longitude list.</value>
-		private HashSet<double> LongitudeList { get; set; }
+		public HashSet<double> LongitudeList { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the left LocationBinaryNode to this

@@ -120,5 +120,50 @@
 				return this.searchHelper(node.Right, latitude, longitude); 
 			}
 		}
+
+		/// <summary>
+		/// Calculates the average point for all locations in the location binary search tree. 
+		/// </summary>
+		/// <returns>The point.</returns>
+		public double[] averagePoint()
+		{			
+			var points = new double[3]; 
+
+			if (this.root == null)
+			{
+				return points; 
+			}
+
+			averagePoint(this.root, points);
+
+			points[0] /= points[2];
+			points[1] /= points[2]; 
+
+			return points; 
+		}
+
+		/// <summary>
+		/// In-Order Traversal of the location binary tree where at each node we are:
+		/// For each longitude, add the latitude and longitude pairs to the total sum 
+		/// For each longitude (implies a latitude) add one to the total count. 
+		/// </summary>
+		/// <param name="node">Node.</param>
+		/// <param name="points">Points.</param>
+		private void averagePoint(LocationBinaryNode node, double[] points)
+		{
+			if (node != null)
+			{
+				averagePoint(node.Left, points);
+
+				foreach (var currentLongitude in node.LongitudeList)
+				{
+					points[0] += node.Latitude;
+					points[1] += currentLongitude;
+					points[2]++;
+				}
+
+				averagePoint(node.Right, points);
+			}
+		}
 	}
 }
