@@ -121,6 +121,38 @@
 		}
 
 		/// <summary>
+		/// Ensures when the tree is empty, the averages are zero. 
+		/// </summary>
+		[Test]
+		public void averagePoint_EmptyTree_Zero()
+		{
+			var tree = this.GetInstance();
+			var result = tree.averagePoint();
+
+			Assert.AreEqual(0, result[0]); 
+			Assert.AreEqual(0, result[1]);
+		}
+
+		/// <summary>
+		/// Ensures when the tree is populated, the averages are returned. 
+		/// </summary>
+		[Test]
+		public void averagePoint_PopulatedTree_AveragesReturned()
+		{
+			var tree = this.GetInstance();
+			tree.Add(2, 4); 
+			tree.Add(2, 3);
+			tree.Add(3, 3);
+			tree.Add(4, 7);
+			tree.Add(3, 2);
+
+			var result = tree.averagePoint();
+
+			Assert.AreEqual(2.8, result[0]);
+			Assert.AreEqual(3.8, result[1]);
+		}
+
+		/// <summary>
 		/// Gets the instance.
 		/// </summary>
 		/// <returns>The instance.</returns>

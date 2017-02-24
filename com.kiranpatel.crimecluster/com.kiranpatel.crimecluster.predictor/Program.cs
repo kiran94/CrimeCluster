@@ -64,7 +64,8 @@
 		/// <param name="incidents">Incidents.</param>
 		private static double[,] generateTransitionMatrix(ICollection<Incident> incidents, List<Cluster> clusters)
 		{
-			var model = kernel.Get<IMarkovModel>();
+			//var model = kernel.Get<IMarkovModel>();
+			MarkovModel model = new MarkovModel(CrimeType.AntiSocialBehaviour, kernel.Get<ILogger>()); 
 			return model.generateTransitionMatrix(incidents, clusters); 
 		}
 			
