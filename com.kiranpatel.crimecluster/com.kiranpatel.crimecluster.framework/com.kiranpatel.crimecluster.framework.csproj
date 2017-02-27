@@ -124,6 +124,7 @@
     <Compile Include="structures\LocationBinaryNode.cs" />
     <Compile Include="structures\LocationBinaryTree.cs" />
     <Compile Include="contracts\IMixedMarkovModel.cs" />
+    <Compile Include="services\PredictionAlgorithms\MixedMarkovModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />
