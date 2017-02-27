@@ -64,26 +64,30 @@
 		/// <param name="incidents">Incidents.</param>
 		private static double[,] generateTransitionMatrix(ICollection<Incident> incidents, List<Cluster> clusters)
 		{
-			//var model = kernel.Get<IMarkovModel>();
-			MarkovModel model = new MarkovModel(CrimeType.AntiSocialBehaviour, kernel.Get<ILogger>()); 
+			var model = kernel.Get<IMarkovModel>();
+			//MarkovModel model = new MarkovModel(CrimeType.AntiSocialBehaviour, kernel.Get<ILogger>()); 
 			return model.generateTransitionMatrix(incidents, clusters); 
 		}
 			
 		/// <summary>
 		/// Prints the array.
 		/// </summary>
-		/// <param name="array">Array.</param>
-		private static void printArray(String title, double[,] array)
+		/// <param name="arr">Array.</param>
+		private static void printArray(String title, double[,] arr)
 		{
 			Console.WriteLine(title); 
-			for (int i = 0; i < array.GetLength(0); i++)
-			{
-				for (int j = 0; j < array.GetLength(1); j++)
-				{
-					Console.Write(array[i, j] + "\t"); 
-				}
+			int rowLength = arr.GetLength(0);
+			int colLength = arr.GetLength(1);
 
-				Console.WriteLine(String.Empty); 
+			for (int i = 0; i < rowLength; i++)
+			{
+				Console.Write("[");
+				for (int j = 0; j < colLength; j++)
+				{
+					Console.Write(string.Format("{0} ", Math.Round(arr[i, j], 3)));
+				}
+				Console.Write("]");
+				Console.Write(Environment.NewLine + Environment.NewLine);
 			}
 		}
 
@@ -132,7 +136,7 @@
 
 			_kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>();
 			_kernel.Bind<IClusteringService>().To<DJClusterAlgorithm>();
-			_kernel.Bind<IMarkovModel>().To<MarkovModel>(); 
+			_kernel.Bind<IMarkovModel>().To<MarkovModel>().WithConstructorArgument("type", CrimeType.AntiSocialBehaviour);			    
 
 			return _kernel;
 		}
