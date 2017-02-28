@@ -12,8 +12,7 @@
 		/// <summary>
 		/// Generates the Mixed Markov Model.
 		/// </summary>
-		/// <param name="incidents">Incidents to generate the model on.</param>
-		void GenerateModel(IQueryable<Incident> incidents);
+		void GenerateModel();
 
 		/// <summary>
 		/// Predicts the next location for the given type.
