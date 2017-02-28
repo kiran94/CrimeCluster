@@ -27,7 +27,7 @@
 		/// <summary>
 		/// The location service instance. 
 		/// </summary>
-		private readonly ILocationService locationService; 
+		private readonly ILocationService locationService;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.IncidentService"/> class.
@@ -39,18 +39,18 @@
 		/// <param name="repository">Repository.</param>
 		/// <param name="logger">Logger.</param>
 		public IncidentService(
-			IOfficerService officerService, 
-			IIncidentOutcomeService outcomeService, 
-			IIncidentBacklogService backlogService, 
-			ILocationService locationService, 
-			IRepository repository, 
-			ILogger logger) 
+			IOfficerService officerService,
+			IIncidentOutcomeService outcomeService,
+			IIncidentBacklogService backlogService,
+			ILocationService locationService,
+			IRepository repository,
+			ILogger logger)
 			: base(repository, logger)
 		{
 			this.officerService = officerService;
 			this.outcomeService = outcomeService;
 			this.backlogService = backlogService;
-			this.locationService = locationService; 
+			this.locationService = locationService;
 		}
 
 		// <inheritdoc>
@@ -59,7 +59,7 @@
 			if (incident == null)
 			{
 				this.logger.debug("null incident passed into allocate new incident");
-				return false; 
+				return false;
 			}
 
 			var onlineOfficers = this.officerService.GetOnlineOfficerLocations();
@@ -68,7 +68,7 @@
 			{
 				this.logger.debug(String.Format("No Officers currently online, adding incident {0} to backlog", incident.ID.ToString()));
 				this.backlogService.add(incident);
-				return false; 
+				return false;
 			}
 
 			/// This is very infficent, maybe change to something a bit better
@@ -85,11 +85,11 @@
 			};
 
 			// may have to flush here or just let the incident cascade from the outcome
-			this.Save(incident); 
+			this.Save(incident);
 			this.outcomeService.Save(outcome);
-			this.officerService.SetOfficerBusy(chooseOfficer); 
+			this.officerService.SetOfficerBusy(chooseOfficer);
 
-			return true; 
+			return true;
 		}
 
 		// <inheritdoc>

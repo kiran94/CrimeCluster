@@ -121,6 +121,8 @@
 		[Test]
 		public void generateTransitionMatrix_NoClusterTransitionsFound_InvalidOperationException()
 		{
+			this.logger.Setup(x => x.error("No Points were found in Clusters", It.IsAny<InvalidOperationException>())).Verifiable(); 
+
 			var rawCluster1 = new HashSet<double[]>();
 			var rawCluster2 = new HashSet<double[]>();
 
@@ -150,10 +152,8 @@
 			clusters.Add(new Cluster(0, rawCluster1));
 			clusters.Add(new Cluster(1, rawCluster2));
 
-			Assert.Throws<InvalidOperationException>(delegate 
-			{
-				this.GetInstance().generateTransitionMatrix(incidents, clusters);					
-			});
+			this.GetInstance().generateTransitionMatrix(incidents, clusters);
+			this.logger.Verify(x => x.error("No Points were found in Clusters", It.IsAny<InvalidOperationException>()), Times.Once); 
 		}
 
 		/// <summary>
