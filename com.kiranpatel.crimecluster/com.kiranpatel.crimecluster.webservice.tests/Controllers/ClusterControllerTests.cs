@@ -10,6 +10,9 @@
 	using System.Collections.Generic;
 	using com.kiranpatel.crimecluster.webservice;
 
+	/// <summary>
+	/// Cluster controller tests.
+	/// </summary>
 	[TestFixture]
 	public class ClusterControllerTests
 	{
