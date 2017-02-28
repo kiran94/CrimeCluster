@@ -27,48 +27,13 @@
 			var logger = kernel.Get<ILogger>();
 			logger.debug("Starting Predictor");
 
-			var incidentService = kernel.Get<IIncidentService>();
+			IMixedMarkovModel model = kernel.Get<IMixedMarkovModel>();
+			model.GenerateModel();
 
-			var incidents = incidentService.getAllForCrimeType(CrimeType.AntiSocialBehaviour);
-			var dataSet = incidents.Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value }).ToArray();
-
-			var clusters = generateClusters(dataSet);
-
-			var clusterList = new List<Cluster>();
-			for (int i = 0; i < clusters.Count; i++)
-			{
-				clusterList.Add(new Cluster(i, clusters[i])); 
-			}
-
-			var transitionMatrix = generateTransitionMatrix(incidents, clusterList);
-
-			Console.WriteLine($"Generated {clusters.Count} clusters"); 		
-			printArray("Transition Matrix", transitionMatrix);
+			double[] result = model.Predict(CrimeType.AntiSocialBehaviour);
+			printArray(" ", result); 
 		}
 
-		/// <summary>
-		/// Generates the clusters.
-		/// </summary>
-		/// <returns>The clusters.</returns>
-		/// <param name="dataset">Dataset.</param>
-		private static List<HashSet<double[]>> generateClusters(double[][] dataset)
-		{
-			var djCluster = kernel.Get<IClusteringService>();
-			return djCluster.Learn(dataset);
-		}
-
-		/// <summary>
-		/// Generates the transition matrix.
-		/// </summary>
-		/// <returns>The transition matrix.</returns>
-		/// <param name="incidents">Incidents.</param>
-		private static double[,] generateTransitionMatrix(ICollection<Incident> incidents, List<Cluster> clusters)
-		{
-			var model = kernel.Get<IMarkovModel>();
-			//MarkovModel model = new MarkovModel(CrimeType.AntiSocialBehaviour, kernel.Get<ILogger>()); 
-			return model.generateTransitionMatrix(incidents, clusters); 
-		}
-			
 		/// <summary>
 		/// Prints the array.
 		/// </summary>
@@ -136,7 +101,8 @@
 
 			_kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>();
 			_kernel.Bind<IClusteringService>().To<DJClusterAlgorithm>();
-			_kernel.Bind<IMarkovModel>().To<MarkovModel>().WithConstructorArgument("type", CrimeType.AntiSocialBehaviour);			    
+			//_kernel.Bind<IMarkovModel>().To<MarkovModel>().WithConstructorArgument("type", CrimeType.AntiSocialBehaviour);
+			_kernel.Bind<IMixedMarkovModel>().To<MixedMarkovModel>(); 
 
 			return _kernel;
 		}
