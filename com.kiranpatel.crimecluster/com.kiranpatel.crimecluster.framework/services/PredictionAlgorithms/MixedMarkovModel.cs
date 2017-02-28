@@ -57,8 +57,7 @@
 
 				this.logger.info($"Generating Markov Model for {currentEnum.ToString()}");
 
-				var currentIncidents = this.incidentService.getAllForCrimeType(currentEnum)	
-					.OrderBy(x => x.Location.DateLogged)
+				var currentIncidents = this.incidentService.getAllForCrimeType(currentEnum)
 					.ToHashSet();
 
 				double[][] dataSet = currentIncidents
