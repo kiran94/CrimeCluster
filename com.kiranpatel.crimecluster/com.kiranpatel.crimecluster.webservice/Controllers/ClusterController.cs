@@ -144,7 +144,7 @@
 			var descType = this.crimeTypes[parsedType];
 			var incidents = this.incidentService.getAllForCrimeType(descType);
 
-			if (incidents.IsNullOrEmpty())
+			if (incidents == null)
 			{
 				this.logger.warn($"{nameof(incidents)} was null or empty");
 				return new JsonResult(); 

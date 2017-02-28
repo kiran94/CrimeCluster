@@ -99,9 +99,12 @@
 		}
 
 		// <inheritdoc>
-		public ICollection<Incident> getAllForCrimeType(CrimeType type)
+		public IQueryable<Incident> getAllForCrimeType(CrimeType type)
 		{
-			return this.repository.Query<Incident>().Where(x => x.CrimeType == type.GetDescription()).OrderBy(x => x.DateCreated).ToList(); 
+			return this.repository.Query<Incident>()
+				       .Where(x => x.CrimeType.Equals(type.GetDescription()))
+				       .OrderBy(x => x.DateCreated)
+				       .AsQueryable(); 
 		}
 
 		// <inheritdoc>

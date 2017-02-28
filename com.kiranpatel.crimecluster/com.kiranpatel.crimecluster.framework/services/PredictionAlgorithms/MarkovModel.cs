@@ -155,7 +155,8 @@
 			{
 				Exception e = new InvalidOperationException();
 				this.logger.error("No Points were found in Clusters", e);
-				throw e;
+				//throw e;
+				return null; 
 			}
 
 			var transitionMatrix = new double[NoClusters, NoClusters];

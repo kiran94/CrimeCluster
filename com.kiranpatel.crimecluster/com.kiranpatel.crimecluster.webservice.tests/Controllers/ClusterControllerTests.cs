@@ -106,7 +106,7 @@
 			};
 
 			String serialsied = "serialised";
-			this.incidentService.Setup(x => x.getAllForCrimeType(CrimeType.AntiSocialBehaviour)).Returns(incidents);
+			this.incidentService.Setup(x => x.getAllForCrimeType(CrimeType.AntiSocialBehaviour)).Returns(incidents.AsQueryable());
 			this.serialisationService.Setup(x => x.serialise<List<LocationModel>>(It.IsAny<List<LocationModel>>())).Returns(serialsied);
 
 			var result = this.GetInstance().Filter("1");
@@ -132,7 +132,7 @@
 		[Test]
 		public void Cluster_NoIncidentsUnderCrimeType_ReturnNull()
 		{
-			this.incidentService.Setup(x => x.getAllForCrimeType(CrimeType.AntiSocialBehaviour)).Returns(new List<Incident>()); 
+			this.incidentService.Setup(x => x.getAllForCrimeType(CrimeType.AntiSocialBehaviour)).Returns(new List<Incident>().AsQueryable()); 
 			var result = this.GetInstance().Cluster("1");
 			Assert.IsNull(result.Data);
 		}
@@ -152,7 +152,7 @@
 			var clusters = new List<HashSet<double[]>>() { new HashSet<double[]>() { new double[] { 1D, 1D } }};
 			var centroids = new List<double[]>() { new double[] { 1D, 1D }};
 
-			this.incidentService.Setup(x => x.getAllForCrimeType(CrimeType.AntiSocialBehaviour)).Returns(incidents);
+			this.incidentService.Setup(x => x.getAllForCrimeType(CrimeType.AntiSocialBehaviour)).Returns(incidents.AsQueryable());
 			this.clusteringService.Setup(x => x.Learn(It.IsAny<double[][]>())).Returns(clusters);
 			this.clusteringService.Setup(x => x.CalculateCentroids(clusters)).Returns(centroids); 
 			this.serialisationService.Setup(x => x.serialise<List<LocationModel>>(It.IsAny<List<LocationModel>>())).Returns("serialised");

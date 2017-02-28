@@ -77,7 +77,7 @@
 				throw new ArgumentNullException(nameof(dataSet)); 
 			}
 
-			this.logger.info($"Generating clusters with parameters Eps: {this.raduisEps} MinPts: {this.minPoints} Distance Measure: {this.measure.GetType().ToString()}");
+			this.logger.debug($"Generating clusters with parameters Eps: {this.raduisEps} MinPts: {this.minPoints} Distance Measure: {this.measure.GetType().ToString()}");
 
 			var clusters = new List<HashSet<double[]>>();
 			for (int i = 0; i < dataSet.Length; i++)

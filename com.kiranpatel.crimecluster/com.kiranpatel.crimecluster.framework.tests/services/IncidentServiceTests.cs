@@ -179,7 +179,7 @@
 
 			var result = this.GetInstance().getAllForCrimeType(CrimeType.AntiSocialBehaviour);
 
-			Assert.AreEqual(2, result.Count);
+			Assert.AreEqual(2, result.Count());
 			Assert.That(result.All(x => x.CrimeType == CrimeType.AntiSocialBehaviour.GetDescription()));  
 		}
 
@@ -201,7 +201,7 @@
 
 			var result = this.GetInstance().getAllForCrimeType(CrimeType.AntiSocialBehaviour);
 
-			Assert.AreEqual(0, result.Count);
+			Assert.AreEqual(0, result.Count());
 		}
 
 		/// <summary>

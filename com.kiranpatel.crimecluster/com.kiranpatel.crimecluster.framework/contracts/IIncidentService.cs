@@ -28,6 +28,6 @@
 		/// </summary>
 		/// <returns>A collection of incidents.</returns>
 		/// <param name="type">crime type to filter by.</param>
-		ICollection<Incident> getAllForCrimeType(CrimeType type); 
+		IQueryable<Incident> getAllForCrimeType(CrimeType type); 
 	}
 }
