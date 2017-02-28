@@ -71,7 +71,6 @@
 			var clustersFound = new Queue<int>();
 			foreach (var currentIncident in incidents)
 			{
-				// maybe improve this? O(n*c)
 				foreach (var currentCluster in clusters)
 				{
 					if (currentCluster.Contains(

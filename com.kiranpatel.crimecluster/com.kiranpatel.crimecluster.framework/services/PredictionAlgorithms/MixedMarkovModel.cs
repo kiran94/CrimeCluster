@@ -27,6 +27,7 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.MixedMarkovModel"/> class.
 		/// </summary>
+		/// <param name="clusteringService">Clustering service.</param>
 		/// <param name="logger">Logger.</param>
 		public MixedMarkovModel(IClusteringService clusteringService, ILogger logger)
 		{
@@ -38,42 +39,44 @@
 		// <inheritdoc>
 		public void GenerateModel(IQueryable<Incident> incidents)
 		{
+			this.logger.debug("Generating Mixed Markov Model");
 			foreach (CrimeType currentEnum in Enum.GetValues(typeof(CrimeType)))
 			{
-				// Be careful here.. Not sure if doing x.Location will eager load the whole instance in..
-				IEnumerable<Incident> currentIncidents = incidents
+				this.logger.info($"Generating Markov Model for {currentEnum.ToString()}");
+
+				var currentIncidents = incidents
 					.Where(x => x.CrimeType.Equals(currentEnum))
-					.OrderBy(x => x.Location.DateLogged);
+					.OrderBy(x => x.Location.DateLogged)
+					.ToHashSet();
 
-				var incidentHashSet = new HashSet<Incident>(currentIncidents);
-
-				double[][] dataSet = incidentHashSet
+				double[][] dataSet = currentIncidents
 					.Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value })
 					.ToArray();
 
-				// factory?
-
+				this.logger.debug($"Clustering Data for {currentEnum.ToString()}");
 				var rawClusters = this.clusteringService.Learn(dataSet);
-				var clusters = new List<Cluster>();
 
+				var clusters = new List<Cluster>();
 				for (int i = 0; i < rawClusters.Count; i++)
 				{
 					clusters.Add(new Cluster(i, rawClusters[i])); 
 				}
 
-				MarkovModel model = new MarkovModel(currentEnum, this.logger);
-				model.generateTransitionMatrix(incidentHashSet, clusters);
+				this.logger.debug($"Generating Transition Matrix for {currentEnum.ToString()}");
+				var model = new MarkovModel(currentEnum, this.logger);
+				model.generateTransitionMatrix(currentIncidents, clusters);
 
 				this.modelLookup.Add(currentEnum, model); 
 			}
 
-
-			throw new NotImplementedException(); 
+			this.logger.debug("Mixed Markov Model generated.");
 		}
 
 		// <inheritdoc>
 		public double[] Predict(CrimeType type)
 		{
+			this.logger.info($"Predicting on type {type.ToString()}");
+
 			if (!this.modelLookup.ContainsKey(type))
 			{
 				string message = $"{type.ToString()} not in lookup";
@@ -83,9 +86,10 @@
 			}
 
 			this.modelLookup[type].predict();
-			return this.modelLookup[type].getPredictionPoint();
+			var predictionPoint = this.modelLookup[type].getPredictionPoint();
 
-			throw new NotImplementedException();
+			this.logger.debug($"Generated Prediction Point, Lat: {predictionPoint[0]}, Long: {predictionPoint[1]}");
+			return predictionPoint; 
 		}
 	}
 }
