@@ -66,8 +66,6 @@
 				throw new InvalidOperationException(nameof(clusters) + " should not be null");
 			}
 
-			this.logger.debug($"Generating Transition matrix for {this.crimeType.GetDescription()}"); 
-
 			var clustersFound = new Queue<int>();
 			foreach (var currentIncident in incidents)
 			{
