@@ -55,29 +55,7 @@
 					continue; 
 				}
 
-				this.logger.info($"Generating Markov Model for {currentEnum.ToString()}");
-
-				var currentIncidents = this.incidentService.getAllForCrimeType(currentEnum)
-					.ToHashSet();
-
-				double[][] dataSet = currentIncidents
-					.Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value })
-					.ToArray();
-
-				this.logger.debug($"Clustering Data for {currentEnum.ToString()}");
-				var rawClusters = this.clusteringService.Learn(dataSet);
-
-				var clusters = new List<Cluster>();
-				for (int i = 0; i < rawClusters.Count; i++)
-				{
-					clusters.Add(new Cluster(i, rawClusters[i])); 
-				}
-
-				//this.logger.debug($"Generating Transition Matrix for {currentEnum.ToString()}");
-				var model = new MarkovModel(currentEnum, this.logger);
-				model.generateTransitionMatrix(currentIncidents, clusters);
-
-				this.modelLookup.Add(currentEnum, model); 
+				this.GenerateModel(currentEnum); 
 			}
 
 			this.logger.debug("Mixed Markov Model generated.");
@@ -101,6 +79,59 @@
 
 			this.logger.debug($"Generated Prediction Point, Lat: {predictionPoint[0]}, Long: {predictionPoint[1]}");
 			return predictionPoint; 
+		}
+
+		// <inheritdoc>
+		public void AddIncident(Incident incident)
+		{
+			if (incident == null)
+			{
+				this.logger.warn($"Adding incident was null");
+				return; 
+			}
+
+			this.logger.info($"Adding Incident { incident.ID.ToString() }"); 
+			this.incidentService.Save(incident);
+
+			CrimeType type = CrimeType.Default;
+			if (!Enum.TryParse(incident.CrimeType, out type))
+			{
+				this.logger.warn($"Incident {incident.ID} has an invalid crime type {incident.CrimeType}");
+				return; 
+			}
+
+			this.GenerateModel(type); 
+		}
+
+		/// <summary>
+		/// Generates a Markov Model for the passed Crime Type. 
+		/// </summary>
+		/// <param name="currentEnum">Current enum.</param>
+		private void GenerateModel(CrimeType currentEnum)
+		{
+			this.logger.info($"Generating Markov Model for {currentEnum.ToString()}");
+
+			var currentIncidents = this.incidentService.getAllForCrimeType(currentEnum)
+				.ToHashSet();
+
+			double[][] dataSet = currentIncidents
+				.Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value })
+				.ToArray();
+
+			this.logger.debug($"Clustering Data for {currentEnum.ToString()}");
+			var rawClusters = this.clusteringService.Learn(dataSet);
+
+			var clusters = new List<Cluster>();
+			for (int i = 0; i < rawClusters.Count; i++)
+			{
+				clusters.Add(new Cluster(i, rawClusters[i]));
+			}
+
+			this.logger.debug($"Generating Transition matrix for {currentEnum.GetDescription()}");
+			var model = new MarkovModel(currentEnum, this.logger);
+			model.generateTransitionMatrix(currentIncidents, clusters);
+
+			this.modelLookup.Add(currentEnum, model);
 		}
 	}
 }

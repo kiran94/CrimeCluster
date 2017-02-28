@@ -19,5 +19,11 @@
 		/// </summary>
 		/// <param name="type">type to predict against.</param>
 		double[] Predict(CrimeType type);
+
+		/// <summary>
+		/// Adds an incident to the appropiate Markov Model.
+		/// </summary>
+		/// <param name="incident">Incident.</param>
+		void AddIncident(Incident incident);
 	}
 }
