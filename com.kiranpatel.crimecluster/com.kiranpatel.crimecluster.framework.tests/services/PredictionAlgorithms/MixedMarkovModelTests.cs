@@ -72,6 +72,7 @@
 
 			this.clusteringService.Setup(x => x.Learn(It.IsAny<double[][]>())).Returns(clusters).Verifiable();
 			this.incidentService.Setup(x => x.Save(It.IsAny<Incident>())).Verifiable();
+			this.incidentService.Setup(x => x.Flush()).Verifiable(); 
 
 			var incidentList = new List<Incident>() { incident };
 			this.incidentService.Setup(x => x.getAllForCrimeType(CrimeType.Burglary)).Returns(incidentList.AsQueryable()); 
@@ -80,6 +81,7 @@
 
 			this.clusteringService.Verify(x => x.Learn(It.IsAny<double[][]>()), Times.Once);
 			this.incidentService.Verify(x => x.Save(incident), Times.Once);
+			this.incidentService.Verify(x => x.Flush(), Times.Once); 
 		}
 
 		/// <summary>

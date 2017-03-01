@@ -92,6 +92,7 @@
 
 			this.logger.info($"Adding Incident { incident.ID.ToString() }"); 
 			this.incidentService.Save(incident);
+			this.incidentService.Flush(); 
 
 			CrimeType type = CrimeType.Default;
 			if (!Enum.TryParse(incident.CrimeType, out type))
