@@ -53,10 +53,19 @@
 			}
 		}
 
-		// <inheritdoc>
+
 		public IQueryable<T> Query<T>() where T : EntityBase
 		{
 			return this.session.Query<T>(); 
+		}
+
+		// <inheritdoc>
+		public void Flush()
+		{
+			if (this.session != null)
+			{
+				this.session.Flush(); 
+			}
 		}
 
 		/// <summary>

@@ -41,5 +41,10 @@ namespace com.kiranpatel.crimecluster.framework
 		/// </summary>
 		/// <typeparam name="T">Type of object</typeparam>
 		IQueryable<T> Query<T>() where T : EntityBase;
+
+		/// <summary>
+		/// Flushes the current objects persisted. 
+		/// </summary>
+		void Flush(); 
 	}
 }
