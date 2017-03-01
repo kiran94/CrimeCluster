@@ -90,16 +90,16 @@
 				return; 
 			}
 
-			this.logger.info($"Adding Incident { incident.ID.ToString() }"); 
-			this.incidentService.Save(incident);
-			this.incidentService.Flush(); 
-
 			CrimeType type = CrimeType.Default;
 			if (!Enum.TryParse(incident.CrimeType, out type))
 			{
 				this.logger.warn($"Incident {incident.ID} has an invalid crime type {incident.CrimeType}");
 				return; 
 			}
+
+			this.logger.info($"Adding Incident { incident.ID.ToString() }");
+			this.incidentService.Save(incident);
+			this.incidentService.Flush();
 
 			this.GenerateModel(type); 
 		}
@@ -129,10 +129,18 @@
 			}
 
 			this.logger.debug($"Generating Transition matrix for {currentEnum.GetDescription()}");
+
 			var model = new MarkovModel(currentEnum, this.logger);
 			model.generateTransitionMatrix(currentIncidents, clusters);
 
-			this.modelLookup.Add(currentEnum, model);
+			if (this.modelLookup.ContainsKey(currentEnum))
+			{
+				this.modelLookup[currentEnum] = model;
+			}
+			else
+			{
+				this.modelLookup.Add(currentEnum, model);
+			}
 		}
 	}
 }
