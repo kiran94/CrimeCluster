@@ -6,6 +6,9 @@
 	using NUnit.Framework;
 	using Moq; 
 
+	/// <summary>
+	/// Markov model tests.
+	/// </summary>
 	[TestFixture]
 	public class MarkovModelTests
 	{
