@@ -72,6 +72,15 @@
 			this.repository.Delete(toDelete); 
 		}
 
+		// <inheritdoc>
+		public void Flush()
+		{
+			if (this.repository != null)
+			{
+				this.repository.Flush();
+			}
+		}
+
 		/// <summary>
 		/// Releases all resource used by the <see cref="T:com.kiranpatel.crimecluster.framework.EntityService`1"/> object.
 		/// </summary>

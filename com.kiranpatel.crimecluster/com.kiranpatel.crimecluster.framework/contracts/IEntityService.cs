@@ -28,6 +28,11 @@ namespace com.kiranpatel.crimecluster.framework
 		/// Delete the specified toDelete.
 		/// </summary>
 		/// <param name="toDelete">To delete.</param>
-		void Delete(T toDelete); 
+		void Delete(T toDelete);
+
+		/// <summary>
+		/// Flush changes in this instance.
+		/// </summary>
+		void Flush(); 
 	}
 }
