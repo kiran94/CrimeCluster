@@ -63,7 +63,8 @@
 			Incident incident = new Incident()
 			{
 				CrimeType = CrimeType.Burglary.ToString(),
-				Location = new Location() { Latitude = 1, Longitude = 2 }
+				Location = new Location() { Latitude = 1, Longitude = 2 },
+				DateCreated = new DateTime(2015, 01, 15)
 			};
 
 			List<HashSet<double[]>> clusters = new List<HashSet<double[]>>();
@@ -90,7 +91,9 @@
 		/// <returns>The instance.</returns>
 		private MixedMarkovModel GetInstance()
 		{
-			return new MixedMarkovModel(this.clusteringService.Object, this.incidentService.Object, this.logger.Object); 
+			var start = new DateTime(2015, 01, 01);
+			var end = new DateTime(2015, 01, 31); 
+			return new MixedMarkovModel(this.clusteringService.Object, this.incidentService.Object, this.logger.Object, start, end); 
 		}
 	}
 }

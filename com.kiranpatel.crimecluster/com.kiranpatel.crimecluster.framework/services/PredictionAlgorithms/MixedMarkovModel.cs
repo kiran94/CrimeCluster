@@ -30,18 +30,38 @@
 		private readonly ILogger logger;
 
 		/// <summary>
+		/// The start date the Mixed Markov Model covers. 
+		/// </summary>
+		private readonly DateTime start;
+
+		/// <summary>
+		/// The end date the Mixed Markov Model covers. 
+		/// </summary>
+		private readonly DateTime end; 
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.MixedMarkovModel"/> class.
 		/// </summary>
 		/// <param name="clusteringService">Clustering service.</param>
 		/// <param name="incidentService">Incident service.</param>
 		/// <param name="logger">Logger.</param>
-		public MixedMarkovModel(IClusteringService clusteringService, IIncidentService incidentService, ILogger logger)
+		/// <param name="start">Start.</param>
+		/// <param name="end">End.</param>
+		public MixedMarkovModel(
+			IClusteringService clusteringService, 
+			IIncidentService incidentService, 
+			ILogger logger, 
+			DateTime start, 
+			DateTime end)
 		{
 			this.modelLookup = new Dictionary<CrimeType, MarkovModel>();
 
 			this.clusteringService = clusteringService;
 			this.incidentService = incidentService; 
 			this.logger = logger;
+
+			this.start = start;
+			this.end = end; 
 		}
 
 		// <inheritdoc>
@@ -113,6 +133,7 @@
 			this.logger.info($"Generating Markov Model for {currentEnum.ToString()}");
 
 			var currentIncidents = this.incidentService.getAllForCrimeType(currentEnum)
+				.Where(x => x.DateCreated >= this.start && x.DateCreated <= this.end)
 				.ToHashSet();
 
 			double[][] dataSet = currentIncidents
