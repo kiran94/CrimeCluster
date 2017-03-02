@@ -102,8 +102,10 @@
 			_kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>();
 			_kernel.Bind<IClusteringService>().To<DJClusterAlgorithm>();
 			//_kernel.Bind<IMarkovModel>().To<MarkovModel>().WithConstructorArgument("type", CrimeType.AntiSocialBehaviour);
-			_kernel.Bind<IMixedMarkovModel>().To<MixedMarkovModel>(); 
-
+			_kernel.Bind<IMixedMarkovModel>().To<MixedMarkovModel>()
+				   .WithConstructorArgument("start", new DateTime(2015, 01, 01))
+				   .WithConstructorArgument("end", new DateTime(2015, 12, 31)); 
+			
 			return _kernel;
 		}
 	}
