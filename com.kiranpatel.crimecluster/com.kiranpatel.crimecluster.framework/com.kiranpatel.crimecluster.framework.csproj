@@ -126,6 +126,8 @@
     <Compile Include="contracts\IMixedMarkovModel.cs" />
     <Compile Include="services\PredictionAlgorithms\MixedMarkovModel.cs" />
     <Compile Include="extensions\IQueryableExtensions.cs" />
+    <Compile Include="contracts\IModelEvaluation.cs" />
+    <Compile Include="services\PredictionAlgorithms\ModelEvaluation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />

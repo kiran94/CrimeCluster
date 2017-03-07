@@ -67,6 +67,7 @@
     <Compile Include="structures\LocationBinaryTreeTests.cs" />
     <Compile Include="services\PredictionAlgorithms\MarkovModelTests.cs" />
     <Compile Include="services\PredictionAlgorithms\MixedMarkovModelTests.cs" />
+    <Compile Include="services\PredictionAlgorithms\ModelEvaluationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\com.kiranpatel.crimecluster.framework\com.kiranpatel.crimecluster.framework.csproj">
