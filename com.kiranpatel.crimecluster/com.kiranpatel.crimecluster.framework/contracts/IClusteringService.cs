@@ -14,12 +14,5 @@ namespace com.kiranpatel.crimecluster.framework
 		/// <returns>List of Collections (and the points within those clusters)</returns>
 		/// <param name="dataSet">dataset to compute clusters on</param>
 		List<HashSet<double[]>> Learn(double[][] dataSet);
-
-		/// <summary>
-		/// Calcualtes the centroids of the passed clusters.
-		/// </summary>
-		/// <returns>The centroids.</returns>
-		/// <param name="clusters">Clusters.</param>
-		List<double[]> CalculateCentroids(List<HashSet<double[]>> clusters); 
 	}
 }
