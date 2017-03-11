@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace com.kiranpatel.crimecluster.framework
+﻿namespace com.kiranpatel.crimecluster.framework
 {
+	using System.Collections.Generic;
+
 	/// <summary>
-	/// Contract for clustering
+	/// Contract for clustering services.
 	/// </summary>
 	public interface IClusteringService
 	{
 		/// <summary>
-		/// Computes clusters for a given data set
+		/// Computes Clusters for a passed dataset.
 		/// </summary>
 		/// <returns>List of Collections (and the points within those clusters)</returns>
 		/// <param name="dataSet">dataset to compute clusters on</param>

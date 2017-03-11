@@ -37,9 +37,9 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.DJClusterAlgorithm`1"/> class.
 		/// </summary>
-		/// <param name="configService">Config service.</param>
-		/// <param name="logger">Logger.</param>
-		/// <param name="distanceMeasure">Distance Measure.</param>
+		/// <param name="configService">configuration service.</param>
+		/// <param name="logger">logger service.</param>
+		/// <param name="distanceMeasure">distance measure.</param>
 		public DJClusterAlgorithm(
 			IConfigurationService configService, 
 			ILogger logger, 
@@ -84,7 +84,7 @@
 		}
 
 		/// <summary>
-		/// Calculates the neighbourhood of a given point using the minimum raduis and minpoints
+		/// Calculates the neighbourhood of a given point using the minimum radius and minpoints
 		/// </summary>
 		/// <returns>clustering of the point</returns>
 		/// <param name="currentPoint">Current point.</param>
@@ -107,16 +107,17 @@
 		/// Merges the generated cluster with the list of clusters if there are any intersecting points, 
 		/// if there are any intersecting points the clusters are merged.
 		/// </summary>
-		/// <returns><c>true</c>, if clusters was merged, <c>false</c> otherwise.</returns>
-		/// <param name="clusters">Clusters.</param>
-		/// <param name="cluster">Cluster.</param>
+		/// <returns><c>true</c>, if clusters were merged, <c>false</c> otherwise.</returns>
+		/// <param name="clusters">Existing Clusters.</param>
+		/// <param name="cluster">Newly Discovered Cluster.</param>
 		private bool mergeClusters(List<HashSet<double[]>> clusters, HashSet<double[]> cluster)
 		{
 			for (int currentCluster = 0; currentCluster < clusters.Count; currentCluster++)
 			{
 				if (clusters[currentCluster].Intersect(cluster).Count() != 0)
 				{
-					clusters[currentCluster] = new HashSet<double[]>(clusters[currentCluster].Union(cluster));
+					clusters[currentCluster] = new HashSet<double[]>(clusters[currentCluster]
+					                                                 .Union(cluster));
 					return true; 
 				}
 			}
