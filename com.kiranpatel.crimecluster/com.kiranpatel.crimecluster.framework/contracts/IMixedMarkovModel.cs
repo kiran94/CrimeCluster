@@ -1,9 +1,5 @@
 ﻿namespace com.kiranpatel.crimecluster.framework
-{
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-
+{	
 	/// <summary>
 	/// Contract for Mixed Markov Model.
 	/// </summary>
@@ -21,7 +17,7 @@
 		double[] Predict(CrimeType type);
 
 		/// <summary>
-		/// Adds an incident to the appropiate Markov Model.
+		/// Adds an incident to the appropriate Markov Model.
 		/// </summary>
 		/// <param name="incident">Incident.</param>
 		void AddIncident(Incident incident);

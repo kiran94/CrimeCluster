@@ -10,7 +10,7 @@
 	public class MixedMarkovModel : IMixedMarkovModel
 	{
 		/// <summary>
-		/// The model lookup.
+		/// The model lookup, mapping a crime type to a markov model.
 		/// </summary>
 		private readonly Dictionary<CrimeType, MarkovModel> modelLookup;
 
@@ -44,9 +44,9 @@
 		/// </summary>
 		/// <param name="clusteringService">Clustering service.</param>
 		/// <param name="incidentService">Incident service.</param>
-		/// <param name="logger">Logger.</param>
-		/// <param name="start">Start.</param>
-		/// <param name="end">End.</param>
+		/// <param name="logger">Logger service.</param>
+		/// <param name="start">Start date of the incidents in the MMM.</param>
+		/// <param name="end">End date of the incidents in the MMM.</param>
 		public MixedMarkovModel(
 			IClusteringService clusteringService, 
 			IIncidentService incidentService, 
@@ -125,9 +125,9 @@
 		}
 
 		/// <summary>
-		/// Generates a Markov Model for the passed Crime Type. 
+		/// Generates a Markov Model for the passed Crime Type and sets them to the internal dictionary.
 		/// </summary>
-		/// <param name="currentEnum">Current enum.</param>
+		/// <param name="currentEnum">Current enum to generate the Markov Model for.</param>
 		private void GenerateModel(CrimeType currentEnum)
 		{
 			this.logger.info($"Generating Markov Model for {currentEnum.ToString()}");

@@ -31,16 +31,15 @@
 		}
 
 		/// <summary>
-		/// Adds a LocationBinaryNode with the latitude and longitude
+		/// Adds a LocationBinaryNode with the latitude and longitude to the tree.
 		/// </summary>
-		/// <param name="latitude">Latitude.</param>
-		/// <param name="longitude">Longitude.</param>
+		/// <param name="latitude">Latitude to add.</param>
+		/// <param name="longitude">Longitude to add.</param>
 		public void Add(double latitude, double longitude)
-		{
-			var node = new LocationBinaryNode(latitude, longitude); 
+		{			
 			if (this.root == null)
 			{
-				this.root = node;
+				this.root = new LocationBinaryNode(latitude, longitude);
 				return; 
 			}
 
@@ -50,9 +49,9 @@
 		/// <summary>
 		/// Recursively finds the position to add the latitude and longitude.
 		/// </summary>
-		/// <param name="node">Node.</param>
-		/// <param name="latitude">Latitude.</param>
-		/// <param name="longitude">Longitude.</param>
+		/// <param name="node">current node the insert is at.</param>
+		/// <param name="latitude">Latitude to add.</param>
+		/// <param name="longitude">Longitude to add.</param>
 		private void addHelper(LocationBinaryNode node, double latitude, double longitude)
 		{			
 			if (Math.Abs(node.Latitude - latitude) < Double.Epsilon)
@@ -86,8 +85,8 @@
 		/// <summary>
 		/// Searches to determine if there is a node with the passed latitude and longitude. 
 		/// </summary>
-		/// <param name="latitude">Latitude.</param>
-		/// <param name="longitude">Longitude.</param>
+		/// <param name="latitude">Latitude to search for.</param>
+		/// <param name="longitude">Longitude to search for.</param>
 		public bool Search(double latitude, double longitude)
 		{
 			return this.searchHelper(this.root, latitude, longitude);  
@@ -96,9 +95,9 @@
 		/// <summary>
 		/// Recursively searches through the binary tree for the passed latitude and longitude. 
 		/// </summary>
-		/// <param name="node">Node.</param>
-		/// <param name="latitude">Latitude.</param>
-		/// <param name="longitude">Longitude.</param>
+		/// <param name="node">Current Node.</param>
+		/// <param name="latitude">Latitude to search for.</param>
+		/// <param name="longitude">Longitude to search for.</param>
 		private bool searchHelper(LocationBinaryNode node, double latitude, double longitude)
 		{
 			if (node == null)
@@ -124,7 +123,7 @@
 		/// <summary>
 		/// Calculates the average point for all locations in the location binary search tree. 
 		/// </summary>
-		/// <returns>The point.</returns>
+		/// <returns>The average point.</returns>
 		public double[] averagePoint()
 		{			
 			var points = new double[3]; 
@@ -134,7 +133,7 @@
 				return points; 
 			}
 
-			averagePoint(this.root, points);
+			this.averagePoint(this.root, points);
 
 			points[0] /= points[2];
 			points[1] /= points[2]; 
@@ -147,13 +146,13 @@
 		/// For each longitude, add the latitude and longitude pairs to the total sum 
 		/// For each longitude (implies a latitude) add one to the total count. 
 		/// </summary>
-		/// <param name="node">Node.</param>
-		/// <param name="points">Points.</param>
+		/// <param name="node">Current Node.</param>
+		/// <param name="points">Average Points.</param>
 		private void averagePoint(LocationBinaryNode node, double[] points)
 		{
 			if (node != null)
 			{
-				averagePoint(node.Left, points);
+				this.averagePoint(node.Left, points);
 
 				foreach (var currentLongitude in node.LongitudeList)
 				{
@@ -162,7 +161,7 @@
 					points[2]++;
 				}
 
-				averagePoint(node.Right, points);
+				this.averagePoint(node.Right, points);
 			}
 		}
 	}
