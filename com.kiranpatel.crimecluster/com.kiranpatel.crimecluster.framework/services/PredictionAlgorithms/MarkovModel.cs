@@ -54,7 +54,9 @@
 		}
 
 		// <inheritdoc>
-		public double[,] generateTransitionMatrix(ICollection<Incident> incidents, List<Cluster> clusters)
+		public double[,] generateTransitionMatrix(
+			ICollection<Incident> incidents, 
+			List<Cluster> clusters)
 		{
 			if (incidents == null)
 			{
@@ -80,7 +82,10 @@
 				}
 			}
 
-			this._transitionMatrix = this.generateTransitionMatrix(clustersFound, clusters.Count);
+			this._transitionMatrix = this.generateTransitionMatrix(
+				clustersFound, 
+				clusters.Count);
+			
 			this.clusters = clusters;
 			this.modelGenerated = true; 
 			return this._transitionMatrix; 
@@ -142,11 +147,11 @@
 		}
 
 		/// <summary>
-		/// Generates a Transition Matrix from the passed queue of cluster labels
+		/// Generates a Transition Matrix from the passed queue of cluster labels.
 		/// </summary>
 		/// <returns>The transition matrix.</returns>
-		/// <param name="clustersFound">Clusters found.</param>
-		/// <param name="NoClusters">No clusters.</param>
+		/// <param name="clustersFound">Clusters discovered.</param>
+		/// <param name="NoClusters">Number of clusters.</param>
 		private double[,] generateTransitionMatrix(Queue<int> clustersFound, int NoClusters)
 		{			
 			if (clustersFound.Count == 0)
@@ -177,7 +182,7 @@
 		/// <summary>
 		/// Calculates the frequencies of each of the cells in the transition matrix according to the corresponding row total
 		/// </summary>
-		/// <returns>The frequencies.</returns>
+		/// <returns>The completed transition matrix with populated frequencies.</returns>
 		/// <param name="transitionMatrix">Transition matrix.</param>
 		/// <param name="rowTotals">Row totals.</param>
 		private double[,] calcFrequencies(double[,] transitionMatrix, double[] rowTotals)

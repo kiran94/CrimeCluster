@@ -21,13 +21,13 @@
 		public HashSet<double> LongitudeList { get; private set; }
 
 		/// <summary>
-		/// Gets or sets the left LocationBinaryNode to this
+		/// Gets or sets the left LocationBinaryNode to this node.
 		/// </summary>
 		/// <value>The left.</value>
 		public LocationBinaryNode Left { get; set; }
 
 		/// <summary>
-		/// Gets or sets the right LocationBinaryNode to this
+		/// Gets or sets the right LocationBinaryNode to this node.
 		/// </summary>
 		/// <value>The right.</value>
 		public LocationBinaryNode Right { get; set; } 

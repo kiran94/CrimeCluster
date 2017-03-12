@@ -25,7 +25,7 @@
 		/// </summary>
 		private LoggerService()
 		{
-			log = LogManager.GetLogger(typeof(LoggerService));
+			this.log = LogManager.GetLogger(typeof(LoggerService));
 			XmlConfigurator.Configure(new FileInfo("log4net.xml"));
 		}
 
