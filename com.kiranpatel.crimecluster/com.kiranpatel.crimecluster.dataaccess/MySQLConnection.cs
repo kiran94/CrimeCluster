@@ -1,6 +1,5 @@
 ﻿namespace com.kiranpatel.crimecluster.dataaccess
 {
-	using System;
 	using System.Reflection;
 	using com.kiranpatel.crimecluster.framework;
 	using NHibernate;
@@ -16,17 +15,17 @@
 	public class MySQLConnection
 	{
 		/// <summary>
-		/// Configuration Service instance
+		/// Configuration Service instance.
 		/// </summary>
 		private readonly IConfigurationService configService;
 
 		/// <summary>
-		/// The Session Factory
+		/// The Nhibernate Session Factory.
 		/// </summary>
 		private ISessionFactory factory;
 
 		/// <summary>
-		/// The Nhibernate Configuration
+		/// The Nhibernate Configuration.
 		/// </summary>
 		private Configuration config; 
 
@@ -40,7 +39,7 @@
 		}
 
 		/// <summary>
-		/// Gets a ISession from the factory
+		/// Gets a ISession from the factory.
 		/// </summary>
 		/// <returns>The session.</returns>
 		public ISession getSession()
@@ -49,7 +48,7 @@
 		}
 
 		/// <summary>
-		/// Gets the SessionFactory
+		/// Initialises and returns the ISessionFactory if not already initalised, else returns ISessionFactory.
 		/// </summary>
 		/// <returns>The factory.</returns>
 		private ISessionFactory getFactory()
@@ -63,7 +62,7 @@
 		}
 
 		/// <summary>
-		/// Gets the Configuration for the SessionFactory
+		/// Gets the Configuration for the SessionFactory using the configuration for a MySql database and the connection string.
 		/// </summary>
 		/// <returns>The configuration.</returns>
 		private Configuration getConfiguration()
