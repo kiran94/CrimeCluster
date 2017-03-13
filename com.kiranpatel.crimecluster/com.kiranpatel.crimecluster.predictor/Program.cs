@@ -16,7 +16,17 @@
 		/// <summary>
 		/// The kernel.
 		/// </summary>
-		private static IKernel kernel = GenerateKernel(); 
+		private static IKernel kernel = GenerateKernel();
+
+		/// <summary>
+		/// The training data start date.
+		/// </summary>
+		private static DateTime trainingStart;
+
+		/// <summary>
+		/// The training data end date.
+		/// </summary>
+		private static DateTime trainingEnd;
 
 		/// <summary>
 		/// The entry point of the program, where the program control starts and ends.
@@ -27,50 +37,20 @@
 			var logger = kernel.Get<ILogger>();
 			logger.debug("Starting Predictor");
 
-			IMixedMarkovModel model = kernel.Get<IMixedMarkovModel>();
-			model.GenerateModel();
+			trainingStart = new DateTime(2015, 01, 01);
+			trainingEnd = new DateTime(2015, 12, 31);
 
-			double[] result = model.Predict(CrimeType.AntiSocialBehaviour);
-			printArray(" ", result); 
-		}
+			var testStart = new DateTime(2016, 01, 01);
+			var testEnd = new DateTime(2016, 12, 31);
+			var radius = 10D;
 
-		/// <summary>
-		/// Prints the array.
-		/// </summary>
-		/// <param name="arr">Array.</param>
-		private static void printArray(String title, double[,] arr)
-		{
-			Console.WriteLine(title); 
-			int rowLength = arr.GetLength(0);
-			int colLength = arr.GetLength(1);
+			logger.info($"Training Model on {trainingStart.ToLongDateString()} to {trainingEnd.ToLongDateString()}"); 
+			logger.info($"Testing Model on {testStart.ToLongDateString()} to {testEnd.ToLongDateString()}");
 
-			for (int i = 0; i < rowLength; i++)
-			{
-				Console.Write("[");
-				for (int j = 0; j < colLength; j++)
-				{
-					Console.Write(string.Format("{0} ", Math.Round(arr[i, j], 3)));
-				}
-				Console.Write("]");
-				Console.Write(Environment.NewLine + Environment.NewLine);
-			}
-		}
+			var evaluation = kernel.Get<IModelEvaluation>();
+			var accuracy = evaluation.Evaluate(testStart, testEnd, radius);
 
-		/// <summary>
-		/// Prints the array.
-		/// </summary>
-		/// <param name="title">Title.</param>
-		/// <param name="array">Array.</param>
-		private static void printArray(String title, double[] array)
-		{
-			Console.WriteLine(title);
-
-			for (int i = 0; i < array.Length; i++)
-			{
-				Console.Write(array[i] + "\t"); 
-			}
-
-			Console.WriteLine(string.Empty); 
+			logger.info($"Accuracy of {accuracy}% found"); 
 		}
 
 		/// <summary>
@@ -101,12 +81,52 @@
 
 			_kernel.Bind<IDistanceMeasure>().To<EuclideanDistance>();
 			_kernel.Bind<IClusteringService>().To<DJClusterAlgorithm>();
-			//_kernel.Bind<IMarkovModel>().To<MarkovModel>().WithConstructorArgument("type", CrimeType.AntiSocialBehaviour);
 			_kernel.Bind<IMixedMarkovModel>().To<MixedMarkovModel>()
-				   .WithConstructorArgument("start", new DateTime(2015, 01, 01))
-				   .WithConstructorArgument("end", new DateTime(2015, 12, 31)); 
+			       .WithConstructorArgument("start", trainingStart)
+			       .WithConstructorArgument("end", trainingEnd);
+
+			_kernel.Bind<IModelEvaluation>().To<ModelEvaluation>(); 
 			
 			return _kernel;
+		}
+
+		/// <summary>
+		/// Prints the array.
+		/// </summary>
+		/// <param name="arr">Array.</param>
+		private static void printArray(String title, double[,] arr)
+		{
+			Console.WriteLine(title);
+			int rowLength = arr.GetLength(0);
+			int colLength = arr.GetLength(1);
+
+			for (int i = 0; i < rowLength; i++)
+			{
+				Console.Write("[");
+				for (int j = 0; j < colLength; j++)
+				{
+					Console.Write(string.Format("{0} ", Math.Round(arr[i, j], 3)));
+				}
+				Console.Write("]");
+				Console.Write(Environment.NewLine + Environment.NewLine);
+			}
+		}
+
+		/// <summary>
+		/// Prints the array.
+		/// </summary>
+		/// <param name="title">Title.</param>
+		/// <param name="array">Array.</param>
+		private static void printArray(String title, double[] array)
+		{
+			Console.WriteLine(title);
+
+			for (int i = 0; i < array.Length; i++)
+			{
+				Console.Write(array[i] + "\t");
+			}
+
+			Console.WriteLine(string.Empty);
 		}
 	}
 }
