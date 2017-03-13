@@ -28,6 +28,14 @@
 		/// </summary>
 		/// <returns>A collection of incidents.</returns>
 		/// <param name="type">crime type to filter by.</param>
-		IQueryable<Incident> getAllForCrimeType(CrimeType type); 
+		IQueryable<Incident> getAllForCrimeType(CrimeType type);
+
+		/// <summary>
+		/// Gets all incidents for the given date range. 
+		/// </summary>
+		/// <returns>The for date range.</returns>
+		/// <param name="start">Start.</param>
+		/// <param name="end">End.</param>
+		IQueryable<Incident> getForDateRange(DateTime start, DateTime end); 
 	}
 }

@@ -222,6 +222,80 @@
 		}
 
 		/// <summary>
+		/// Ensures when all data points are in range, all are returned.
+		/// </summary>
+		[Test]
+		public void getForDateRange_AllInRange_AllReturned()
+		{
+			var start = new DateTime(2015, 01, 01);
+			var end = new DateTime(2015, 12, 01);
+
+			var incidents = new List<Incident>()
+			{
+				new Incident() { DateCreated = new DateTime(2015, 01, 01) },
+				new Incident() { DateCreated = new DateTime(2015, 04, 01) },
+				new Incident() { DateCreated = new DateTime(2015, 06, 01) },
+			};
+
+			this.repository.Setup(x => x.Query<Incident>()).Returns(incidents.AsQueryable());
+
+			var result = this.GetInstance().getForDateRange(start, end).ToList();
+
+			Assert.AreEqual(3, result.Count);
+			CollectionAssert.AreEqual(incidents, result); 
+		}
+
+		/// <summary>
+		/// Ensures when some of the data points are in range, some are returned. 
+		/// </summary>
+		[Test]
+		public void getForDateRange_SomeInRange_OnlyInRangeReturned()
+		{
+			var start = new DateTime(2015, 01, 01);
+			var end = new DateTime(2015, 12, 01);
+
+			var incidents = new List<Incident>()
+			{
+				new Incident() { DateCreated = new DateTime(2015, 01, 01) },
+				new Incident() { DateCreated = new DateTime(2015, 04, 01) },
+				new Incident() { DateCreated = new DateTime(2015, 06, 01) },
+				new Incident() { DateCreated = new DateTime(2014, 12, 02) },
+				new Incident() { DateCreated = new DateTime(2016, 01, 01) },
+			};
+
+			this.repository.Setup(x => x.Query<Incident>()).Returns(incidents.AsQueryable());
+
+			var result = this.GetInstance().getForDateRange(start, end).ToList();
+
+			Assert.AreEqual(3, result.Count);
+			Assert.That(result.All(x => x.DateCreated.Year == 2015)); 
+		}
+
+		/// <summary>
+		/// Ensures when none of the data points are in range, none are returned. 
+		/// </summary>
+		[Test]
+		public void getForDateRange_NoneInRange_NoneReturned()
+		{
+			var start = new DateTime(2015, 01, 01);
+			var end = new DateTime(2015, 12, 01);
+
+			var incidents = new List<Incident>()
+			{
+				new Incident() { DateCreated = new DateTime(2014, 01, 01) },
+				new Incident() { DateCreated = new DateTime(2014, 04, 01) },
+				new Incident() { DateCreated = new DateTime(2014, 06, 01) },
+			};
+
+			this.repository.Setup(x => x.Query<Incident>()).Returns(incidents.AsQueryable());
+
+			var result = this.GetInstance().getForDateRange(start, end).ToList();
+
+			Assert.AreEqual(0, result.Count);
+			CollectionAssert.IsEmpty(result); 
+		}
+
+		/// <summary>
 		/// Ensures when the incident is valid true is returned
 		/// </summary>
 		public void validate_ValidIncident_True()

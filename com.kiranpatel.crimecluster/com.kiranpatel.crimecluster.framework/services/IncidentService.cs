@@ -108,6 +108,12 @@
 		}
 
 		// <inheritdoc>
+		public IQueryable<Incident> getForDateRange(DateTime start, DateTime end)
+		{
+			return this.repository.Query<Incident>().Where(x => x.DateCreated >= start && x.DateCreated <= end).AsQueryable(); 
+		}
+
+		// <inheritdoc>
 		public bool validate(Incident toValidate)
 		{
 			return !(toValidate.Grading == null || toValidate.Location == null);
