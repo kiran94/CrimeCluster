@@ -8,14 +8,12 @@
 	public interface IModelEvaluation
 	{
 		/// <summary>
-		/// Evaluates the Model by training the model on data from trainingStart to trainingEnd and then scoring the accuracy against 
-		/// data from testStart to testStart. 
+		/// Evaluates the Model by testing the accuracy on the parameter date time range. 
 		/// </summary>
 		/// <returns>An Accuracy value.</returns>
-		/// <param name="trainingStart">Training start.</param>
-		/// <param name="trainingEnd">Traninig end.</param>
 		/// <param name="testStart">Test start.</param>
 		/// <param name="testEnd">Test end.</param>
-		double Evaluate(DateTime trainingStart, DateTime trainingEnd, DateTime testStart, DateTime testEnd); 
+		/// <param name="Radius">Radius to compare predicted point to an actual point.</param>
+		double Evaluate(DateTime testStart, DateTime testEnd, double Radius); 
 	}
 }
