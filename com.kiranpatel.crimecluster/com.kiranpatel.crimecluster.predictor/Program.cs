@@ -19,14 +19,14 @@
 		private static IKernel kernel;
 
 		/// <summary>
-		/// The training data start date.
+		/// The training dataset start.
 		/// </summary>
 		private static DateTime trainingStart;
 
 		/// <summary>
-		/// The training data end date.
+		/// The training dataset end.
 		/// </summary>
-		private static DateTime trainingEnd;
+		private static DateTime trainingEnd; 
 
 		/// <summary>
 		/// The entry point of the program, where the program control starts and ends.
@@ -34,26 +34,29 @@
 		/// <param name="args">The command-line arguments.</param>
 		public static void Main(string[] args)
 		{
-			trainingStart = new DateTime(2016, 01, 01);
-			trainingEnd = new DateTime(2016, 6, 30);
-
+			var watch = System.Diagnostics.Stopwatch.StartNew();
 			kernel = GenerateKernel();
+
+			var configService = kernel.Get<IConfigurationService>(); 
+			var testStart = Convert.ToDateTime(configService.Get(ConfigurationKey.TestStartDate, "01/01/2016"));
+			var testEnd = Convert.ToDateTime(configService.Get(ConfigurationKey.TestEndDate, "31/12/2016"));
+			var radius = Convert.ToDouble(configService.Get(ConfigurationKey.ModelEvaluatorRadius, "0.001"));
 
 			var logger = kernel.Get<ILogger>();
 			logger.debug("Starting Predictor");
 
-			var testStart = new DateTime(2016, 7, 01);
-			var testEnd = new DateTime(2016, 12, 31);
-			var radius = 0.005D;
-
-			logger.info($"Training Model on {trainingStart.ToLongDateString()} to {trainingEnd.ToLongDateString()}"); 
-			logger.info($"Testing Model on {testStart.ToLongDateString()} to {testEnd.ToLongDateString()}");
+			logger.info($"Training Model on { trainingStart.ToLongDateString() } to { trainingEnd.ToLongDateString() }"); 
+			logger.info($"Testing Model on { testStart.ToLongDateString() } to { testEnd.ToLongDateString() }");
+			logger.info($"Model Evaluation on Radius { radius }");
 
 			var evaluation = kernel.Get<IModelEvaluation>();
 			evaluation.SetUp(); 
-			var accuracy = evaluation.Evaluate(testStart, testEnd, radius);
 
-			logger.info($"Accuracy of {accuracy * 100 }% found"); 
+			var accuracy = evaluation.Evaluate(testStart, testEnd, radius);
+			logger.info($"Accuracy of { accuracy * 100 }% found");
+
+			watch.Stop();
+			logger.info($"{ watch.ElapsedMilliseconds } ms."); 
 		}
 
 		/// <summary>
@@ -62,6 +65,10 @@
 		/// <returns>The kernel.</returns>
 		private static IKernel GenerateKernel()
 		{
+			var configService = new ConfigurationService();
+			trainingStart = Convert.ToDateTime(configService.Get(ConfigurationKey.TrainingStartDate, "01/01/2015"));
+			trainingEnd = Convert.ToDateTime(configService.Get(ConfigurationKey.TrainingEndDate, "31/12/2015"));
+
 			IKernel _kernel = new StandardKernel();
 			_kernel.Bind<ILogger>().ToMethod(x => LoggerService.GetInstance());
 			_kernel.Bind<IConfigurationService>().To<ConfigurationService>();
