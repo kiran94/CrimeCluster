@@ -87,7 +87,7 @@
 		// <inheritdoc>
 		public double[] Predict(CrimeType type)
 		{
-			this.logger.info($"Predicting on type {type.ToString()}");
+			this.logger.debug($"Predicting on type {type.ToString()}");
 
 			if (!this.modelLookup.ContainsKey(type))
 			{
@@ -124,7 +124,7 @@
 				return; 
 			}
 
-			this.logger.info($"Adding Incident { incident.ID.ToString() } to cache.");
+			this.logger.debug($"Adding Incident { incident.ID.ToString() } to cache.");
 			if (this.incidentCache.ContainsKey(type))
 			{
 				this.incidentCache[type].Add(incident);
@@ -143,7 +143,7 @@
 		/// <param name="currentEnum">Current enum to generate the Markov Model for.</param>
 		private void GenerateModel(CrimeType currentEnum)
 		{
-			this.logger.info($"Generating Markov Model for {currentEnum.ToString()}");
+			this.logger.debug($"Generating Markov Model for {currentEnum.ToString()}");
 			HashSet<Incident> currentIncidents; 
 
 			// if already in the cache then get the cache, else make the database call. 
