@@ -38,16 +38,6 @@
 		KMeansClusterNumber,
 
 		/// <summary>
-		/// Start Date for Crime Sampling 
-		/// </summary>
-		StartCrimeSamplingDate,
-
-		/// <summary>
-		/// End Date for Crime Sampling
-		/// </summary>
-		EndCrimeSamplingDate,
-
-		/// <summary>
 		/// Minimum raduis for DJ Clustering algorithm to consider a point in a cluster
 		/// </summary>
 		DJClusterRadiusEps,
