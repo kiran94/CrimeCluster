@@ -58,14 +58,24 @@
 			ICollection<Incident> incidents, 
 			List<Cluster> clusters)
 		{
-			if (incidents == null)
+			if (incidents == null || incidents.Count == 0)
 			{
-				throw new InvalidOperationException(nameof(incidents) + " should not be null");
+				var message = nameof(incidents) + " should not be null or empty."; 
+				var e = new InvalidOperationException(message);
+				this.logger.error(message, e);
+
+				this._transitionMatrix = new double[0, 0];
+				return this._transitionMatrix; 
 			}
 
-			if (clusters == null)
+			if (clusters == null || clusters.Count == 0)
 			{
-				throw new InvalidOperationException(nameof(clusters) + " should not be null");
+				var message = nameof(clusters) + " should not be null or empty.";
+				var e = new InvalidOperationException(message);
+				this.logger.error(message, e); 
+
+				this._transitionMatrix = new double[0, 0];
+				return this._transitionMatrix;
 			}
 
 			var clustersFound = new Queue<int>();
@@ -99,7 +109,7 @@
 				var message = "Called predict when model was not generated."; 
 				var e = new InvalidOperationException(message);
 				this.logger.error(message, e);
-				throw e; 
+				return 0; 
 			}
 
 			this.logger.debug($"Predicting for {this.crimeType.GetDescription()}");
@@ -133,7 +143,8 @@
 				var message = "Called get prediction point when model was not generated.";
 				var e = new InvalidOperationException(message);
 				this.logger.error(message, e);
-				throw e;
+
+				return null;
 			}
 
 			if (this.currentState >= this.clusters.Count)
