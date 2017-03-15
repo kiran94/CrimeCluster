@@ -108,7 +108,12 @@
 
 			CrimeType descType = this.crimeTypes[parsedType];
 
-			var relatedIncidents = this.incidentService.getAllForCrimeType(descType);
+			var start = Convert.ToDateTime(configService.Get(ConfigurationKey.TestStartDate, "01/01/2016"));
+			var end = Convert.ToDateTime(configService.Get(ConfigurationKey.TestEndDate, "31/12/2016"));
+
+			var relatedIncidents = this.incidentService
+			                           .getAllForCrimeType(descType)
+			                           .Where(x => x.DateCreated >= start && x.DateCreated <= end);
 
 			List<LocationModel> locations = relatedIncidents
 				.Select(x => new LocationModel(x.Location.Latitude.ToString(), x.Location.Longitude.ToString()))
@@ -142,7 +147,13 @@
 			}
 
 			var descType = this.crimeTypes[parsedType];
-			var incidents = this.incidentService.getAllForCrimeType(descType);
+
+			var start = Convert.ToDateTime(configService.Get(ConfigurationKey.TestStartDate, "01/01/2016"));
+			var end = Convert.ToDateTime(configService.Get(ConfigurationKey.TestEndDate, "31/12/2016"));
+
+			var incidents = this.incidentService
+									   .getAllForCrimeType(descType)
+									   .Where(x => x.DateCreated >= start && x.DateCreated <= end);
 
 			if (incidents == null || incidents.Count() == 0)
 			{
