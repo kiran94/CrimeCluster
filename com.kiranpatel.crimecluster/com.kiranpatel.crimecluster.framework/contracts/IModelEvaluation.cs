@@ -8,6 +8,11 @@
 	public interface IModelEvaluation
 	{
 		/// <summary>
+		/// Sets up the Evaluation by generating the MMM. 
+		/// </summary>
+		void SetUp();
+
+		/// <summary>
 		/// Evaluates the Model by testing the accuracy on the parameter date time range. 
 		/// </summary>
 		/// <returns>An Accuracy value.</returns>
