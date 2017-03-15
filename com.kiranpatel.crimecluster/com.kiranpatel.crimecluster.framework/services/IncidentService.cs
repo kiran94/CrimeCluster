@@ -102,7 +102,7 @@
 		public IQueryable<Incident> getAllForCrimeType(CrimeType type)
 		{
 			return this.repository.Query<Incident>()
-				       .Where(x => x.CrimeType.Equals(type.GetDescription()))
+				       .Where(x => x.CrimeType.Equals(type.ToString()))
 				       .OrderBy(x => x.DateCreated)
 				       .AsQueryable(); 
 		}
