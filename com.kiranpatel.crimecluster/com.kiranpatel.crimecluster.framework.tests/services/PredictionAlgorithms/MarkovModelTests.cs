@@ -32,33 +32,39 @@
 		}
 
 		/// <summary>
-		/// Ensures when generating transition matrix and incident is passed as null, an exception is thrown
+		/// Ensures when generating transition matrix and incident is passed as null, error is logged.
 		/// </summary>
 		[Test]
 		public void generateTransitionMatrix_NullIncident_ThrowException()
 		{
+			this.logger.Setup(x => x.error("incidents should not be null or empty.", It.IsAny<InvalidOperationException>()))
+			    .Verifiable(); 
+			
 			ICollection<Incident> incidents = null;
 			List<Cluster> clusters = new List<Cluster>();
 
-			Assert.Throws<InvalidOperationException>(delegate
-			{
-				this.GetInstance().generateTransitionMatrix(incidents, clusters);
-			}); 
+			var result = this.GetInstance().generateTransitionMatrix(incidents, clusters);
+
+			CollectionAssert.IsEmpty(result); 
+			this.logger.VerifyAll(); 
 		}
 
 		/// <summary>
-		/// Ensures when the clusters passed is null, an exception is thrown.
+		/// Ensures when the clusters passed is null, error is logged. 
 		/// </summary>
 		[Test]
-		public void generateTransitionMatrix_NullClusters_ThrowException()
+		public void generateTransitionMatrix_NullClusters_ErrorLogged()
 		{
-			ICollection<Incident> incidents = new List<Incident>();
+			this.logger.Setup(x => x.error("clusters should not be null or empty.", It.IsAny<InvalidOperationException>()))
+				.Verifiable();
+
+			ICollection<Incident> incidents = new List<Incident>() { new Incident() };
 			List<Cluster> clusters = null;
 
-			Assert.Throws<InvalidOperationException>(delegate
-			{
-				this.GetInstance().generateTransitionMatrix(incidents, clusters);
-			});
+			var result = this.GetInstance().generateTransitionMatrix(incidents, clusters);
+
+			CollectionAssert.IsEmpty(result);
+			this.logger.Verify(x => x.error("clusters should not be null or empty.", It.IsAny<InvalidOperationException>()), Times.Once);
 		}
 
 		/// <summary>
@@ -155,7 +161,9 @@
 			clusters.Add(new Cluster(0, rawCluster1));
 			clusters.Add(new Cluster(1, rawCluster2));
 
-			this.GetInstance().generateTransitionMatrix(incidents, clusters);
+			var result = this.GetInstance().generateTransitionMatrix(incidents, clusters);
+			Assert.IsNull(result); 
+
 			this.logger.Verify(x => x.error("No Points were found in Clusters", It.IsAny<InvalidOperationException>()), Times.Once); 
 		}
 
@@ -221,11 +229,13 @@
 		[Test]
 		public void predict_ModelNotGenerated_InvalidOperationException()
 		{
+			this.logger.Setup(x => x.warn("Called predict when model was not generated.")).Verifiable(); 
 			var model = this.GetInstance(); 
-			Assert.Throws<InvalidOperationException>(delegate 
-			{
-				model.predict();	
-			});
+
+			var result = model.predict();
+			Assert.AreEqual(0, result);
+
+			this.logger.VerifyAll(); 
 		}
 
 		/// <summary>
@@ -284,8 +294,8 @@
 			var predictionPoint = model.getPredictionPoint();
 
 			Assert.AreEqual(1, state);
-			Assert.That(predictionPoint[0], Is.EqualTo(43.25D).Within(PRECISION));
-			Assert.That(predictionPoint[1], Is.EqualTo(14.16667D).Within(PRECISION));
+			Assert.That(predictionPoint[0], Is.EqualTo(21.806D).Within(PRECISION));
+			Assert.That(predictionPoint[1], Is.EqualTo(7.1428D).Within(PRECISION));
 		}
 
 		/// <summary>
@@ -294,12 +304,14 @@
 		[Test]
 		public void getPredictionPoint_ModelNotGenerated_InvalidOperationException()
 		{
+			this.logger.Setup(x => x.error("Called get prediction point when model was not generated.", It.IsAny<InvalidOperationException>()))
+			    .Verifiable();
+			
 			var model = this.GetInstance(); 
+			var result = model.getPredictionPoint();
+			Assert.IsNull(result);
 
-			Assert.Throws<InvalidOperationException>(delegate 
-			{
-				model.getPredictionPoint();	
-			});
+			this.logger.VerifyAll(); 
 		}
 
 		/// <summary>

@@ -99,7 +99,7 @@
 		[Test]
 		public void parse_CorrectValues_ParsedIncident()
 		{
-			String[] rows = { "ID", "2009-01", "Reported", "Falls Within", "1.0", "2.0", "Location", "LSOA Code", "LSOA Name", "Crime Type", "Outcome", "context" };
+			String[] rows = { "ID", "2009-01", "Reported", "Falls Within", "1.0", "2.0", "Location", "LSOA Code", "LSOA Name", "Other crime", "Outcome", "context" };
 
 			var parser = this.GetInstance();
 			parser.grading = new IncidentGrading() { GradeValue = null, Description = "Imported" }; 
@@ -113,7 +113,7 @@
 			StringAssert.AreEqualIgnoringCase("Location", result.LocationDesc);
 			StringAssert.AreEqualIgnoringCase("LSOA Code", result.LSOACode);
 			StringAssert.AreEqualIgnoringCase("LSOA Name", result.LSOAName);
-			StringAssert.AreEqualIgnoringCase("Crime Type", result.CrimeType);
+			StringAssert.AreEqualIgnoringCase(CrimeType.OtherCrime.ToString(), result.CrimeType);
 			StringAssert.AreEqualIgnoringCase("Outcome", result.LastOutcomeCategory);
 			StringAssert.AreEqualIgnoringCase("context", result.Context);
 

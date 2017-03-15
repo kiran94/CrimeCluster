@@ -200,7 +200,7 @@ namespace com.kiranpatel.crimecluster.framework.tests
 				Assert.AreEqual(new DateTime(2016, 07, 01), resultIncident.DateCreated);
 				Assert.AreEqual(Double.Parse("51.517372"), resultIncident.Location.Latitude); 
 				Assert.AreEqual(Double.Parse("-0.113767"), resultIncident.Location.Longitude);
-				Assert.AreEqual("Bicycle theft", resultIncident.CrimeType);
+				Assert.AreEqual(CrimeType.BicycleTheft.ToString(), resultIncident.CrimeType);
 				Assert.AreEqual("Under investigation", resultIncident.LastOutcomeCategory); 
 			}
 		}

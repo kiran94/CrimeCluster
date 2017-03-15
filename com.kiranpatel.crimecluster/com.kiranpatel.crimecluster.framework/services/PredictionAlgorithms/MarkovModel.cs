@@ -106,9 +106,8 @@
 		{
 			if (!this.modelGenerated)
 			{
-				//var message = "Called predict when model was not generated."; 
-				//var e = new InvalidOperationException(message);
-				//this.logger.warn(message, e);
+				var message = "Called predict when model was not generated."; 
+				this.logger.warn(message);
 				return 0; 
 			}
 
@@ -140,9 +139,9 @@
 		{
 			if (!this.modelGenerated)
 			{
-				//var message = "Called get prediction point when model was not generated.";
-				//var e = new InvalidOperationException(message);
-				//this.logger.error(message, e);
+				var message = "Called get prediction point when model was not generated.";
+				var e = new InvalidOperationException(message);
+				this.logger.error(message, e);
 
 				return null;
 			}

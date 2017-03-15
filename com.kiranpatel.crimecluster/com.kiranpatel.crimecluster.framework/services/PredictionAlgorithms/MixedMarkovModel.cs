@@ -14,6 +14,9 @@
 		/// </summary>
 		private readonly Dictionary<CrimeType, MarkovModel> modelLookup;
 
+		/// <summary>
+		/// The incident cache.
+		/// </summary>
 		private Dictionary<CrimeType, HashSet<Incident>> incidentCache; 
 
 		/// <summary>

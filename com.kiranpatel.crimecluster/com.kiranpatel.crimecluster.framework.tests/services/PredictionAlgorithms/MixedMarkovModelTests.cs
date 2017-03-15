@@ -81,8 +81,6 @@
 			this.GetInstance().AddIncident(incident);
 
 			this.clusteringService.Verify(x => x.Learn(It.IsAny<double[][]>()), Times.Once);
-			this.incidentService.Verify(x => x.Save(incident), Times.Once);
-			this.incidentService.Verify(x => x.Flush(), Times.Once); 
 		}
 
 		/// <summary>
