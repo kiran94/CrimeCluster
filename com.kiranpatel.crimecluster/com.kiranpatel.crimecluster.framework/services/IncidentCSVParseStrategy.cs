@@ -19,7 +19,7 @@
 		/// <summary>
 		/// The date regex validation 
 		/// </summary>
-		private String dateRegex;
+		private string dateRegex;
 
 		/// <summary>
 		/// The culture for the date
@@ -90,7 +90,7 @@
 					LocationDesc = row[6],
 					LSOACode = row[7],
 					LSOAName = row[8],
-					CrimeType = row[9],
+					CrimeType = validateCrimeType(row[9]).ToString(),
 					LastOutcomeCategory = row[10],
 					Context = row[11],
 					Location = new Location() { DateLogged = extractedDate, Latitude = extractedLatitude, Longitude = extractedLongitude },
@@ -135,6 +135,47 @@
 		private bool validateLongitudeOrLatitude(String locationVal, out double toConvert)
 		{
 			return Double.TryParse(locationVal, out toConvert); 
+		}
+
+		/// <summary>
+		/// Validates the type of the crime to an enumeration.
+		/// </summary>
+		/// <returns>The crime type.</returns>
+		/// <param name="crimeType">Crime type.</param>
+		private CrimeType validateCrimeType(string crimeType)
+		{
+			if (string.IsNullOrEmpty(crimeType))
+			{
+				this.logger.warn(nameof(crimeType) + " was null or empty");
+				return default(CrimeType); 
+			}
+
+			var lookup = new Dictionary<string, CrimeType>()
+			{
+				{"Anti-social behaviour", CrimeType.AntiSocialBehaviour },
+				{"Bicycle theft", CrimeType.BicycleTheft },
+				{"Burglary", CrimeType.Burglary},
+				{"Criminal damage and arson", CrimeType.CriminalDamageandArson},
+				{"Drugs", CrimeType.Drugs},
+				{"Other crime", CrimeType.OtherCrime},
+				{"Other theft", CrimeType.OtherTheft},
+				{"Possession of weapons", CrimeType.PossessionOfWeapons},
+				{"Public disorder and weapons", CrimeType.PublicDisorderAndWeapons},
+				{"Public order", CrimeType.PublicOrder},
+				{"Robbery", CrimeType.Robbery},
+				{"Shoplifting", CrimeType.Shoplifting},
+				{"Theft from the person", CrimeType.TheftFromThePerson},
+				{"Vehicle crime", CrimeType.VehicleCrime},
+				{"Violence and sexual offences", CrimeType.ViolenceAndSexualOffences},
+				{"Violent crime", CrimeType.ViolentCrime},
+			};
+
+			if (lookup.ContainsKey(crimeType))
+			{
+				return lookup[crimeType];
+			}
+
+			return default(CrimeType); 
 		}
 	}
 }
