@@ -78,7 +78,7 @@
 				int errors = 0; 
 				while (this.reader.ReadNextRecord())
 				{
-					String[] row = new String[headers.Length];
+					string[] row = new string[headers.Length];
 
 					for (int i = 0; i < headers.Length; i++)
 					{
