@@ -50,6 +50,31 @@
 		/// <summary>
 		/// Google Maps Key 
 		/// </summary>
-		GoogleMapsKey
+		GoogleMapsKey,
+
+		/// <summary>
+		/// The model evaluator radius.
+		/// </summary>
+		ModelEvaluatorRadius,
+
+		/// <summary>
+		/// Training data set start date.
+		/// </summary>
+		TrainingStartDate,
+
+		/// <summary>
+		/// Training data set end date.
+		/// </summary>
+		TrainingEndDate,
+
+		/// <summary>
+		/// Test data set start date.
+		/// </summary>
+		TestStartDate,
+
+		/// <summary>
+		/// Test data set end date.
+		/// </summary>
+		TestEndDate,
 	}
 }
