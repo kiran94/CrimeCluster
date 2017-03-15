@@ -14,6 +14,8 @@
 		/// </summary>
 		private readonly Dictionary<CrimeType, MarkovModel> modelLookup;
 
+		private Dictionary<CrimeType, HashSet<Incident>> incidentCache; 
+
 		/// <summary>
 		/// The clustering service.
 		/// </summary>
@@ -55,6 +57,7 @@
 			DateTime end)
 		{
 			this.modelLookup = new Dictionary<CrimeType, MarkovModel>();
+			this.incidentCache = new Dictionary<CrimeType, HashSet<Incident>>(); 
 
 			this.clusteringService = clusteringService;
 			this.incidentService = incidentService; 
@@ -97,7 +100,11 @@
 			this.modelLookup[type].predict();
 			var predictionPoint = this.modelLookup[type].getPredictionPoint();
 
-			this.logger.debug($"Generated Prediction Point, Lat: {predictionPoint[0]}, Long: {predictionPoint[1]}");
+			if (predictionPoint != null && predictionPoint.Count() < 2)
+			{
+				this.logger.debug($"Generated Prediction Point, Lat: {predictionPoint[0]}, Long: {predictionPoint[1]}");
+			}
+
 			return predictionPoint; 
 		}
 
@@ -117,9 +124,15 @@
 				return; 
 			}
 
-			this.logger.info($"Adding Incident { incident.ID.ToString() }");
-			this.incidentService.Save(incident);
-			this.incidentService.Flush();
+			this.logger.info($"Adding Incident { incident.ID.ToString() } to cache.");
+			if (this.incidentCache.ContainsKey(type))
+			{
+				this.incidentCache[type].Add(incident);
+			}
+			else
+			{
+				this.logger.warn($"attempted to add incident with no model generated: {type}");
+			}
 
 			this.GenerateModel(type); 
 		}
@@ -131,11 +144,22 @@
 		private void GenerateModel(CrimeType currentEnum)
 		{
 			this.logger.info($"Generating Markov Model for {currentEnum.ToString()}");
+			HashSet<Incident> currentIncidents; 
 
-			var currentIncidents = this.incidentService.getAllForCrimeType(currentEnum)
-				.Where(x => x.DateCreated >= this.start && x.DateCreated <= this.end)
-				.ToHashSet();
+			// if already in the cache then get the cache, else make the database call. 
+			if (this.incidentCache.ContainsKey(currentEnum))
+			{
+				currentIncidents = this.incidentCache[currentEnum];
+			}
+			else
+			{
+				currentIncidents = this.incidentService.getAllForCrimeType(currentEnum)
+				                       .Where(x => x.DateCreated >= this.start && x.DateCreated <= this.end)
+				                       .ToHashSet();
 
+				this.incidentCache[currentEnum] = currentIncidents;
+			}
+					
 			double[][] dataSet = currentIncidents
 				.Select(x => new double[] { x.Location.Latitude.Value, x.Location.Longitude.Value })
 				.ToArray();
