@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.ComponentModel;
-	using System.Reflection;
 
 	/// <summary>
 	/// Extensions for <see cref="CrimeType"/> enums

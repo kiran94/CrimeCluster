@@ -62,6 +62,12 @@
 		PossessionOfWeapons,
 
 		/// <summary>
+		/// Represents the public disorder and weapons.
+		/// </summary>
+		[Description("Public disorder and weapons")]
+		PublicDisorderAndWeapons,
+
+		/// <summary>
 		/// Represents public order crime.
 		/// </summary>
 		[Description("Public order")]
@@ -96,5 +102,11 @@
 		/// </summary>
 		[Description("Violence and sexual offences")]
 		ViolenceAndSexualOffences,
+
+		/// <summary>
+		/// Represents Violent crime.
+		/// </summary>
+		[Description("Violent crime")]
+		ViolentCrime
 	}
 }
