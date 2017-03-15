@@ -16,7 +16,7 @@
 		/// <summary>
 		/// The kernel.
 		/// </summary>
-		private static IKernel kernel = GenerateKernel();
+		private static IKernel kernel;
 
 		/// <summary>
 		/// The training data start date.
@@ -34,23 +34,26 @@
 		/// <param name="args">The command-line arguments.</param>
 		public static void Main(string[] args)
 		{
+			trainingStart = new DateTime(2016, 01, 01);
+			trainingEnd = new DateTime(2016, 6, 30);
+
+			kernel = GenerateKernel();
+
 			var logger = kernel.Get<ILogger>();
 			logger.debug("Starting Predictor");
 
-			trainingStart = new DateTime(2015, 01, 01);
-			trainingEnd = new DateTime(2015, 12, 31);
-
-			var testStart = new DateTime(2016, 01, 01);
+			var testStart = new DateTime(2016, 7, 01);
 			var testEnd = new DateTime(2016, 12, 31);
-			var radius = 10D;
+			var radius = 0.005D;
 
 			logger.info($"Training Model on {trainingStart.ToLongDateString()} to {trainingEnd.ToLongDateString()}"); 
 			logger.info($"Testing Model on {testStart.ToLongDateString()} to {testEnd.ToLongDateString()}");
 
 			var evaluation = kernel.Get<IModelEvaluation>();
+			evaluation.SetUp(); 
 			var accuracy = evaluation.Evaluate(testStart, testEnd, radius);
 
-			logger.info($"Accuracy of {accuracy}% found"); 
+			logger.info($"Accuracy of {accuracy * 100 }% found"); 
 		}
 
 		/// <summary>
