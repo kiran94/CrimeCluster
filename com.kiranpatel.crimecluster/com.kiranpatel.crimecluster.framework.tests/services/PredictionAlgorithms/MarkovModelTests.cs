@@ -37,8 +37,7 @@
 		[Test]
 		public void generateTransitionMatrix_NullIncident_ThrowException()
 		{
-			this.logger.Setup(x => x.error("incidents should not be null or empty.", It.IsAny<InvalidOperationException>()))
-			    .Verifiable(); 
+			this.logger.Setup(x => x.debug("incidents should not be null or empty for AntiSocialBehaviour")).Verifiable(); 
 			
 			ICollection<Incident> incidents = null;
 			List<Cluster> clusters = new List<Cluster>();
@@ -55,8 +54,7 @@
 		[Test]
 		public void generateTransitionMatrix_NullClusters_ErrorLogged()
 		{
-			this.logger.Setup(x => x.error("clusters should not be null or empty.", It.IsAny<InvalidOperationException>()))
-				.Verifiable();
+			this.logger.Setup(x => x.debug("clusters should not be null or empty for AntiSocialBehaviour")).Verifiable();
 
 			ICollection<Incident> incidents = new List<Incident>() { new Incident() };
 			List<Cluster> clusters = null;
@@ -64,7 +62,7 @@
 			var result = this.GetInstance().generateTransitionMatrix(incidents, clusters);
 
 			CollectionAssert.IsEmpty(result);
-			this.logger.Verify(x => x.error("clusters should not be null or empty.", It.IsAny<InvalidOperationException>()), Times.Once);
+			this.logger.VerifyAll();
 		}
 
 		/// <summary>
@@ -229,12 +227,12 @@
 		[Test]
 		public void predict_ModelNotGenerated_InvalidOperationException()
 		{
-			this.logger.Setup(x => x.warn("Called predict when model was not generated.")).Verifiable(); 
+			this.logger.Setup(x => x.debug("Called predict when model was not generated for AntiSocialBehaviour")).Verifiable(); 
 			var model = this.GetInstance(); 
 
 			var result = model.predict();
-			Assert.AreEqual(0, result);
 
+			Assert.AreEqual(0, result);
 			this.logger.VerifyAll(); 
 		}
 
@@ -294,8 +292,8 @@
 			var predictionPoint = model.getPredictionPoint();
 
 			Assert.AreEqual(1, state);
-			Assert.That(predictionPoint[0], Is.EqualTo(21.806D).Within(PRECISION));
-			Assert.That(predictionPoint[1], Is.EqualTo(7.1428D).Within(PRECISION));
+			Assert.That(predictionPoint[0], Is.EqualTo(43.6134D).Within(PRECISION));
+			Assert.That(predictionPoint[1], Is.EqualTo(14.2857D).Within(PRECISION));
 		}
 
 		/// <summary>
@@ -304,13 +302,12 @@
 		[Test]
 		public void getPredictionPoint_ModelNotGenerated_InvalidOperationException()
 		{
-			this.logger.Setup(x => x.error("Called get prediction point when model was not generated.", It.IsAny<InvalidOperationException>()))
-			    .Verifiable();
+			this.logger.Setup(x => x.debug("Called get prediction point when model was not generated for AntiSocialBehaviour")).Verifiable();
 			
 			var model = this.GetInstance(); 
 			var result = model.getPredictionPoint();
-			Assert.IsNull(result);
 
+			Assert.IsNull(result);
 			this.logger.VerifyAll(); 
 		}
 

@@ -59,23 +59,15 @@
 			List<Cluster> clusters)
 		{
 			if (incidents == null || incidents.Count == 0)
-			{
-				var message = nameof(incidents) + " should not be null or empty."; 
-				var e = new InvalidOperationException(message);
-				this.logger.error(message, e);
-
-				this._transitionMatrix = new double[0, 0];
-				return this._transitionMatrix; 
+			{	
+				this.logger.debug($"{nameof(incidents)} should not be null or empty for {this.crimeType.ToString()}");
+				return this._transitionMatrix = new double[0, 0];
 			}
 
 			if (clusters == null || clusters.Count == 0)
 			{
-				var message = nameof(clusters) + " should not be null or empty.";
-				var e = new InvalidOperationException(message);
-				this.logger.error(message, e); 
-
-				this._transitionMatrix = new double[0, 0];
-				return this._transitionMatrix;
+				this.logger.debug($"{nameof(clusters)} should not be null or empty for {this.crimeType.ToString()}"); 
+				return this._transitionMatrix = new double[0, 0];
 			}
 
 			var clustersFound = new Queue<int>();
@@ -92,9 +84,7 @@
 				}
 			}
 
-			this._transitionMatrix = this.generateTransitionMatrix(
-				clustersFound, 
-				clusters.Count);
+			this._transitionMatrix = this.generateTransitionMatrix(clustersFound, clusters.Count);
 			
 			this.clusters = clusters;
 			this.modelGenerated = true; 
@@ -106,8 +96,8 @@
 		{
 			if (!this.modelGenerated)
 			{
-				var message = "Called predict when model was not generated."; 
-				this.logger.warn(message);
+				var message = $"Called predict when model was not generated for { this.crimeType.ToString() }"; 
+				this.logger.debug(message);
 				return 0; 
 			}
 
@@ -138,11 +128,8 @@
 		public double[] getPredictionPoint()
 		{
 			if (!this.modelGenerated)
-			{
-				var message = "Called get prediction point when model was not generated.";
-				var e = new InvalidOperationException(message);
-				this.logger.error(message, e);
-
+			{				
+				this.logger.debug($"Called get prediction point when model was not generated for { this.crimeType.ToString() }");
 				return null;
 			}
 
@@ -168,7 +155,6 @@
 			{
 				Exception e = new InvalidOperationException();
 				this.logger.error("No Points were found in Clusters", e);
-				//throw e;
 				return null; 
 			}
 
