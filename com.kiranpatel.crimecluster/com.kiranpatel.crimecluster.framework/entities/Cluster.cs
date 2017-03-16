@@ -3,6 +3,8 @@
 	using System;
 	using System.Linq;
 	using System.Collections.Generic;
+	using KdTree;
+	using KdTree.Math;
 
 	/// <summary>
 	/// Represents a Cluster
@@ -19,7 +21,7 @@
 		/// Gets the points.
 		/// </summary>
 		/// <value>The points.</value>
-		public LocationBinaryTree Points { get; private set; }
+		public KdTree<double, string> Points { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.Cluster"/> class.
@@ -29,23 +31,28 @@
 		public Cluster(int label, HashSet<double[]> cluster)
 		{
 			this.Label = label;
-			this.Points = new LocationBinaryTree(); 
+			this.Points = new KdTree<double, string>(2, new DoubleMath()); 
 
 			foreach (var currentPoint in cluster)
-			{
-				this.Points.Add(currentPoint[0], currentPoint[1]); 	
+			{				
+				this.Points.Add(currentPoint, label.ToString()); 
 			}
+
+			this.Points.Balance();
 		}
 
 		/// <summary>
-		/// Checks wheather the passed point is contained in the cluster.
+		/// Checks if the passed point is contained in the cluster.
 		/// </summary>
 		/// <returns>flag indicating if the cluster contains the point.</returns>
 		/// <param name="latitude">Latitude.</param>
 		/// <param name="longitude">Longitude.</param>
 		public bool Contains(double latitude, double longitude)
 		{
-			return this.Points.Search(latitude, longitude); 
+			var nearest = this.Points.GetNearestNeighbours(new double[] { latitude, longitude }, 1)[0];
+
+			return ((Math.Abs(latitude - nearest.Point[0]) < double.Epsilon)
+					&& (Math.Abs(longitude - nearest.Point[1]) < double.Epsilon));				
 		}
 
 		/// <summary>
@@ -54,7 +61,7 @@
 		/// <returns>The average point.</returns>
 		public double[] GetAveragePoint()
 		{
-			return this.Points.averagePoint();
+			return this.Points.Average(); 
 		}
 	}
 }
