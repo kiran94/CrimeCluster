@@ -21,5 +21,12 @@
 		/// </summary>
 		/// <param name="incident">Incident.</param>
 		void AddIncident(Incident incident);
+
+		/// <summary>
+		/// Checks whether the model for the parameter crime type has been genereted. 
+		/// </summary>
+		/// <returns><c>true</c>, if generated, <c>false</c> otherwise.</returns>
+		/// <param name="type">Type.</param>
+		bool IsGenerated(CrimeType type);
 	}
 }

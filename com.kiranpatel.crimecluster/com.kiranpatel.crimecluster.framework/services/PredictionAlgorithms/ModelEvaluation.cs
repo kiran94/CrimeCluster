@@ -1,8 +1,10 @@
 ﻿namespace com.kiranpatel.crimecluster.framework
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
-	using System.Text.RegularExpressions;
+	using KdTree;
+	using KdTree.Math;
 
 	/// <summary>
 	/// Evaluator for Model.
@@ -54,67 +56,91 @@
 		{		
 			this.logger.info("Evaluating the Model.");	
 
+			IList<Incident> testSet = this.incidentService.getForDateRange(testStart, testEnd).OrderBy(x => x.DateCreated).ToList();
+			IKdTree<double, string> kdTree = this.generateKdTree(testSet);
+
 			double correct = 0;
 			double error = 0;
 
-			// Get the incidents for the date range of the test data set and order them. 
-			var testIncidents = this.incidentService.getForDateRange(testStart, testEnd).OrderBy(x => x.DateCreated).ToList();
-
-			// Go through each incident in the test incidents
 			double countDone = 0;
-			double countToDo = testIncidents.Count;
-			foreach (Incident currentIncident in testIncidents)
-			{
-				//Parse the current incident crime type to an enumeration.
+			double countToDo = testSet.Count;
+
+			foreach (var currentIncident in testSet)
+			{				
 				CrimeType currentType = default(CrimeType);
 				if (!Enum.TryParse(currentIncident.CrimeType, out currentType))
 				{
-					//string message = $"crime type {currentIncident.CrimeType} could not be parsed. skipping.";
-					//var e = new InvalidOperationException(message);
-					//this.logger.error(message, e);
-
+					this.logger.debug($"Could not parse crime type {currentIncident.CrimeType}"); 
 					continue;
 				}
-			
-				//Create a prediction point
+
+				if (!this.mixedMarkovModel.IsGenerated(currentType))
+				{
+					this.logger.debug($"model was not generated for {currentType}");
+					continue; 
+				}
+
 				var predictedPoint = this.mixedMarkovModel.Predict(currentType);
 				if (predictedPoint == null)
 				{
-					//this.logger.warn("predicted point was returned as null"); 	
+					this.logger.debug($"predicted point was null for {currentIncident.ID}");
 					continue;
 				}
 
-				// For each point in the test incident set, check if the predicted point is within range (R) of any test point. 
-				foreach (Incident currentCheck in testIncidents)
-				{
-					var currentPoint = new double[] { currentCheck.Location.Latitude.Value, currentCheck.Location.Longitude.Value };
-					var difference = this.distanceMeasure.measure(currentPoint, predictedPoint);
-					//this.logger.info("Difference: " + difference);
-					if (difference < Radius)
-					{
-						this.logger.debug($"Match found between predicted { predictedPoint[0] + "," + predictedPoint[1] } and Incident { currentCheck.ID }");
-						correct++;
-						break;
-					}
-					else
-					{
-						error++; 
-					}
-				}
+				var nearest = kdTree.GetNearestNeighbours(predictedPoint, 1);
 
-				//Adds an incident to the MMM to update the model. 
+				if (this.distanceMeasure.measure(nearest.First().Point, predictedPoint) <= Radius)
+				{
+					this.logger.debug($"Match found between predicted { predictedPoint[0] } , { predictedPoint[1] } and Incident { nearest.First().Value }");
+					correct++;				
+				}
+				else
+				{
+					error++; 
+				}
+												                        			
 				this.mixedMarkovModel.AddIncident(currentIncident);
-				countDone++;
-
-				double percentDone = countDone / countToDo;
-
-				if (Math.Abs((countDone % 500)) < double.Epsilon)
-				{
-					this.logger.info($"{ Math.Round(percentDone, 2) }% done");
-				}
+				this.progressCheck(++countDone, countToDo); 
 			}
 
-			return correct / (correct+error); 
+			return correct / (correct + error); 
+		}
+
+		/// <summary>
+		/// Generates a KD Tree for the test incidents.
+		/// </summary>
+		/// <returns>The kd tree of test incidents.</returns>
+		/// <param name="incidents">Test Incidents.</param>
+		private IKdTree<double, string> generateKdTree(IList<Incident> incidents)
+		{
+			var tree = new KdTree<double, string>(2, new DoubleMath());
+
+			foreach (var currentIncident in incidents)
+			{
+				tree.Add(
+					new double[] { currentIncident.Location.Latitude.Value, currentIncident.Location.Longitude.Value }, 
+					currentIncident.ID.ToString()); 
+			}
+
+			tree.Balance(); 
+			return tree; 
+		}
+
+		/// <summary>
+		/// Checks if progress should be logged, logged if so. 
+		/// </summary>
+		/// <param name="countDone">Count done.</param>
+		/// <param name="countToDo">Count to do.</param>
+		private void progressCheck(double countDone, double countToDo)
+		{
+			const int interval = 500;
+			const int percentDp = 2; 
+			double percentDone = countDone / countToDo;
+
+			if (Math.Abs((countDone % interval)) < double.Epsilon)
+			{
+				this.logger.info($"{ Math.Round(percentDone, percentDp) * 100 }% done");
+			}
 		}
 	}
 }

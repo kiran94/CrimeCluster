@@ -140,6 +140,12 @@
 			this.GenerateModel(type); 
 		}
 
+		// <inheritdoc>
+		public bool IsGenerated(CrimeType type)
+		{
+			return this.modelLookup.ContainsKey(type); 
+		}
+
 		/// <summary>
 		/// Generates a Markov Model for the passed Crime Type and sets them to the internal dictionary.
 		/// </summary>
