@@ -95,21 +95,18 @@
 		public int predict()
 		{
 			if (!this.modelGenerated)
-			{
-				var message = $"Called predict when model was not generated for { this.crimeType.ToString() }"; 
-				this.logger.debug(message);
+			{				
+				this.logger.debug($"Called predict when model was not generated for { this.crimeType.ToString() }");
 				return 0; 
 			}
 
 			this.logger.debug($"Predicting for {this.crimeType.GetDescription()}");
-
 			int nextState = this.currentState;
 			double maxValue = Int32.MinValue;
 
 			for (int i = 0; i < this._transitionMatrix.GetLength(1); i++)
 			{
 				double currentValue = this._transitionMatrix[this.currentState, i];
-
 				if (currentValue > maxValue)
 				{
 					maxValue = currentValue;

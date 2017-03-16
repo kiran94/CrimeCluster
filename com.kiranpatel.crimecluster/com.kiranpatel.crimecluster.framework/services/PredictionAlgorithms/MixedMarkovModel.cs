@@ -134,7 +134,7 @@
 			}
 			else
 			{
-				this.logger.warn($"attempted to add incident with no model generated: {type}");
+				this.logger.warn($"Attempted to add incident with no model generated: {type}");
 			}
 
 			this.GenerateModel(type); 
@@ -147,15 +147,14 @@
 		}
 
 		/// <summary>
-		/// Generates a Markov Model for the passed Crime Type and sets them to the internal dictionary.
+		/// Generates a Markov Model for the passed Crime Type and sets them to the internal dictionary or updates an existing entry with a cache.
 		/// </summary>
 		/// <param name="currentEnum">Current enum to generate the Markov Model for.</param>
 		private void GenerateModel(CrimeType currentEnum)
 		{
 			this.logger.debug($"Generating Markov Model for {currentEnum.ToString()}");
-			HashSet<Incident> currentIncidents; 
 
-			// if already in the cache then get the cache, else make the database call. 
+			HashSet<Incident> currentIncidents;
 			if (this.incidentCache.ContainsKey(currentEnum))
 			{
 				currentIncidents = this.incidentCache[currentEnum];
