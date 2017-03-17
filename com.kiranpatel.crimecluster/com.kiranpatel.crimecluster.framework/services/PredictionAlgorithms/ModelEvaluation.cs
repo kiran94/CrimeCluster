@@ -57,7 +57,7 @@
 			this.logger.info("Evaluating the Model.");	
 
 			IList<Incident> testSet = this.incidentService.getForDateRange(testStart, testEnd).OrderBy(x => x.DateCreated).ToList();
-			IKdTree<double, string> kdTree = this.generateKdTree(testSet);
+			IKdTreeWrapper<double, string> kdTree = this.generateKdTree(testSet);
 
 			double correct = 0;
 			double error = 0;
@@ -87,11 +87,11 @@
 					continue;
 				}
 
-				var nearest = kdTree.GetNearestNeighbours(predictedPoint, 1);
+				var nearest = kdTree.GetNearestNeighbours(predictedPoint);
 
-				if (this.distanceMeasure.measure(nearest.First().Point, predictedPoint) <= Radius)
+				if (this.distanceMeasure.measure(nearest, predictedPoint) <= Radius)
 				{
-					this.logger.debug($"Match found between predicted { predictedPoint[0] } , { predictedPoint[1] } and Incident { nearest.First().Value }");
+					this.logger.debug($"Match found between predicted { predictedPoint[0] } , { predictedPoint[1] } and Incident { nearest }");
 					correct++;				
 				}
 				else
@@ -111,9 +111,9 @@
 		/// </summary>
 		/// <returns>The kd tree of test incidents.</returns>
 		/// <param name="incidents">Test Incidents.</param>
-		private IKdTree<double, string> generateKdTree(IList<Incident> incidents)
+		private IKdTreeWrapper<double, string> generateKdTree(IList<Incident> incidents)
 		{
-			var tree = new KdTree<double, string>(2, new DoubleMath());
+			var tree = new KdTreeWrapper<double, string>(new DoubleMath());
 
 			foreach (var currentIncident in incidents)
 			{

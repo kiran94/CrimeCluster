@@ -12,7 +12,7 @@
 		/// Computes the average latitude and longitude for a given kd-tree.
 		/// </summary>
 		/// <param name="value">Value.</param>
-		public static double[] Average(this KdTree<double, string> value)
+		public static double[] Average(this IKdTreeWrapper<double, string> value)
 		{
 			var enumerator = value.GetEnumerator();
 			double latitude = 0;
@@ -25,8 +25,8 @@
 				longitude += current[1];
 			}
 
-			latitude /= value.Count;
-			longitude /= value.Count;
+			latitude /= value.Count();
+			longitude /= value.Count();
 
 			return new double[] { latitude*2, longitude*2 };
 		}

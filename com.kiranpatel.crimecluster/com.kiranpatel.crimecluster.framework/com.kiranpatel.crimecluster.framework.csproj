@@ -114,6 +114,8 @@
     <Compile Include="contracts\IModelEvaluation.cs" />
     <Compile Include="services\PredictionAlgorithms\ModelEvaluation.cs" />
     <Compile Include="extensions\KdTreeExtensions.cs" />
+    <Compile Include="contracts\IKdTreeWrapper.cs" />
+    <Compile Include="structures\KdTreeWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="contracts\" />

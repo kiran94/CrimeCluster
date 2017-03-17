@@ -21,7 +21,7 @@
 		/// Gets the points.
 		/// </summary>
 		/// <value>The points.</value>
-		public KdTree<double, string> Points { get; private set; }
+		public IKdTreeWrapper<double, string> Points { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:com.kiranpatel.crimecluster.framework.Cluster"/> class.
@@ -31,7 +31,7 @@
 		public Cluster(int label, HashSet<double[]> cluster)
 		{
 			this.Label = label;
-			this.Points = new KdTree<double, string>(2, new DoubleMath()); 
+			this.Points = new KdTreeWrapper<double, string>(new DoubleMath()); 
 
 			foreach (var currentPoint in cluster)
 			{				
@@ -49,10 +49,10 @@
 		/// <param name="longitude">Longitude.</param>
 		public bool Contains(double latitude, double longitude)
 		{
-			var nearest = this.Points.GetNearestNeighbours(new double[] { latitude, longitude }, 1)[0];
+			var nearest = this.Points.GetNearestNeighbours(new double[] { latitude, longitude });
 
-			return ((Math.Abs(latitude - nearest.Point[0]) < double.Epsilon)
-					&& (Math.Abs(longitude - nearest.Point[1]) < double.Epsilon));				
+			return ((Math.Abs(latitude - nearest[0]) < double.Epsilon)
+					&& (Math.Abs(longitude - nearest[1]) < double.Epsilon));				
 		}
 
 		/// <summary>
