@@ -9,13 +9,26 @@
 	public class ConfigurationService : IConfigurationService
 	{
 		// <inheritdoc>
-		public String Get(ConfigurationKey key, String defaultValue)
+		public string Get(ConfigurationKey key, string defaultValue)
 		{
-			return ConfigurationManager.AppSettings[key.ToString()];
+			var val = this.Get(key);
+
+			if (string.IsNullOrEmpty(val))
+			{
+				val = defaultValue; 
+			}
+
+			return val;
 		}
 
 		// <inheritdoc>
-		public String GetConnectionString(String name)
+		public string Get(ConfigurationKey key)
+		{
+			return ConfigurationManager.AppSettings[key.ToString()]; 
+		}
+
+		// <inheritdoc>
+		public string GetConnectionString(string name)
 		{
 			return ConfigurationManager.ConnectionStrings[name].ConnectionString; 
 		}

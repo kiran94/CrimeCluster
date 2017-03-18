@@ -38,9 +38,11 @@
 			kernel = GenerateKernel();
 
 			var configService = kernel.Get<IConfigurationService>(); 
-			var testStart = Convert.ToDateTime(configService.Get(ConfigurationKey.TestStartDate, "01/01/2016"));
-			var testEnd = Convert.ToDateTime(configService.Get(ConfigurationKey.TestEndDate, "31/12/2016"));
-			var radius = Convert.ToDouble(configService.Get(ConfigurationKey.ModelEvaluatorRadius, "0.001"));
+			var testStart = Convert.ToDateTime(configService.Get(ConfigurationKey.TestStartDate));
+			var testEnd = Convert.ToDateTime(configService.Get(ConfigurationKey.TestEndDate));
+			var radius = Convert.ToDouble(configService.Get(ConfigurationKey.ModelEvaluatorRadius));
+
+			if (args.Length >= 1) radius = Convert.ToDouble(args[0]);
 
 			var logger = kernel.Get<ILogger>();
 			logger.debug("Starting Predictor");
@@ -66,8 +68,8 @@
 		private static IKernel GenerateKernel()
 		{
 			var configService = new ConfigurationService();
-			trainingStart = Convert.ToDateTime(configService.Get(ConfigurationKey.TrainingStartDate, "01/01/2015"));
-			trainingEnd = Convert.ToDateTime(configService.Get(ConfigurationKey.TrainingEndDate, "31/12/2015"));
+			trainingStart = Convert.ToDateTime(configService.Get(ConfigurationKey.TrainingStartDate));
+			trainingEnd = Convert.ToDateTime(configService.Get(ConfigurationKey.TrainingEndDate));
 
 			IKernel _kernel = new StandardKernel();
 			_kernel.Bind<ILogger>().ToMethod(x => LoggerService.GetInstance());

@@ -11,13 +11,19 @@ namespace com.kiranpatel.crimecluster.framework
 		/// </summary>
 		/// <param name="key">Config Key</param>
 		/// <param name="defaultValue">Default value.</param>
-		String Get(ConfigurationKey key, String defaultValue);
+		string Get(ConfigurationKey key, string defaultValue);
+
+		/// <summary>
+		/// Gets the specified config value. 
+		/// </summary>
+		/// <param name="key">Key.</param>
+		string Get(ConfigurationKey key); 
 
 		/// <summary>
 		/// Gets the connection string with the associated name
 		/// </summary>
 		/// <returns>The connection string.</returns>
 		/// <param name="name">Name.</param>
-		String GetConnectionString(String name); 
+		string GetConnectionString(string name); 
 	}
 }
