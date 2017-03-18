@@ -1,8 +1,5 @@
 ﻿namespace com.kiranpatel.crimecluster.framework
-{
-	using System;
-	using KdTree;
-
+{	
 	/// <summary>
 	/// Extensions to the KD Tree implementation. 
 	/// </summary>

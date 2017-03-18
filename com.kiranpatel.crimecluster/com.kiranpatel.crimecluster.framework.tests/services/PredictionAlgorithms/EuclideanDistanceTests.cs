@@ -2,7 +2,6 @@
 {
 	using System;
 	using NUnit.Framework;
-	using Moq; 
 
 	/// <summary>
 	/// Euclidean distance tests.
@@ -54,15 +53,15 @@
 		}
 
 		/// <summary>
-		/// Ensures when the stes are the same lengths, a value is returned
+		/// Ensures when the sets are the same length, the euclidean distance is returned.
 		/// </summary>
 		[Test]
-		public void measure_SameLengths_Calcualted()
+		public void measure_SameLength_Calculated()
 		{
 			double[] set1 = new double[3] { 1, 2, 3 };
 			double[] set2 = new double[3] { 3, 2, 1 };
 
-			var result = this.GetInstance().measure(set1, set2);
+			double result = this.GetInstance().measure(set1, set2);
 
 			Assert.AreEqual(2.83, Math.Round(result, 2)); 
 		}

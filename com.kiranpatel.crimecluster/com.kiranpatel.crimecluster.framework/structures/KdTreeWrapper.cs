@@ -2,12 +2,11 @@
 {
 	using KdTree;
 	using System.Collections.Generic;
-	using System;
 
 	/// <summary>
 	/// Wrapper for the K-D Tree implementation.
 	/// </summary>
-	public class KdTreeWrapper<TKey, TVal> : IKdTreeWrapper<TKey, TVal>
+	public sealed class KdTreeWrapper<TKey, TVal> : IKdTreeWrapper<TKey, TVal>
 	{
 		/// <summary>
 		/// The kd tree instance.

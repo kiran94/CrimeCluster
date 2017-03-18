@@ -22,12 +22,12 @@
 		private Mock<ILogger> logger;
 
 		/// <summary>
-		/// The distance measure mock.
+		/// The distance measure.
 		/// </summary>
 		private IDistanceMeasure distanceMeasure;
 
 		/// <summary>
-		/// Sets up.
+		/// Set up run before each unit test is run. Cleans out mocks for each unit test. 
 		/// </summary>
 		[SetUp]
 		public void SetUp()
@@ -101,12 +101,15 @@
 		}
 
 		/// <summary>
-		/// Gets the instance.
+		/// Gets the instance of the <see cref="DJClusterAlgorithm"/> class.
 		/// </summary>
-		/// <returns>The instance.</returns>
+		/// <returns>The instance of the class.</returns>
 		private DJClusterAlgorithm GetInstance()
 		{
-			return new DJClusterAlgorithm(this.configService.Object, this.logger.Object, this.distanceMeasure); 
+			return new DJClusterAlgorithm(
+				this.configService.Object, 
+				this.logger.Object, 
+				this.distanceMeasure); 
 		}
 	}
 }
