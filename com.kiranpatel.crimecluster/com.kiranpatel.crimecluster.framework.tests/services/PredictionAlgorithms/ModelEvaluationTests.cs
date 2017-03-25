@@ -1,6 +1,7 @@
 ﻿namespace com.kiranpatel.crimecluster.framework.tests
 {
 	using System;
+	using System.Collections.Generic;
 	using NUnit.Framework;
 	using Moq; 
 
@@ -31,6 +32,11 @@
 		private Mock<ILogger> logger;
 
 		/// <summary>
+		/// List of crime types.
+		/// </summary>
+		private CrimeType[] types = (CrimeType[]) Enum.GetValues(typeof(CrimeType)); 
+
+		/// <summary>
 		/// Sets up.
 		/// </summary>
 		[SetUp]
@@ -43,12 +49,14 @@
 		}
 
 		/// <summary>
-		/// Ensures in the normal case, the model is evaluated. 
+		/// Ensures when setup is called, the generate method in the MMM is called. 
 		/// </summary>
 		[Test]
-		public void Evaluate_NormalCase_ModelEvaluated()
+		public void SetUp_NormalCase_MixedMarkovModelGenerateCalled()
 		{
-			throw new NotImplementedException(); 
+			this.mixedMarkovModel.Setup(x => x.GenerateModel()).Verifiable();
+			this.GetInstance().SetUp(); 
+			this.mixedMarkovModel.Verify(x => x.GenerateModel(), Times.Once); 
 		}
 
 		/// <summary>
