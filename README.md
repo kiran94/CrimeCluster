@@ -1,18 +1,17 @@
 # CrimeCluster2
-Final Year Project - A Real Time Smart Police Dispatching System predicts crime clusters and provides a mechanism for importing new data. 
+Investigating the problem of slowing police response rates and evaluating if a practical software solution can be produced to predict and provide informed decisions to ground officers
+
+This project is an implementation of a level 3 final year university project. 
 
 Solution breakdown: 
 
-com.kiranpatel.crimecluster.dataaccess: Encapsulates all access to the database (Repository Pattern)
-
-com.kiranpatel.crimecluster.framework: Encapsulates all business logic containing services, entities, enums, extensions. 
-
-com.kiranpatel.crimecluster.framework.tests: Encapsulates unit tests for com.kiranpatel.crimecluster.framework. 
-
-com.kiranpatel.crimecluster.importer: Encapsulates the CSV importer for reading historic crimes. 
-
-com.kiranpatel.crimecluster.predictor: Encapsulates prediction aspects of the application. 
-
-com.kiranpatel.crimecluster.webservice: Encapsulates JSON API entry point to access data on the server. (ASP.NET MVC) 
-
-com.kiranpatel.crimecluster.webservice: Encapsulates unit tests for com.kiranpatel.crimecluster.webservice
+| Project  | Description |
+| ------------- | ------------- |
+| dataaccess  | Encapsulates all access to the database (Repository Pattern) |
+| framework  | Encapsulates all business logic containing contracts, services, entities, enums, extensions, structures. |
+| framework  | Encapsulates all business logic containing contracts, services, entities, enums, extensions, structures. |
+| framework.tests  |  Encapsulates unit tests for com.kiranpatel.crimecluster.framework. |
+| importer  |  Encapsulates the CSV importer for reading historic crimes. |
+| predictor  | Encapsulates the main entry point for the predictor application. |
+| webservice  |  Encapsulates JSON API entry point to access data on the server. (ASP.NET MVC) |
+| webservice.tests  |  Encapsulates unit tests for com.kiranpatel.crimecluster.webservice |
