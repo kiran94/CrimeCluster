@@ -32,11 +32,6 @@
 		private Mock<ILogger> logger;
 
 		/// <summary>
-		/// List of crime types.
-		/// </summary>
-		private CrimeType[] types = (CrimeType[]) Enum.GetValues(typeof(CrimeType)); 
-
-		/// <summary>
 		/// Sets up.
 		/// </summary>
 		[SetUp]
