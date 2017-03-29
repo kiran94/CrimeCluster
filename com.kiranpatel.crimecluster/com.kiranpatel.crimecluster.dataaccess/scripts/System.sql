@@ -1,100 +1,142 @@
-﻿DROP DATABASE IF EXISTS `CrimeCluster`; 
-
-CREATE DATABASE `CrimeCluster` 
-CHARACTER SET 'utf8' 
-COLLATE 'utf8_general_ci'; 
-
+﻿CREATE DATABASE  IF NOT EXISTS `crimecluster` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `CrimeCluster`;
+-- MySQL dump 10.13  Distrib 5.6.24, for osx10.8 (x86_64)
+--
+-- Host: localhost    Database: CrimeCluster
+-- ------------------------------------------------------
+-- Server version	5.5.42
 
--- Table for Grades of an Inciden Report
-CREATE TABLE IF NOT EXISTS `IncidentGrading`
-(
-	`ID` CHAR(36) PRIMARY KEY NOT NULL, 
-    `GradeValue` INT(2), 
-    `Description` VARCHAR(255),
-    `IsDeleted` TINYINT(1) NOT NULL
-);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Table for Locations 
-CREATE TABLE IF NOT EXISTS `Location`
-(
-	`ID` CHAR(36) PRIMARY KEY NOT NULL, 
-    `Latitude` DECIMAL(10, 8) NOT NULL, 
-    `Longitude` DECIMAL(10, 8) NOT NULL,
-    `DateLogged` DATETIME NOT NULL,
-    `IsDeleted` TINYINT(1) NOT NULL
-);
+--
+-- Table structure for table `Incident`
+--
 
--- Table for Officers and Dispatchers
--- FK_Officer_Incident associates with the incident the person is currently assigned too
--- FK_Officer_Location associates with the location the person is currently associated with 
-CREATE TABLE IF NOT EXISTS `Person`
-(
-	`ID` CHAR(36) PRIMARY KEY NOT NULL, 
-    `Title` VARCHAR(3) NOT NULL, 
-    `FirstName` VARCHAR(255) NOT NULL, 
-    `LastName` VARCHAR(255) NOT NULL, 
-    `DOB` DATETIME NOT NULL, 
-    `DateRegistered` DATETIME NOT NULL, 
-    `Status` VARCHAR(32) NOT NULL,
-    `BadgeNumber` VARCHAR(255) NOT NULL,
-    `IsDeleted` TINYINT(1) NOT NULL,
-    `IncidentID` CHAR(36) NULL, 
-    `LocationID` CHAR(36) NULL
-);
+DROP TABLE IF EXISTS `Incident`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Incident` (
+  `ID` char(36) NOT NULL,
+  `CrimeID` char(64) DEFAULT NULL,
+  `DateCreated` datetime NOT NULL,
+  `ReportedBy` varchar(255) NOT NULL,
+  `FallsWithin` varchar(255) DEFAULT NULL,
+  `LocationID` char(36) NOT NULL,
+  `LocationDesc` varchar(255) NOT NULL,
+  `LSOACode` varchar(9) NOT NULL,
+  `LSOAName` varchar(31) NOT NULL,
+  `CrimeType` varchar(31) NOT NULL,
+  `LastOutcomeCategory` varchar(63) NOT NULL,
+  `Context` varchar(255) DEFAULT NULL,
+  `IncidentGradingID` char(36) DEFAULT NULL,
+  `IsDeleted` tinyint(1) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_Incident_Location` (`LocationID`),
+  KEY `FK_Incident_IncidentGrading` (`IncidentGradingID`),
+  KEY `IX_DateCreated` (`DateCreated`),
+  CONSTRAINT `incident_ibfk_1` FOREIGN KEY (`LocationID`) REFERENCES `Location` (`ID`),
+  CONSTRAINT `incident_ibfk_2` FOREIGN KEY (`IncidentGradingID`) REFERENCES `IncidentGrading` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Table for an Indicent 
--- FK_Incident_Location associates a location with the incident 
--- FK_Incident_IncidentGrading associates the incident with a incident grading
-CREATE TABLE `Incident`
-(
-	`ID` CHAR(36) PRIMARY KEY NOT NULL, 
-    `CrimeID` CHAR(64) NULL,
-	`DateCreated` DATETIME NOT NULL, 
-    `ReportedBy` VARCHAR(255) NOT NULL, 
-    `FallsWithin` VARCHAR(255) NULL NULL, 
-	`LocationID` CHAR(36) NOT NULL,
-    `LocationDesc` VARCHAR(255) NOT NULL, 
-    `LSOACode` VARCHAR(9) NOT NULL, 
-    `LSOAName` VARCHAR(31) NOT NULL, 
-    `CrimeType` VARCHAR(31) NOT NULL, 
-    `LastOutcomeCategory` VARCHAR(63) NOT NULL,
-    `Context` VARCHAR(255) NULL,
-    `IncidentGradingID` CHAR(36) NULL,
-    `IsDeleted` TINYINT(1) NOT NULL,
-    FOREIGN KEY `FK_Incident_Location` (`LocationID`) REFERENCES `Location`(`ID`),
-    FOREIGN KEY `FK_Incident_IncidentGrading` (`IncidentGradingID`) REFERENCES `IncidentGrading`(`ID`)
-);
+--
+-- Table structure for table `IncidentGrading`
+--
 
--- Table for the Incident Outcome 
--- FK_IncidentOutcome_Incident associates an IncidentOutcome report to an Incident 
--- FK_IncidentOutcome_Officer associates an IncidentOutcome to the officer who reported it 
-CREATE TABLE `IncidentOutcome`
-(
-	`ID` CHAR(36) PRIMARY KEY NOT NULL, 
-    `DateCreated` DATETIME NOT NULL, 
-    `Outcome` VARCHAR(1023) NOT NULL, 
-    `IncidentID` CHAR(36) NOT NULL, 
-    `OfficerID` CHAR(36) NOT NULL, 
-    `IsDeleted` TINYINT(1) NOT NULL, 
-    FOREIGN KEY `FK_IncidentOutcome_Incident` (`IncidentID`) REFERENCES `Incident`(`ID`), 
-    FOREIGN KEY `FK_IncidentOutcome_Officer` (`OfficerID`) REFERENCES `Person`(`ID`)
-);
+DROP TABLE IF EXISTS `IncidentGrading`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `IncidentGrading` (
+  `ID` char(36) NOT NULL,
+  `GradeValue` int(2) DEFAULT NULL,
+  `Description` varchar(255) DEFAULT NULL,
+  `IsDeleted` tinyint(1) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Foreign Keys added after all Entities Created
+--
+-- Table structure for table `IncidentOutcome`
+--
 
--- Officer -> Location
-ALTER TABLE `Person`
-ADD CONSTRAINT `FK_Officer_Location` 
-FOREIGN KEY (`LocationID`)
-REFERENCES `Location`(`ID`);
+DROP TABLE IF EXISTS `IncidentOutcome`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `IncidentOutcome` (
+  `ID` char(36) NOT NULL,
+  `DateCreated` datetime NOT NULL,
+  `Outcome` varchar(1023) NOT NULL,
+  `IncidentID` char(36) NOT NULL,
+  `OfficerID` char(36) NOT NULL,
+  `IsDeleted` tinyint(1) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_IncidentOutcome_Incident` (`IncidentID`),
+  KEY `FK_IncidentOutcome_Officer` (`OfficerID`),
+  CONSTRAINT `incidentoutcome_ibfk_1` FOREIGN KEY (`IncidentID`) REFERENCES `Incident` (`ID`),
+  CONSTRAINT `incidentoutcome_ibfk_2` FOREIGN KEY (`OfficerID`) REFERENCES `Person` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Officer -> Incident
-ALTER TABLE `Person`
-ADD CONSTRAINT `FK_Officer_Incident` 
-FOREIGN KEY (`IncidentID`) 
-REFERENCES `Incident`(`ID`)
+--
+-- Table structure for table `Location`
+--
 
--- Indexes
-ALTER TABLE Incident
-ADD INDEX `IX_DateCreated`(`DateCreated`); 
+DROP TABLE IF EXISTS `Location`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Location` (
+  `ID` char(36) NOT NULL,
+  `Latitude` decimal(10,8) NOT NULL,
+  `Longitude` decimal(10,8) NOT NULL,
+  `DateLogged` datetime NOT NULL,
+  `IsDeleted` tinyint(1) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Person`
+--
+
+DROP TABLE IF EXISTS `Person`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Person` (
+  `ID` char(36) NOT NULL,
+  `Title` varchar(3) NOT NULL,
+  `FirstName` varchar(255) NOT NULL,
+  `LastName` varchar(255) NOT NULL,
+  `DOB` datetime NOT NULL,
+  `DateRegistered` datetime NOT NULL,
+  `Status` varchar(32) NOT NULL,
+  `BadgeNumber` varchar(255) NOT NULL,
+  `IsDeleted` tinyint(1) NOT NULL,
+  `IncidentID` char(36) DEFAULT NULL,
+  `LocationID` char(36) DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `FK_Officer_Location` (`LocationID`),
+  KEY `FK_Officer_Incident` (`IncidentID`),
+  CONSTRAINT `FK_Officer_Incident` FOREIGN KEY (`IncidentID`) REFERENCES `Incident` (`ID`),
+  CONSTRAINT `FK_Officer_Location` FOREIGN KEY (`LocationID`) REFERENCES `Location` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2017-03-29 11:00:04
