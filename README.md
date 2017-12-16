@@ -1,4 +1,4 @@
-# Crime Cluster
+# Crime Cluster ![app veyor badge](https://ci.appveyor.com/api/projects/status/2kew82oy9gv71cgj?svg=true)
 Investigating the problem of slowing police response rates and evaluating if a practical software solution can be produced to predict and provide informed decisions to ground officers
 
 This project is an implementation of a level 3 final year university project. 
